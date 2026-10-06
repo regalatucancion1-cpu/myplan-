@@ -317,12 +317,10 @@ const ING = {
   pimiento: { n: 'Pimientos', c: 'verdura', u: 'g', k: 27, p: 1 },
   cebolla: { n: 'Cebolla', c: 'verdura', u: 'g', k: 40, p: 1.1 },
   calabacin: { n: 'Calabacín', c: 'verdura', u: 'g', k: 17, p: 1.2 },
-  brocoli: { n: 'Brócoli', c: 'verdura', u: 'g', k: 34, p: 2.8 },
   zanahoria: { n: 'Zanahoria', c: 'verdura', u: 'g', k: 40, p: 0.9 },
   tomate: { n: 'Tomate', c: 'verdura', u: 'g', k: 20, p: 0.9 },
   lechuga: { n: 'Lechuga o ensalada de bolsa', c: 'verdura', u: 'g', k: 17, p: 1.3 },
   espinacas: { n: 'Espinacas', c: 'verdura', u: 'g', k: 23, p: 2.9 },
-  champi: { n: 'Champiñones', c: 'verdura', u: 'g', k: 25, p: 3 },
   judias: { n: 'Judías verdes', c: 'verdura', u: 'g', k: 30, p: 1.8 },
   berenjena: { n: 'Berenjena', c: 'verdura', u: 'g', k: 25, p: 1 },
   salteado: { n: 'Verduras para saltear (congeladas)', c: 'verdura', u: 'g', k: 45, p: 2.5 },
@@ -336,7 +334,6 @@ const ING = {
   arroz: { n: 'Arroz', c: 'despensa', u: 'g', k: 355, p: 7 },
   pasta: { n: 'Pasta', c: 'despensa', u: 'g', k: 355, p: 12.5 },
   noodles: { n: 'Fideos de huevo para wok', c: 'despensa', u: 'g', k: 350, p: 12 },
-  cuscus: { n: 'Cuscús', c: 'despensa', u: 'g', k: 360, p: 12 },
   gnocchi: { n: 'Ñoquis', c: 'despensa', u: 'g', k: 160, p: 4 },
   avena: { n: 'Copos de avena', c: 'despensa', u: 'g', k: 370, p: 13.5 },
   pan: { n: 'Pan', c: 'despensa', u: 'g', k: 250, p: 8.5 },
@@ -345,7 +342,6 @@ const ING = {
   tortitas: { n: 'Tortitas de arroz', c: 'despensa', u: 'ud', k: 30, p: 0.7, s: ['tortita de arroz', 'tortitas de arroz'] },
   lentejas: { n: 'Lentejas cocidas (bote, escurridas)', c: 'despensa', u: 'g', k: 105, p: 8 },
   garbanzos: { n: 'Garbanzos cocidos (bote, escurridos)', c: 'despensa', u: 'g', k: 125, p: 7.5 },
-  alubias: { n: 'Alubias cocidas (bote, escurridas)', c: 'despensa', u: 'g', k: 100, p: 7 },
   triturado: { n: 'Tomate triturado', c: 'despensa', u: 'g', k: 30, p: 1.5 },
   maiz: { n: 'Maíz dulce', c: 'despensa', u: 'g', k: 85, p: 3 },
   aceitunas: { n: 'Aceitunas', c: 'despensa', u: 'g', k: 150, p: 1 },
@@ -366,7 +362,8 @@ const ING = {
   canela: { n: 'Canela', c: 'basicos' },
   mostaza: { n: 'Mostaza', c: 'basicos' },
   vinagre: { n: 'Vinagre', c: 'basicos' },
-  caldo: { n: 'Caldo de pollo o verduras', c: 'basicos' }
+  caldo: { n: 'Caldo de pollo o verduras', c: 'basicos' },
+  picante: { n: 'Salsa picante o guindilla', c: 'basicos' }
 };
 
 /* ---------- Recetas ---------- */
@@ -453,9 +450,9 @@ R('c4', 'com', 'Lentejas con pollo', 20, ['taper'],
   [['lentejas', 350], ['pollo', 150], ['cebolla', 50], ['zanahoria', 80], ['pimiento', 80], ['aceite', 10], ['pimenton', 0], ['caldo', 0], ['pan', 50]],
   ['Sofríe la cebolla, la zanahoria y el pimiento picados en el aceite.', 'Añade el pollo en dados y dóralo.', 'Echa las lentejas escurridas, pimentón y un vaso de caldo. Cuece 10 minutos.', 'Sirve con el pan.'],
   'Mejor de un día para otro. Congela bien por raciones.');
-R('c5', 'com', 'Salmón con arroz y brócoli', 20, [],
-  [['salmon', 180], ['arroz', 100], ['brocoli', 250], ['aceite', 5], ['limon', 0.5], ['soja', 0]],
-  ['Cuece el arroz. En los últimos 5 minutos añade el brócoli al agua o hazlo al vapor.', 'Haz el salmón a la plancha, 3-4 minutos por lado, empezando por la piel.', 'Sirve con limón y un poco de soja.']);
+R('c5', 'com', 'Salmón con arroz y judías verdes', 20, [],
+  [['salmon', 180], ['arroz', 100], ['judias', 250], ['aceite', 5], ['limon', 0.5], ['soja', 0]],
+  ['Cuece el arroz. En los últimos 8 minutos añade las judías verdes al agua.', 'Haz el salmón a la plancha, 3-4 minutos por lado, empezando por la piel.', 'Sirve con limón y un poco de soja.']);
 R('c6', 'com', 'Arroz con pollo al curry', 25, ['taper'],
   [['pollo', 200], ['arroz', 100], ['griego', 100], ['cebolla', 80], ['pimiento', 100], ['aceite', 10], ['curry', 0], ['caldo', 0]],
   ['Cuece el arroz.', 'Sofríe la cebolla y el pimiento en el aceite. Añade el pollo en dados y dóralo.', 'Echa una cucharada de curry y medio vaso de caldo o agua. Cuece 8 minutos a fuego suave.', 'Aparta del fuego y mezcla el yogur para que la salsa quede cremosa (si hierve, se corta).', 'Sirve sobre el arroz.']);
@@ -469,16 +466,16 @@ R('c8', 'com', 'Garbanzos salteados con espinacas y huevo', 12, ['rapida'],
 R('c9', 'com', 'Fideos salteados con ternera', 15, ['rapida'],
   [['noodles', 100], ['filete', 180], ['salteado', 250], ['aceite', 10], ['soja', 0], ['ajo', 0], ['fruta', 1]],
   ['Cuece los fideos según el paquete y escúrrelos.', 'Corta la ternera en tiras finas y saltéala a fuego fuerte 2 minutos. Aparta.', 'Saltea las verduras con el aceite y el ajo. Añade fideos, ternera y soja y mezcla un minuto. Fruta de postre.']);
-R('c10', 'com', 'Solomillo de cerdo con cuscús y verduras', 20, [],
-  [['solomillo', 220], ['cuscus', 90], ['calabacin', 150], ['pimiento', 100], ['aceite', 15], ['comino', 0], ['fruta', 1]],
-  ['Hidrata el cuscús con la misma cantidad de agua hirviendo y sal, tapado 5 minutos.', 'Saltea el calabacín y el pimiento en dados con la mitad del aceite y comino.', 'Corta el solomillo en medallones y hazlos a la plancha con el resto del aceite, 2-3 minutos por lado. Fruta de postre.']);
+R('c10', 'com', 'Solomillo de cerdo con arroz y verduras', 20, [],
+  [['solomillo', 220], ['arroz', 90], ['calabacin', 150], ['pimiento', 100], ['aceite', 15], ['comino', 0], ['fruta', 1]],
+  ['Cuece el arroz.', 'Saltea el calabacín y el pimiento en dados con la mitad del aceite y comino.', 'Corta el solomillo en medallones y hazlos a la plancha con el resto del aceite, 2-3 minutos por lado. Fruta de postre.']);
 R('c11', 'com', 'Ensalada de pasta con pollo', 20, ['taper'],
   [['pasta', 100], ['pollo', 180], ['tomate', 150], ['maiz', 60], ['aceitunas', 30], ['mozza', 30], ['aceite', 10], ['oregano', 0]],
   ['Cuece la pasta y enfríala con agua.', 'Haz el pollo a la plancha y córtalo en dados.', 'Mezcla todo con el tomate troceado, el maíz, las aceitunas y la mozzarella. Aliña con aceite y orégano.'],
   'Se come fría: perfecta para llevar.');
 R('c12', 'com', 'Bol mexicano de ternera', 20, ['taper'],
-  [['arroz', 80], ['ternera', 150], ['alubias', 150], ['maiz', 50], ['tomate', 100], ['aguacate', 50], ['lechuga', 50], ['aceite', 5], ['comino', 0], ['pimenton', 0]],
-  ['Cuece el arroz.', 'Dora la carne con el aceite, comino y pimentón. Añade las alubias escurridas y calienta 3 minutos.', 'Monta el bol con el arroz, la carne, el maíz, el tomate en dados, la lechuga y el aguacate.']);
+  [['arroz', 100], ['ternera', 180], ['maiz', 50], ['tomate', 100], ['aguacate', 50], ['lechuga', 50], ['aceite', 5], ['comino', 0], ['pimenton', 0], ['picante', 0]],
+  ['Cuece el arroz.', 'Dora la carne con el aceite, comino, pimentón y el picante que quieras.', 'Monta el bol con el arroz, la carne, el maíz, el tomate en dados, la lechuga y el aguacate.']);
 R('c13', 'com', 'Pollo a la plancha con boniato y judías verdes', 30, ['airfryer'],
   [['pollo', 220], ['boniato', 350], ['judias', 200], ['aceite', 15], ['pimenton', 0], ['fruta', 1]],
   ['Corta el boniato en bastones, mézclalo con la mitad del aceite y pimentón y hazlo 18-20 minutos en freidora de aire a 190 °C (o 30 minutos al horno).', 'Cuece las judías 8 minutos.', 'Haz el pollo a la plancha con el resto del aceite. Fruta de postre.']);
@@ -493,7 +490,7 @@ R('c16', 'com', 'Bol de salmón con arroz y aguacate', 20, [],
   ['Cuece el arroz y alíñalo con unas gotas de limón.', 'Corta el salmón en dados y márcalo en la sartén 1-2 minutos por cara.', 'Monta el bol con el arroz, el salmón, el tomate en dados, la zanahoria rallada y el aguacate. Aliña con soja.']);
 R('c17', 'com', 'Estofado de ternera con patata', 60, ['taper'],
   [['filete', 220], ['patata', 350], ['zanahoria', 100], ['cebolla', 80], ['triturado', 100], ['aceite', 10], ['pimenton', 0], ['caldo', 0], ['pan', 40]],
-  ['Dora la ternera en dados con el aceite. Añade la cebolla y la zanahoria y sofríe.', 'Echa el tomate, pimentón y caldo hasta cubrir. Cuece tapado 35 minutos (15 en olla rápida).', 'Añade la patata troceada y cuece 15 minutos más. Sirve con el pan.'],
+  ['Dora la ternera en dados con el aceite. Añade la cebolla y la zanahoria y sofríe.', 'Echa el tomate, pimentón y caldo hasta cubrir. Cuece tapado 35 minutos a fuego suave.', 'Añade la patata troceada y cuece 15 minutos más. Sirve con el pan.'],
   'Receta de domingo: haz cuatro raciones y congela.');
 R('c18', 'com', 'Tortilla de patatas con ensalada de atún', 30, ['taper'],
   [['huevo', 3], ['patata', 300], ['cebolla', 50], ['aceite', 15], ['lechuga', 100], ['tomate', 100], ['atun', 2], ['pan', 40]],
@@ -516,23 +513,23 @@ R('n5', 'cen', 'Lomo con pimientos y patata', 25, [],
   [['lomo', 200], ['patata', 300], ['pimiento', 200], ['aceite', 15], ['ajo', 0], ['fruta', 1]],
   ['Cuece la patata o hazla al microondas 8 minutos.', 'Fríe los pimientos en tiras con el aceite y el ajo a fuego medio, 12 minutos.', 'Haz el lomo a la plancha, 2 minutos por lado. Fruta de postre.']);
 R('n6', 'cen', 'Pizza rápida de tortilla', 12, ['rapida', 'horno'],
-  [['tortilla', 2], ['triturado', 100], ['mozza', 80], ['cocido', 80], ['champi', 100], ['atun', 1], ['oregano', 0], ['lechuga', 100], ['aceite', 5]],
-  ['Extiende el tomate sobre las tortillas y reparte la mozzarella, el jamón, los champiñones laminados y el atún.', 'Hornea 6-8 minutos a 220 °C (o en freidora de aire 5 minutos a 200 °C).', 'Termina con orégano y acompaña con la ensalada aliñada.']);
+  [['tortilla', 2], ['triturado', 100], ['mozza', 80], ['cocido', 80], ['pimiento', 80], ['atun', 1], ['oregano', 0], ['lechuga', 100], ['aceite', 5]],
+  ['Extiende el tomate sobre las tortillas y reparte la mozzarella, el jamón, el pimiento en tiras finas y el atún.', 'Hornea 6-8 minutos a 220 °C (o en freidora de aire 5 minutos a 200 °C).', 'Termina con orégano y acompaña con la ensalada aliñada.']);
 R('n7', 'cen', 'Salmón al horno con patata y judías verdes', 25, ['horno'],
   [['salmon', 170], ['patata', 300], ['judias', 200], ['aceite', 5], ['limon', 0.5], ['skyr', 125]],
   ['Corta la patata en rodajas finas y ponla en una bandeja con las judías, el aceite y sal. Hornea 12 minutos a 200 °C.', 'Coloca el salmón encima con rodajas de limón y hornea 10-12 minutos más.', 'Skyr de postre.']);
-R('n8', 'cen', 'Revuelto de champiñones y jamón', 12, ['rapida'],
-  [['huevo', 3], ['champi', 250], ['serrano', 50], ['pan', 80], ['aceite', 10], ['ajo', 0], ['skyr', 125]],
-  ['Saltea los champiñones laminados con el ajo y el aceite hasta que pierdan el agua.', 'Añade el jamón en tiras y los huevos batidos. Remueve fuera del fuego para que quede jugoso.', 'Sirve con el pan tostado. Skyr de postre.']);
+R('n8', 'cen', 'Revuelto de calabacín y jamón', 12, ['rapida'],
+  [['huevo', 3], ['calabacin', 250], ['serrano', 50], ['pan', 80], ['aceite', 10], ['ajo', 0], ['skyr', 125]],
+  ['Saltea el calabacín en medias lunas finas con el ajo y el aceite hasta que se dore.', 'Añade el jamón en tiras y los huevos batidos. Remueve fuera del fuego para que quede jugoso.', 'Sirve con el pan tostado. Skyr de postre.']);
 R('n9', 'cen', 'Wraps de pollo con salsa de yogur', 15, ['rapida', 'taper'],
   [['pollo', 180], ['tortilla', 2], ['lechuga', 60], ['tomate', 80], ['loncha', 1], ['griego', 50], ['aceite', 10], ['pimenton', 0], ['fruta', 1]],
   ['Corta el pollo en tiras, sazónalo con pimentón y hazlo a la plancha con el aceite.', 'Mezcla el yogur con sal y unas gotas de limón o vinagre.', 'Rellena las tortillas con el pollo, el queso, la lechuga, el tomate y la salsa. Fruta de postre.']);
 R('n10', 'cen', 'Pasta carbonara ligera', 15, ['rapida'],
   [['pasta', 100], ['huevo', 2], ['serrano', 50], ['rallado', 20], ['lechuga', 100], ['aceite', 5]],
   ['Cuece la pasta y guarda medio vaso del agua.', 'Dora el jamón en tiras sin aceite. Bate los huevos con el queso y pimienta.', 'Fuera del fuego, mezcla la pasta con el jamón, el huevo y un poco del agua hasta que quede cremosa.', 'Acompaña con la ensalada aliñada.']);
-R('n11', 'cen', 'Pollo al limón con cuscús', 15, ['rapida', 'taper'],
-  [['pollo', 200], ['cuscus', 80], ['calabacin', 200], ['aceite', 15], ['limon', 1], ['ajo', 0], ['skyr', 125]],
-  ['Hidrata el cuscús con la misma cantidad de agua hirviendo, tapado 5 minutos.', 'Saltea el calabacín en dados con la mitad del aceite.', 'Dora el pollo en tiras con el ajo y el resto del aceite; al final añade el zumo del limón.', 'Skyr de postre.']);
+R('n11', 'cen', 'Pollo al limón con arroz', 20, ['taper'],
+  [['pollo', 200], ['arroz', 80], ['calabacin', 200], ['aceite', 15], ['limon', 1], ['ajo', 0], ['skyr', 125]],
+  ['Cuece el arroz.', 'Saltea el calabacín en dados con la mitad del aceite.', 'Dora el pollo en tiras con el ajo y el resto del aceite; al final añade el zumo del limón.', 'Skyr de postre.']);
 R('n12', 'cen', 'Tacos de ternera', 15, ['rapida'],
   [['ternera', 180], ['tortilla', 3], ['tomate', 100], ['cebolla', 40], ['lechuga', 50], ['aguacate', 50], ['griego', 30], ['comino', 0], ['pimenton', 0]],
   ['Dora la carne con comino, pimentón y sal.', 'Pica el tomate y la cebolla y mézclalos.', 'Rellena las tortillas calientes con la carne, el picadillo, la lechuga, el aguacate y el yogur.']);
@@ -554,8 +551,8 @@ R('l2', 'cen', 'Ensalada ligera de atún y huevo', 15, ['rapida', 'ligera', 'tap
   [['atun', 3], ['huevo', 2], ['patata', 150], ['tomate', 150], ['lechuga', 100], ['aceite', 10], ['vinagre', 0]],
   ['Cuece la patata troceada y los huevos.', 'Mezcla con el resto y aliña.']);
 R('l3', 'cen', 'Pollo a la plancha con verduras', 15, ['rapida', 'ligera'],
-  [['pollo', 200], ['calabacin', 200], ['champi', 150], ['pimiento', 100], ['aceite', 10], ['pan', 50]],
-  ['Saltea las verduras troceadas con la mitad del aceite, 8 minutos.', 'Haz el pollo a la plancha con el resto.', 'Acompaña con el pan.']);
+  [['pollo', 200], ['calabacin', 200], ['berenjena', 150], ['pimiento', 100], ['aceite', 10], ['pan', 50]],
+  ['Saltea las verduras troceadas con la mitad del aceite, 8-10 minutos.', 'Haz el pollo a la plancha con el resto.', 'Acompaña con el pan.']);
 R('l4', 'cen', 'Crema de calabacín con huevo y jamón', 25, ['ligera', 'taper'],
   [['calabacin', 400], ['patata', 100], ['cebolla', 60], ['huevo', 2], ['serrano', 40], ['aceite', 10], ['caldo', 0], ['skyr', 125]],
   ['Sofríe la cebolla en el aceite, añade el calabacín y la patata troceados y cubre con caldo. Cuece 15 minutos y tritura.', 'Cuece los huevos 10 minutos.', 'Sirve la crema con el huevo picado y el jamón en tiras. Skyr de postre.'],
@@ -569,6 +566,73 @@ R('l6', 'cen', 'Wok de pollo y verduras', 12, ['rapida', 'ligera'],
 R('l7', 'cen', 'Hamburguesa al plato con huevo y ensalada', 12, ['rapida', 'ligera'],
   [['ternera', 200], ['huevo', 1], ['loncha', 1], ['lechuga', 150], ['tomate', 150], ['aceite', 10]],
   ['Haz la hamburguesa a la plancha y funde el queso encima.', 'Haz el huevo a la plancha en la misma sartén.', 'Sirve sin pan, con la ensalada aliñada.']);
+
+/* Añadidas según tus gustos: picante, mexicano, asiático, curry, cuchara, bocadillos y bols */
+R('c19', 'com', 'Pasta picante con pollo y espinacas', 15, ['rapida', 'taper'],
+  [['pasta', 110], ['pollo', 180], ['espinacas', 150], ['triturado', 150], ['aceite', 10], ['rallado', 15], ['ajo', 0], ['picante', 0]],
+  ['Pon la pasta a cocer.', 'Dora el pollo en dados con el aceite y el ajo. Añade el tomate, el picante y las espinacas y cuece 5 minutos.', 'Mezcla con la pasta y termina con el queso.']);
+R('c20', 'com', 'Arroz frito picante con ternera y huevo', 15, ['rapida', 'taper'],
+  [['arroz', 100], ['ternera', 180], ['salteado', 200], ['huevo', 1], ['aceite', 10], ['soja', 0], ['picante', 0], ['ajo', 0]],
+  ['Cuece el arroz (si es del día anterior, mejor).', 'Dora la carne con el ajo a fuego fuerte. Añade las verduras y saltea 4 minutos.', 'Aparta a un lado, cuaja el huevo, y mezcla todo con el arroz, la soja y el picante.']);
+R('c21', 'com', 'Lentejas al curry con pollo y arroz', 20, ['taper'],
+  [['lentejas', 250], ['arroz', 60], ['pollo', 150], ['cebolla', 60], ['triturado', 150], ['aceite', 10], ['curry', 0], ['caldo', 0]],
+  ['Cuece el arroz.', 'Sofríe la cebolla en el aceite, añade el pollo en dados y dóralo con una cucharada de curry.', 'Echa el tomate, las lentejas escurridas y medio vaso de caldo. Cuece 8 minutos y sirve con el arroz.'],
+  'Plato de cuchara que aguanta tres días en la nevera y congela bien.');
+R('c22', 'com', 'Potaje rápido de garbanzos con pollo y espinacas', 15, ['rapida', 'taper'],
+  [['garbanzos', 300], ['pollo', 150], ['espinacas', 150], ['triturado', 150], ['cebolla', 50], ['aceite', 10], ['pimenton', 0], ['comino', 0], ['caldo', 0], ['pan', 40]],
+  ['Sofríe la cebolla en el aceite y dora el pollo en dados con pimentón y comino.', 'Añade el tomate, los garbanzos escurridos, las espinacas y un vaso de caldo.', 'Cuece 8 minutos y sirve con el pan.']);
+R('c23', 'com', 'Burrito de pollo', 20, ['taper'],
+  [['tortilla', 2], ['pollo', 180], ['arroz', 60], ['maiz', 40], ['tomate', 80], ['aguacate', 40], ['loncha', 1], ['lechuga', 30], ['aceite', 5], ['comino', 0], ['picante', 0]],
+  ['Cuece el arroz.', 'Haz el pollo en tiras a la plancha con el aceite, comino y picante.', 'Reparte sobre las tortillas el arroz, el pollo, el queso, el maíz, el tomate en dados, la lechuga y el aguacate. Enrolla cerrando los extremos.'],
+  'Envuelto en papel de aluminio aguanta para llevar.');
+R('c24', 'com', 'Bol templado de boniato, pollo y aguacate', 20, ['airfryer'],
+  [['boniato', 300], ['pollo', 200], ['aguacate', 60], ['espinacas', 80], ['tomate', 100], ['nueces', 10], ['aceite', 15], ['limon', 0.5], ['pimenton', 0]],
+  ['Corta el boniato en dados, mézclalo con una cucharadita de aceite y pimentón y hazlo 12-14 minutos en freidora de aire a 190 °C (o 8 minutos tapado en el microondas).', 'Haz el pollo a la plancha y córtalo en tiras.', 'Monta el bol sobre las espinacas con el tomate, el aguacate y las nueces. Aliña con el resto del aceite y limón.']);
+R('c25', 'com', 'Ñoquis a la boloñesa', 15, ['rapida'],
+  [['gnocchi', 280], ['ternera', 150], ['triturado', 200], ['cebolla', 50], ['aceite', 5], ['rallado', 15], ['oregano', 0]],
+  ['Sofríe la cebolla picada en el aceite y dora la carne.', 'Añade el tomate y el orégano y cuece 8 minutos.', 'Cuece los ñoquis (suben en 2 minutos), mézclalos con la salsa y añade el queso.']);
+R('c26', 'com', 'Fideos picantes con pollo y cacahuete', 15, ['rapida'],
+  [['noodles', 100], ['pollo', 180], ['salteado', 200], ['cacahuete', 20], ['aceite', 5], ['soja', 0], ['picante', 0], ['limon', 0.5]],
+  ['Cuece los fideos según el paquete.', 'Saltea el pollo en tiras con el aceite a fuego fuerte y añade las verduras 4 minutos.', 'Mezcla la crema de cacahuete con soja, picante, limón y dos cucharadas de agua caliente. Júntalo todo con los fideos.']);
+R('n16', 'cen', 'Quesadillas de pollo', 15, ['rapida'],
+  [['tortilla', 3], ['pollo', 150], ['mozza', 60], ['pimiento', 100], ['tomate', 100], ['griego', 50], ['comino', 0], ['picante', 0]],
+  ['Saltea el pollo en tiras finas con el pimiento, comino y picante.', 'Rellena media tortilla con el pollo y la mozzarella, dobla y dora en la sartén sin aceite, 2 minutos por lado.', 'Sirve con el tomate picado y el yogur como salsa.']);
+R('n17', 'cen', 'Hamburguesa de pollo con boniato', 20, ['airfryer'],
+  [['pollo', 200], ['panburger', 1], ['loncha', 1], ['lechuga', 30], ['tomate', 50], ['aguacate', 40], ['boniato', 200], ['aceite', 5], ['pimenton', 0], ['picante', 0]],
+  ['Corta el boniato en bastones, mézclalo con el aceite y pimentón y hazlo 14-16 minutos en freidora de aire a 190 °C.', 'Abre la pechuga en filete, sazónala con pimentón y picante y hazla a la plancha. Funde el queso encima.', 'Monta en el pan con lechuga, tomate y aguacate.']);
+R('n18', 'cen', 'Berenjena salteada con ternera y arroz', 20, [],
+  [['berenjena', 250], ['ternera', 180], ['arroz', 80], ['aceite', 10], ['soja', 0], ['ajo', 0], ['picante', 0], ['skyr', 125]],
+  ['Cuece el arroz.', 'Corta la berenjena en dados pequeños y saltéala con el aceite hasta que se ablande, 8 minutos.', 'Añade la carne y el ajo, dora, y termina con soja y picante. Sirve sobre el arroz. Skyr de postre.']);
+R('n19', 'cen', 'Bocadillo de pollo, aguacate y tomate', 12, ['rapida', 'taper'],
+  [['pan', 120], ['pollo', 180], ['aguacate', 50], ['tomate', 80], ['lechuga', 30], ['aceite', 5], ['fruta', 1]],
+  ['Haz el pollo fileteado a la plancha con el aceite.', 'Aplasta el aguacate sobre el pan y monta con el pollo, el tomate y la lechuga.', 'Fruta de postre.']);
+R('n20', 'cen', 'Tosta de salmón ahumado, huevo y aguacate', 10, ['rapida'],
+  [['pan', 100], ['salmonah', 100], ['huevo', 2], ['aguacate', 60], ['tomate', 100], ['limon', 0.5], ['skyr', 125]],
+  ['Tuesta el pan y aplasta el aguacate encima con unas gotas de limón.', 'Haz los huevos a la plancha o pasados por agua.', 'Monta el salmón y los huevos y acompaña con el tomate. Skyr de postre.']);
+R('n21', 'cen', 'Tortilla de espinacas y queso', 12, ['rapida'],
+  [['huevo', 3], ['espinacas', 150], ['mozza', 50], ['serrano', 40], ['pan', 100], ['aceite', 5], ['ajo', 0]],
+  ['Saltea las espinacas con el ajo y el aceite hasta que reduzcan.', 'Añade los huevos batidos y la mozzarella y cuaja la tortilla.', 'Sirve con el jamón y el pan.']);
+R('l8', 'cen', 'Ensalada de pollo, aguacate y huevo', 12, ['rapida', 'ligera', 'taper'],
+  [['pollo', 180], ['aguacate', 60], ['huevo', 1], ['lechuga', 150], ['tomate', 150], ['aceite', 10], ['pan', 30], ['vinagre', 0]],
+  ['Haz el pollo a la plancha y córtalo en tiras. Cuece el huevo 10 minutos.', 'Mezcla con la lechuga, el tomate y el aguacate y aliña.', 'Acompaña con el pan.']);
+R('l9', 'cen', 'Salteado picante de ternera con berenjena', 15, ['rapida', 'ligera'],
+  [['ternera', 200], ['berenjena', 200], ['pimiento', 150], ['aceite', 10], ['soja', 0], ['ajo', 0], ['picante', 0], ['skyr', 125]],
+  ['Saltea la berenjena y el pimiento en dados con el aceite, 8 minutos.', 'Añade la carne y el ajo y dora a fuego fuerte.', 'Termina con soja y picante. Skyr de postre.']);
+R('l10', 'cen', 'Lentejas rápidas con huevo', 15, ['rapida', 'ligera', 'taper'],
+  [['lentejas', 300], ['zanahoria', 80], ['cebolla', 50], ['triturado', 100], ['huevo', 2], ['aceite', 5], ['pimenton', 0], ['comino', 0], ['caldo', 0]],
+  ['Sofríe la cebolla y la zanahoria picadas en el aceite.', 'Añade el tomate, las lentejas escurridas, pimentón, comino y un vaso de caldo. Cuece 8 minutos.', 'Sirve con los huevos cocidos o escalfados dentro.']);
+R('d10', 'des', 'Gachas de avena con crema de cacahuete', 5, ['rapida'],
+  [['avena', 50], ['leche', 150], ['skyr', 100], ['cacahuete', 10], ['platano', 0.5], ['canela', 0]],
+  ['Calienta la avena con la leche 2 minutos en el microondas y remueve.', 'Mezcla el skyr y pon encima la crema de cacahuete, el plátano y canela.']);
+R('d11', 'des', 'Wrap de huevo, pavo y queso', 8, ['rapida'],
+  [['tortilla', 1], ['huevo', 2], ['pavo', 60], ['loncha', 1], ['tomate', 50], ['picante', 0]],
+  ['Haz los huevos revueltos con el pavo troceado.', 'Pon el queso sobre la tortilla, añade el revuelto y el tomate, y enrolla.']);
+R('m10', 'mer', 'Tosta de salmón ahumado y queso fresco', 4, ['rapida', 'sincocinar'],
+  [['pan', 50], ['burgos', 60], ['salmonah', 50], ['limon', 0.5]],
+  ['Tuesta el pan, pon el queso fresco en láminas y el salmón encima con unas gotas de limón.']);
+R('m11', 'mer', 'Requesón con frutos rojos y avena', 3, ['rapida', 'sincocinar'],
+  [['cottage', 200], ['rojos', 100], ['avena', 20]],
+  ['Mezcla el requesón con los frutos rojos y la avena por encima.']);
 
 /* ---------- Fuera de casa ---------- */
 const SITIOS = [
@@ -627,20 +691,20 @@ const SALIR = [
   'Tope orientativo: 4-5 consumiciones a la semana, mejor en 1-2 días.',
   'Al día siguiente: desayuno normal, agua y el plan tal cual.'
 ];
-const PLAN = { kcal: 2350, kcalMin: 2300, kcalMax: 2400, protMin: 150, protMax: 165, revision: 82, copasTope: 5, entrenos: 3 };
+const PLAN = { kcal: 2350, kcalMin: 2300, kcalMax: 2400, protMin: 150, protMax: 165, revision: 82, copasTope: 5, entrenos: 3, maxMin: 20 };
 const EXTRA = { rest_ok: { k: 850, p: 45 }, rest_pas: { k: 1300, p: 50 }, libre: { k: 1200, p: 40 } };
 
 /* ---------- Compra base: los productos que cubren más recetas (calculado sobre el recetario) ---------- */
 const BASE = [
-  ['pollo', '1 kg'], ['ternera', '500 g'], ['lomo', '400 g'], ['pavo', '2 paquetes (400 g)'], ['serrano', '200 g'], ['cocido', '1 paquete (150 g)'], ['atun', '6 latas'],
-  ['huevo', '2 docenas'], ['skyr', '1 kg'], ['griego', '1 pack'], ['burgos', '1 tarrina (250 g)'], ['loncha', '1 paquete'], ['rallado', '1 bolsa pequeña'],
-  ['patata', '2 kg'], ['tomate', '1 kg'], ['pimiento', '4-5 (600 g)'], ['cebolla', '1 malla (1 kg)'], ['calabacin', '2 (500 g)'], ['lechuga', '2 bolsas'], ['champi', '1 bandeja (250 g)'], ['zanahoria', '1 bolsa (500 g)'], ['salteado', '1 bolsa (450 g)'],
-  ['fruta', '8-10 piezas'], ['platano', '3-4'],
-  ['arroz', '1 kg'], ['pasta', '500 g'], ['pan', '1 barra cada 1-2 días'], ['tortilla', '1 paquete (8 ud)'], ['triturado', '2 botes (800 g)'], ['nueces', '1 bolsa (150 g)']
+  ['pollo', '1 kg'], ['ternera', '500 g'], ['lomo', '400 g'], ['pavo', '2 paquetes (400 g)'], ['serrano', '200 g'], ['cocido', '1 paquete (150 g)'], ['atun', '6 latas'], ['salmonah', '2 sobres (200 g)'],
+  ['huevo', '2 docenas'], ['skyr', '1 kg'], ['griego', '1 pack'], ['burgos', '1 tarrina (250 g)'], ['loncha', '1 paquete'], ['mozza', '1 bolsa (150 g)'],
+  ['patata', '2 kg'], ['tomate', '1 kg'], ['pimiento', '4-5 (600 g)'], ['cebolla', '1 malla (1 kg)'], ['calabacin', '2 (500 g)'], ['berenjena', '2'], ['lechuga', '2 bolsas'], ['zanahoria', '1 bolsa (500 g)'], ['salteado', '1 bolsa (450 g)'], ['aguacate', '2-3'],
+  ['fruta', '8-10 piezas'],
+  ['arroz', '1 kg'], ['pan', '1 barra cada 1-2 días'], ['tortilla', '1 paquete (8 ud)'], ['triturado', '2 botes (800 g)'], ['lentejas', '2 botes (800 g)']
 ];
 const BASE2 = [
-  ['salmon', '2 lomos (350 g)'], ['salmonah', '1 sobre (100 g)'], ['mozza', '1 bolsa (150 g)'], ['aguacate', '1-2'], ['judias', '1 bolsa (300 g)'],
-  ['lentejas', '1 bote (400 g)'], ['panburger', '1 paquete (4 ud)'], ['aceitunas', '1 lata pequeña']
+  ['salmon', '2 lomos (350 g)'], ['rallado', '1 bolsa pequeña'], ['boniato', '2 (600 g)'], ['espinacas', '1 bolsa (300 g)'], ['judias', '1 bolsa (300 g)'],
+  ['pasta', '500 g'], ['gnocchi', '1 paquete (500 g)'], ['garbanzos', '2 botes (800 g)'], ['maiz', '1 lata pequeña'], ['panburger', '1 paquete (4 ud)']
 ];
 
 /* ---------- Fechas (siempre en hora local) ---------- */
@@ -976,7 +1040,14 @@ function mutDay(f) {
 const NPROD = Object.keys(ING).filter(function (i) { return ING[i].c !== 'basicos' && i !== 'limon'; }).length;
 function baseIds() { return (S.compra.amp ? BASE.concat(BASE2) : BASE).map(function (x) { return x[0]; }); }
 function baseMap() { const m = {}; recetasCon(baseIds()).forEach(function (r) { m[r.id] = true; }); return m; }
-function elige(s, tipo, f, evitar) { return elegir(s, tipo, f, S.diario.dias, S.prefs.favs, evitar, null, S.compra.solo ? baseMap() : null); }
+/* Entre semana solo platos de 20 minutos o menos; el fin de semana, cualquiera. */
+function elige(s, tipo, f, evitar) {
+  const wd = dparse(f).getDay(), lab = wd >= 1 && wd <= 5, bm = S.compra.solo ? baseMap() : null;
+  if (!lab && !bm) return elegir(s, tipo, f, S.diario.dias, S.prefs.favs, evitar, null, null);
+  const ok = {};
+  REC.forEach(function (r) { if ((!bm || bm[r.id]) && (!lab || r.min <= PLAN.maxMin)) ok[r.id] = true; });
+  return elegir(s, tipo, f, S.diario.dias, S.prefs.favs, evitar, null, ok);
+}
 function esLigera(id) { return RBY[id] && RBY[id].tags.indexOf('ligera') >= 0; }
 function cerca(id, f, saltar) {
   let best = null;
@@ -1188,13 +1259,13 @@ function leerNum(id, min, max) {
 }
 
 /* ---------- Recetas ---------- */
-const RFLAGS = [['base', 'Con la compra base'], ['rapida', '15 min o menos'], ['taper', 'Para táper'], ['ligera', 'Cena ligera'], ['fav', 'Favoritas'], ['nuevas', 'Sin repetir']];
+const RFLAGS = [['base', 'Con la compra base'], ['rapida', '20 min o menos'], ['taper', 'Para táper'], ['ligera', 'Cena ligera'], ['fav', 'Favoritas'], ['nuevas', 'Sin repetir']];
 function filtradas() {
   const q = plano(ui.q.trim()), u = usos(S.diario.dias), hoy = todayStr(), bm = ui.rflags.base ? baseMap() : null;
   return REC.filter(function (r) {
     if (bm && !bm[r.id]) return false;
     if (ui.rtipo !== 'todo' && r.t !== ui.rtipo) return false;
-    if (ui.rflags.rapida && r.min > 15) return false;
+    if (ui.rflags.rapida && r.min > PLAN.maxMin) return false;
     if (ui.rflags.taper && r.tags.indexOf('taper') < 0) return false;
     if (ui.rflags.ligera && r.tags.indexOf('ligera') < 0) return false;
     if (ui.rflags.fav && !S.prefs.favs[r.id]) return false;
@@ -1281,7 +1352,7 @@ function vCompraBase() {
     const it = BASE.filter(function (x) { return ING[x[0]].c === cat[0]; });
     if (it.length) h += '<div class="card"><span class="lbl">' + cat[1] + '</span><div>' + it.map(function (x) { return buyRow(x[0], x[1]); }).join('') + '</div></div>';
   });
-  h += '<div class="card"><div class="row"><button class="check sq" data-a="camp" aria-pressed="' + S.compra.amp + '" aria-label="Añadir la ampliación">' + IC.check + '</button><div class="grow"><b>Ampliación: ' + BASE2.length + ' productos más, ' + r2.length + ' recetas</b><div class="small muted">Añade salmón, lentejas, hamburguesas y ' + (r2.length - r1.length) + ' platos nuevos. Márcala para incluirla en tu compra base.</div></div></div><div>' +
+  h += '<div class="card"><div class="row"><button class="check sq" data-a="camp" aria-pressed="' + S.compra.amp + '" aria-label="Añadir la ampliación">' + IC.check + '</button><div class="grow"><b>Ampliación: ' + BASE2.length + ' productos más, ' + r2.length + ' recetas</b><div class="small muted">Añade salmón fresco, pasta, ñoquis, garbanzos y ' + (r2.length - r1.length) + ' platos nuevos. Márcala para incluirla en tu compra base.</div></div></div><div>' +
     BASE2.map(function (x) { return buyRow(x[0], x[1]); }).join('') + '</div></div>';
   const bas = Object.keys(ING).filter(function (i) { return ING[i].c === 'basicos'; }).concat(['limon']);
   h += '<div class="card"><span class="lbl">Básicos (mira si ya tienes)</span><div>' + bas.map(function (i) { return buyRow(i, ''); }).join('') + '</div></div>';
