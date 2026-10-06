@@ -1,0 +1,1599 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mi Plan de Déficit</title>
+<meta name="description" content="Plan de déficit: peso, menú del día, recetas, compra y guía para comer fuera.">
+<meta name="theme-color" content="#EDF1EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1815" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mi Plan">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>:root{color-scheme:light;padding:env(safe-area-inset-top,0px) 0 0}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<style>
+/* Layout: una columna de app, pensada para el móvil; cifras grandes tipo báscula, barra de pestañas abajo. */
+:root {
+  --bg: #EDF1EC;
+  --surface: #FFFFFF;
+  --sunk: #E1E8E2;
+  --ink: #142B25;
+  --muted: #586C65;
+  --line: #D2DBD5;
+  --pine: #1C5848;
+  --on-pine: #FFFFFF;
+  --pine-soft: #DCEBE5;
+  --tomato: #C5391F;
+  --tomato-soft: #F8E2DC;
+  --saffron: #D99A0B;
+  --saffron-soft: #FBEFCF;
+  --shade: rgba(8, 22, 18, .55);
+  --display: 'Barlow Condensed', 'Arial Narrow', 'Helvetica Neue', sans-serif;
+  --body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1815; --surface: #16231F; --sunk: #1E2E29; --ink: #E7F0EB; --muted: #96ABA3; --line: #2B3E38;
+    --pine: #63C6A6; --on-pine: #0B1512; --pine-soft: #1D3A32; --tomato: #F17660; --tomato-soft: #3B211C;
+    --saffron: #F1C04C; --saffron-soft: #3A3018; --shade: rgba(0, 0, 0, .65); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1815; --surface: #16231F; --sunk: #1E2E29; --ink: #E7F0EB; --muted: #96ABA3; --line: #2B3E38;
+  --pine: #63C6A6; --on-pine: #0B1512; --pine-soft: #1D3A32; --tomato: #F17660; --tomato-soft: #3B211C;
+  --saffron: #F1C04C; --saffron-soft: #3A3018; --shade: rgba(0, 0, 0, .65); color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.45; -webkit-text-size-adjust: 100%; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--pine); outline-offset: 2px; }
+h1, h2, h3, p, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+
+.app { max-width: 760px; margin: 0 auto; padding-inline: 16px; padding-block: 12px 104px; display: flex; flex-direction: column; gap: 16px; }
+.top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.brand { font-family: var(--display); font-weight: 700; font-size: 28px; letter-spacing: .02em; text-transform: uppercase; line-height: 1; }
+.brand small { display: block; font-family: var(--body); font-weight: 500; font-size: 13px; letter-spacing: 0; text-transform: none; color: var(--muted); margin-top: 4px; font-variant-numeric: tabular-nums; }
+.sync { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.sync::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.sync[data-s="ok"]::before { background: var(--pine); }
+.sync[data-s="err"]::before { background: var(--tomato); }
+
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--surface); border-top: 1px solid var(--line); display: flex; justify-content: center; padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); }
+.tabs div { display: flex; width: 100%; max-width: 560px; }
+.tab { flex: 1; min-width: 0; background: none; border: 0; padding: 6px 2px; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11.5px; font-weight: 600; color: var(--muted); border-radius: 10px; }
+.tab svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tab[aria-selected="true"] { color: var(--pine); background: var(--pine-soft); }
+
+#view { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.h2 { font-family: var(--display); font-weight: 600; font-size: 22px; text-transform: uppercase; letter-spacing: .03em; line-height: 1.1; text-wrap: balance; }
+.lbl { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.muted { color: var(--muted); }
+.small { font-size: 13.5px; }
+.card { background: var(--surface); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.row > .grow { flex: 1; min-width: 0; }
+.sec { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 9px 14px; font-weight: 600; font-size: 14.5px; line-height: 1.2; }
+.btn.pri { background: var(--pine); border-color: var(--pine); color: var(--on-pine); }
+.btn.sm { padding: 6px 10px; font-size: 13px; }
+.btn.ghost { border-color: transparent; background: none; color: var(--pine); padding-inline: 6px; }
+.btn:disabled { opacity: .5; cursor: default; }
+.icon { width: 38px; height: 38px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); flex: none; }
+.icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.icon.on { background: var(--saffron-soft); border-color: var(--saffron); color: var(--ink); }
+.icon.on svg { fill: var(--saffron); stroke: var(--saffron); }
+.seg { display: inline-flex; background: var(--sunk); border-radius: 10px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: none; padding: 6px 12px; border-radius: 8px; font-weight: 600; font-size: 13.5px; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-size: 13.5px; font-weight: 600; color: var(--muted); }
+.chip[aria-pressed="true"] { background: var(--pine); border-color: var(--pine); color: var(--on-pine); }
+.tag { display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; background: var(--sunk); color: var(--muted); white-space: nowrap; }
+.tag.t { background: var(--tomato-soft); color: var(--tomato); }
+.tag.p { background: var(--pine-soft); color: var(--pine); }
+input[type="text"], input[type="date"], input[type="search"] { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; min-width: 0; width: 100%; }
+.num { font-family: var(--display); font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1; }
+
+/* Hoy */
+.daynav { display: flex; align-items: center; gap: 8px; }
+.daynav .grow { text-align: center; }
+.daynav .fecha { font-family: var(--display); font-weight: 600; font-size: 26px; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05; }
+.week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.wd { border: 1px solid transparent; background: var(--surface); border-radius: 10px; padding: 6px 0 5px; display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 0; }
+.wd b { font-family: var(--display); font-size: 19px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.wd span { font-size: 11px; color: var(--muted); text-transform: uppercase; font-weight: 700; letter-spacing: .04em; }
+.wd i { font-style: normal; font-size: 10px; font-weight: 700; color: var(--tomato); height: 12px; line-height: 12px; letter-spacing: .03em; }
+.wd.hoy { border-color: var(--line); }
+.wd[aria-current="true"] { background: var(--pine); border-color: var(--pine); }
+.wd[aria-current="true"] b, .wd[aria-current="true"] span, .wd[aria-current="true"] i { color: var(--on-pine); }
+.meters { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.meter { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.meter .num { font-size: 38px; }
+.bar { position: relative; height: 10px; border-radius: 5px; background: var(--sunk); overflow: hidden; }
+.bar i, .bar b { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; }
+.bar i { opacity: .28; }
+.bar.k i, .bar.k b { background: var(--tomato); }
+.bar.p i, .bar.p b { background: var(--saffron); }
+.slot { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.slot:first-of-type { border-top: 0; padding-top: 0; }
+.slot:last-of-type { padding-bottom: 0; }
+.slot .grow { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.slot .name { background: none; border: 0; padding: 0; text-align: left; font-weight: 600; font-size: 16px; line-height: 1.25; }
+.slot .name.link { text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+.slot.ok .name { color: var(--muted); }
+.slot .acts { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.check { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line); background: var(--surface); flex: none; display: inline-flex; align-items: center; justify-content: center; padding: 0; margin-top: 16px; }
+.check svg { width: 16px; height: 16px; fill: none; stroke: transparent; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.check[aria-pressed="true"] { background: var(--pine); border-color: var(--pine); }
+.check[aria-pressed="true"] svg { stroke: var(--on-pine); }
+.check.sq { border-radius: 8px; margin-top: 0; width: 26px; height: 26px; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.stat { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.stat .num { font-size: 26px; }
+.stat .num small { font-size: 15px; color: var(--muted); font-weight: 500; }
+.stat.over .num { color: var(--tomato); }
+.stat span { font-size: 12px; color: var(--muted); line-height: 1.2; }
+.copa { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--surface); }
+.copa button { border: 0; background: none; padding: 6px 11px; font-size: 13.5px; font-weight: 600; }
+.copa .menos { border-left: 1px solid var(--line); color: var(--tomato); padding-inline: 10px; }
+.copa b { background: var(--tomato-soft); color: var(--tomato); font-size: 12.5px; padding: 2px 7px; border-radius: 999px; margin-left: 4px; font-variant-numeric: tabular-nums; }
+
+/* Peso */
+.pesoform { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; }
+.pesoform label { display: flex; flex-direction: column; gap: 4px; min-width: 0; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.pesoform input { font-size: 17px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--ink); }
+.big4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px 8px; }
+.big4 .num { font-size: 30px; }
+.chart { width: 100%; height: auto; display: block; }
+.chart text { font-family: var(--body); font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.verdict { border-radius: var(--r); padding: 14px 16px; background: var(--pine-soft); display: flex; flex-direction: column; gap: 4px; }
+.verdict.warn { background: var(--saffron-soft); }
+.verdict.alert { background: var(--tomato-soft); }
+.verdict b { font-family: var(--display); font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
+.tw { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 0 8px 6px 0; white-space: nowrap; }
+td { padding: 8px 8px 8px 0; border-top: 1px solid var(--line); }
+td.r, th.r { text-align: right; padding-right: 0; }
+.down { color: var(--pine); font-weight: 600; }
+.up { color: var(--tomato); font-weight: 600; }
+.x { border: 0; background: none; color: var(--muted); padding: 2px 6px; font-size: 18px; line-height: 1; }
+
+/* Recetas */
+.recgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.rec { background: var(--surface); border: 0; border-radius: var(--r); padding: 14px; text-align: left; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.rec .name { font-weight: 600; font-size: 16px; line-height: 1.25; }
+.rec .meta, .meta { display: flex; gap: 10px; flex-wrap: wrap; font-size: 13.5px; color: var(--muted); font-variant-numeric: tabular-nums; align-items: center; }
+.meta b { color: var(--ink); font-weight: 600; }
+.rec .foot { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; }
+.star { color: var(--saffron); }
+
+/* Compra */
+.buy { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); width: 100%; background: none; border-inline: 0; border-bottom: 0; text-align: left; }
+.buy:first-child { border-top: 0; }
+.buy .grow { flex: 1; min-width: 0; }
+.buy .q { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.buy.ok .grow, .buy.ok .q { text-decoration: line-through; color: var(--muted); }
+details { background: var(--surface); border-radius: var(--r); }
+summary { padding: 14px 16px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; gap: 12px; align-items: baseline; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary > span:first-child { flex: 1; min-width: 0; }
+summary > span + span { text-align: right; }
+summary::after { content: '+'; font-family: var(--display); font-size: 22px; line-height: .8; color: var(--muted); }
+details[open] > summary::after { content: '–'; }
+details > div { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 12px; }
+.dayline { display: flex; gap: 10px; align-items: flex-start; padding-top: 10px; border-top: 1px solid var(--line); }
+.dayline .grow { flex: 1; min-width: 0; }
+
+/* Fuera */
+.sino { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.sino ul { display: flex; flex-direction: column; gap: 6px; font-size: 14.5px; }
+.sino li { padding-left: 14px; position: relative; }
+.sino li::before { content: ''; position: absolute; left: 0; top: .6em; width: 6px; height: 6px; border-radius: 50%; background: var(--pine); }
+.sino .no li::before { background: var(--tomato); border-radius: 1px; }
+.reglas { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px 20px; }
+.reglas b { display: block; }
+.pasos { counter-reset: p; display: flex; flex-direction: column; gap: 10px; }
+.pasos li { counter-increment: p; padding-left: 34px; position: relative; }
+.pasos li::before { content: counter(p); position: absolute; left: 0; top: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--pine-soft); color: var(--pine); font-family: var(--display); font-weight: 600; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+.dots { display: flex; flex-direction: column; gap: 7px; }
+.dots li { padding-left: 14px; position: relative; }
+.dots li::before { content: ''; position: absolute; left: 0; top: .6em; width: 6px; height: 6px; border-radius: 50%; background: var(--pine); }
+
+/* Hoja */
+dialog { border: 0; padding: 0; background: var(--bg); color: var(--ink); width: 100%; max-width: 620px; max-height: 88vh; border-radius: 18px 18px 0 0; margin: auto auto 0; overflow: hidden; }
+dialog[open] { display: flex; flex-direction: column; }
+dialog::backdrop { background: var(--shade); }
+.sh-head { display: flex; align-items: flex-start; gap: 12px; padding: 18px 16px 12px; }
+.sh-head .grow { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.sh-body { overflow-y: auto; padding: 4px 16px calc(20px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 16px; }
+.opt { display: flex; gap: 12px; align-items: center; width: 100%; text-align: left; background: var(--surface); border: 1px solid transparent; border-radius: 12px; padding: 11px 14px; }
+.opt .grow { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.opt.cur { border-color: var(--pine); }
+.opt b { font-weight: 600; }
+#toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(86px + env(safe-area-inset-bottom, 0px)); z-index: 60; background: var(--ink); color: var(--bg); padding: 10px 14px; border-radius: 12px; font-size: 14px; font-weight: 500; display: flex; gap: 12px; align-items: center; max-width: calc(100% - 32px); }
+#toast button { background: none; border: 0; color: inherit; font-weight: 700; text-decoration: underline; padding: 0; }
+.empty { text-align: center; padding: 22px 12px; color: var(--muted); display: flex; flex-direction: column; gap: 10px; align-items: center; }
+
+@media (min-width: 760px) {
+  .app { padding-block: 20px 40px; }
+  .tabs { position: sticky; top: env(safe-area-inset-top, 0px); bottom: auto; border-top: 0; border-radius: var(--r); padding: 6px; order: 0; }
+  .tabs div { max-width: none; }
+  .tab { flex-direction: row; justify-content: center; gap: 8px; font-size: 14px; padding: 9px 4px; }
+  .tab svg { width: 20px; height: 20px; }
+  dialog { margin: auto; border-radius: 18px; }
+  #toast { bottom: 24px; }
+}
+@media (max-width: 460px) {
+  .sino { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); gap: 12px 8px; }
+  .big4 { grid-template-columns: repeat(2, 1fr); }
+  .pesoform { grid-template-columns: 1fr 1fr; }
+  .pesoform .btn { grid-column: 1 / -1; }
+  .meter .num { font-size: 34px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bar b, .bar i { transition: width .25s ease; }
+}
+
+.buy .q2 { white-space: normal; text-align: right; max-width: 48%; font-weight: 500; font-size: 14px; color: var(--muted); }
+.buy.ok .q2 { text-decoration: line-through; }
+
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .band { fill: var(--pine); opacity: .13; }
+.chart .bandt { fill: var(--pine); font-weight: 600; }
+.chart .pt { fill: var(--muted); opacity: .55; }
+.chart .ln { fill: none; stroke: var(--pine); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.chart .end { fill: var(--pine); stroke: var(--surface); stroke-width: 2.5; }
+.key { display: inline-block; vertical-align: middle; margin-right: 4px; }
+.key.pt { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); opacity: .55; }
+.key.ln { width: 18px; height: 3px; border-radius: 2px; background: var(--pine); }
+.brandrow { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.brandrow svg { width: 44px; height: 44px; flex: none; }
+.toolrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+input[type="file"] { max-width: 100%; font-size: 14px; }
+
+</style>
+<div class="app">
+  <header class="top">
+    <div class="brandrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#1C5848"/><circle cx="256" cy="256" r="150" fill="none" stroke="#EDF1EC" stroke-width="26"/><path d="M172 206l62 58 42-34 70 76" fill="none" stroke="#F1C04C" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/><path d="M282 306h64v-64" fill="none" stroke="#F1C04C" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="brand">Mi plan de déficit<small>2.300-2.400 kcal · 150-165 g de proteína · 3 entrenos</small></div></div>
+    <div class="toolrow"><div class="sync" id="sync" aria-live="polite">Conectando…</div><button class="btn sm" id="bak-btn" data-a="backup" hidden>Copia de seguridad</button></div>
+  </header>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Secciones"></nav>
+  <main id="view"></main>
+</div>
+<dialog id="sheet" aria-label="Detalle"></dialog>
+<div id="toast" role="status" hidden></div>
+<script>
+const STANDALONE = true;
+/* ---------- Ingredientes: kcal y proteína por 100 g/ml, o por unidad ---------- */
+const CATS = [
+  ['carne', 'Carne y pescado'],
+  ['lacteos', 'Lácteos y huevos'],
+  ['verdura', 'Verdura y patata'],
+  ['fruta', 'Fruta'],
+  ['despensa', 'Despensa'],
+  ['basicos', 'Básicos (mira si ya tienes)']
+];
+const ING = {
+  pollo: { n: 'Pechuga de pollo', c: 'carne', u: 'g', k: 110, p: 23 },
+  ternera: { n: 'Ternera picada magra', c: 'carne', u: 'g', k: 135, p: 21 },
+  filete: { n: 'Ternera (filete o para guisar)', c: 'carne', u: 'g', k: 125, p: 22 },
+  lomo: { n: 'Lomo de cerdo', c: 'carne', u: 'g', k: 145, p: 22 },
+  solomillo: { n: 'Solomillo de cerdo', c: 'carne', u: 'g', k: 120, p: 21 },
+  pavo: { n: 'Pechuga de pavo en lonchas', c: 'carne', u: 'g', k: 105, p: 20 },
+  serrano: { n: 'Jamón serrano', c: 'carne', u: 'g', k: 240, p: 30 },
+  cocido: { n: 'Jamón cocido', c: 'carne', u: 'g', k: 110, p: 19 },
+  salmon: { n: 'Salmón fresco', c: 'carne', u: 'g', k: 205, p: 20 },
+  salmonah: { n: 'Salmón ahumado', c: 'carne', u: 'g', k: 180, p: 23 },
+  atun: { n: 'Atún al natural (lata pequeña)', c: 'carne', u: 'ud', k: 58, p: 13, s: ['lata pequeña de atún al natural', 'latas pequeñas de atún al natural'] },
+
+  huevo: { n: 'Huevos', c: 'lacteos', u: 'ud', k: 75, p: 6.5, s: ['huevo', 'huevos'] },
+  claras: { n: 'Claras de huevo', c: 'lacteos', u: 'g', k: 48, p: 11 },
+  skyr: { n: 'Skyr (yogur alto en proteína) o queso fresco batido 0%', c: 'lacteos', u: 'g', k: 62, p: 11 },
+  griego: { n: 'Yogur griego natural', c: 'lacteos', u: 'g', k: 115, p: 5 },
+  cottage: { n: 'Requesón o cottage', c: 'lacteos', u: 'g', k: 95, p: 12 },
+  burgos: { n: 'Queso fresco tipo Burgos', c: 'lacteos', u: 'g', k: 175, p: 13 },
+  loncha: { n: 'Queso en lonchas', c: 'lacteos', u: 'ud', k: 60, p: 4.5, s: ['loncha de queso', 'lonchas de queso'] },
+  mozza: { n: 'Mozzarella', c: 'lacteos', u: 'g', k: 250, p: 18 },
+  rallado: { n: 'Queso rallado', c: 'lacteos', u: 'g', k: 380, p: 25 },
+  leche: { n: 'Leche semidesnatada', c: 'lacteos', u: 'ml', k: 46, p: 3.3 },
+
+  patata: { n: 'Patatas', c: 'verdura', u: 'g', k: 78, p: 2 },
+  boniato: { n: 'Boniato', c: 'verdura', u: 'g', k: 86, p: 1.6 },
+  pimiento: { n: 'Pimientos', c: 'verdura', u: 'g', k: 27, p: 1 },
+  cebolla: { n: 'Cebolla', c: 'verdura', u: 'g', k: 40, p: 1.1 },
+  calabacin: { n: 'Calabacín', c: 'verdura', u: 'g', k: 17, p: 1.2 },
+  brocoli: { n: 'Brócoli', c: 'verdura', u: 'g', k: 34, p: 2.8 },
+  zanahoria: { n: 'Zanahoria', c: 'verdura', u: 'g', k: 40, p: 0.9 },
+  tomate: { n: 'Tomate', c: 'verdura', u: 'g', k: 20, p: 0.9 },
+  lechuga: { n: 'Lechuga o ensalada de bolsa', c: 'verdura', u: 'g', k: 17, p: 1.3 },
+  espinacas: { n: 'Espinacas', c: 'verdura', u: 'g', k: 23, p: 2.9 },
+  champi: { n: 'Champiñones', c: 'verdura', u: 'g', k: 25, p: 3 },
+  judias: { n: 'Judías verdes', c: 'verdura', u: 'g', k: 30, p: 1.8 },
+  berenjena: { n: 'Berenjena', c: 'verdura', u: 'g', k: 25, p: 1 },
+  salteado: { n: 'Verduras para saltear (congeladas)', c: 'verdura', u: 'g', k: 45, p: 2.5 },
+  aguacate: { n: 'Aguacate', c: 'verdura', u: 'g', k: 160, p: 2 },
+
+  platano: { n: 'Plátanos', c: 'fruta', u: 'ud', k: 105, p: 1.3, s: ['plátano', 'plátanos'] },
+  fruta: { n: 'Fruta de temporada (piezas)', c: 'fruta', u: 'ud', k: 80, p: 1, s: ['pieza de fruta', 'piezas de fruta'] },
+  rojos: { n: 'Frutos rojos congelados', c: 'fruta', u: 'g', k: 45, p: 1 },
+  limon: { n: 'Limón', c: 'fruta', u: 'ud', k: 0, p: 0, s: ['limón', 'limones'] },
+
+  arroz: { n: 'Arroz', c: 'despensa', u: 'g', k: 355, p: 7 },
+  pasta: { n: 'Pasta', c: 'despensa', u: 'g', k: 355, p: 12.5 },
+  noodles: { n: 'Fideos de huevo para wok', c: 'despensa', u: 'g', k: 350, p: 12 },
+  cuscus: { n: 'Cuscús', c: 'despensa', u: 'g', k: 360, p: 12 },
+  gnocchi: { n: 'Ñoquis', c: 'despensa', u: 'g', k: 160, p: 4 },
+  avena: { n: 'Copos de avena', c: 'despensa', u: 'g', k: 370, p: 13.5 },
+  pan: { n: 'Pan', c: 'despensa', u: 'g', k: 250, p: 8.5 },
+  panburger: { n: 'Pan de hamburguesa', c: 'despensa', u: 'ud', k: 160, p: 5, s: ['pan de hamburguesa', 'panes de hamburguesa'] },
+  tortilla: { n: 'Tortillas de trigo medianas', c: 'despensa', u: 'ud', k: 120, p: 3.2, s: ['tortilla de trigo mediana', 'tortillas de trigo medianas'] },
+  tortitas: { n: 'Tortitas de arroz', c: 'despensa', u: 'ud', k: 30, p: 0.7, s: ['tortita de arroz', 'tortitas de arroz'] },
+  lentejas: { n: 'Lentejas cocidas (bote, escurridas)', c: 'despensa', u: 'g', k: 105, p: 8 },
+  garbanzos: { n: 'Garbanzos cocidos (bote, escurridos)', c: 'despensa', u: 'g', k: 125, p: 7.5 },
+  alubias: { n: 'Alubias cocidas (bote, escurridas)', c: 'despensa', u: 'g', k: 100, p: 7 },
+  triturado: { n: 'Tomate triturado', c: 'despensa', u: 'g', k: 30, p: 1.5 },
+  maiz: { n: 'Maíz dulce', c: 'despensa', u: 'g', k: 85, p: 3 },
+  aceitunas: { n: 'Aceitunas', c: 'despensa', u: 'g', k: 150, p: 1 },
+  nueces: { n: 'Nueces', c: 'despensa', u: 'g', k: 650, p: 15 },
+  almendras: { n: 'Almendras al natural', c: 'despensa', u: 'g', k: 600, p: 21 },
+  cacahuete: { n: 'Crema de cacahuete', c: 'despensa', u: 'g', k: 600, p: 25 },
+  miel: { n: 'Miel', c: 'despensa', u: 'g', k: 320, p: 0.3 },
+  choco: { n: 'Chocolate negro 85%', c: 'despensa', u: 'g', k: 600, p: 9 },
+  prote: { n: 'Proteína en polvo', c: 'despensa', u: 'ud', k: 120, p: 24, s: ['cacito de proteína en polvo', 'cacitos de proteína en polvo'] },
+
+  aceite: { n: 'Aceite de oliva', c: 'basicos', u: 'g', k: 900, p: 0 },
+  soja: { n: 'Salsa de soja', c: 'basicos' },
+  ajo: { n: 'Ajo', c: 'basicos' },
+  pimenton: { n: 'Pimentón', c: 'basicos' },
+  curry: { n: 'Curry en polvo', c: 'basicos' },
+  oregano: { n: 'Orégano', c: 'basicos' },
+  comino: { n: 'Comino', c: 'basicos' },
+  canela: { n: 'Canela', c: 'basicos' },
+  mostaza: { n: 'Mostaza', c: 'basicos' },
+  vinagre: { n: 'Vinagre', c: 'basicos' },
+  caldo: { n: 'Caldo de pollo o verduras', c: 'basicos' }
+};
+
+/* ---------- Recetas ---------- */
+const TIPOS = { des: 'Desayuno', com: 'Comida', mer: 'Merienda', cen: 'Cena' };
+const REC = [];
+function R(id, t, n, min, tags, ing, pasos, nota) {
+  REC.push({ id, t, n, min, tags, ing, pasos, nota: nota || '' });
+}
+
+/* Desayunos */
+R('d1', 'des', 'Skyr con plátano y nueces', 3, ['rapida', 'sincocinar'],
+  [['skyr', 250], ['platano', 1], ['nueces', 20]],
+  ['Pon el skyr en un bol.', 'Corta el plátano encima y añade las nueces troceadas.']);
+R('d2', 'des', 'Tostada con jamón y tomate', 5, ['rapida'],
+  [['pan', 80], ['serrano', 60], ['tomate', 80], ['aceite', 5]],
+  ['Tuesta el pan.', 'Ralla el tomate encima, añade el aceite y una pizca de sal.', 'Cubre con el jamón.']);
+R('d3', 'des', 'Huevos revueltos con pavo y tostada', 8, ['rapida'],
+  [['huevo', 2], ['pavo', 50], ['pan', 60], ['fruta', 1]],
+  ['Trocea el pavo y dóralo un minuto en una sartén antiadherente.', 'Añade los huevos batidos y remueve a fuego medio hasta que cuajen.', 'Sirve con el pan tostado y la fruta.']);
+R('d4', 'des', 'Avena de un día para otro', 5, ['sincocinar', 'taper'],
+  [['avena', 50], ['skyr', 150], ['leche', 100], ['rojos', 100], ['miel', 10], ['canela', 0]],
+  ['La noche anterior mezcla la avena, el skyr, la leche y la canela en un bote.', 'Añade los frutos rojos congelados encima y cierra.', 'Por la mañana remueve y añade la miel.'],
+  'Prepara dos o tres botes de una vez; aguantan tres días en la nevera.');
+R('d5', 'des', 'Tortitas de avena y plátano', 12, ['rapida'],
+  [['avena', 40], ['huevo', 1], ['claras', 100], ['platano', 1], ['skyr', 50], ['canela', 0]],
+  ['Tritura la avena, el huevo, las claras, medio plátano y la canela.', 'Haz tortitas pequeñas en una sartén antiadherente, 1-2 minutos por lado.', 'Sirve con el skyr y el otro medio plátano en rodajas.']);
+R('d6', 'des', 'Bocadillo de tortilla francesa', 8, ['rapida'],
+  [['pan', 80], ['huevo', 2], ['cocido', 40], ['tomate', 50]],
+  ['Bate los huevos y haz una tortilla francesa con el jamón cocido dentro.', 'Abre el pan, restriega el tomate y mete la tortilla.'],
+  'Envuelto en papel aguanta bien para llevar.');
+R('d7', 'des', 'Tostada de aguacate, huevo y salmón ahumado', 10, ['rapida'],
+  [['pan', 60], ['aguacate', 50], ['huevo', 1], ['salmonah', 60], ['limon', 0.5]],
+  ['Tuesta el pan y aplasta el aguacate encima con unas gotas de limón.', 'Haz el huevo a la plancha o pasado por agua (6 minutos).', 'Monta el salmón y el huevo sobre la tostada.']);
+R('d8', 'des', 'Batido para llevar', 3, ['rapida', 'sincocinar'],
+  [['prote', 1], ['platano', 1], ['leche', 250], ['avena', 20]],
+  ['Tritura todo junto hasta que quede fino.', 'Si lo quieres frío, añade unos cubitos de hielo.'],
+  'El desayuno de los días que sales con prisa.');
+R('d9', 'des', 'Tostada con queso fresco y pavo', 5, ['rapida', 'sincocinar'],
+  [['pan', 80], ['burgos', 80], ['pavo', 50], ['tomate', 60], ['oregano', 0]],
+  ['Tuesta el pan.', 'Pon el queso fresco en láminas, el pavo y el tomate en rodajas.', 'Termina con orégano.']);
+
+/* Meriendas */
+R('m1', 'mer', 'Skyr con fruta y nueces', 3, ['rapida', 'sincocinar'],
+  [['skyr', 250], ['fruta', 1], ['nueces', 15]],
+  ['Trocea la fruta sobre el skyr y añade las nueces.']);
+R('m2', 'mer', 'Bocadillo pequeño de pavo', 4, ['rapida', 'sincocinar', 'taper'],
+  [['pan', 60], ['pavo', 80], ['tomate', 50]],
+  ['Abre el pan, restriega el tomate y rellena con el pavo.']);
+R('m3', 'mer', 'Batido de proteína con plátano', 3, ['rapida', 'sincocinar'],
+  [['prote', 1], ['platano', 1], ['almendras', 15]],
+  ['Bate la proteína con agua fría.', 'Acompaña con el plátano y las almendras.']);
+R('m4', 'mer', 'Tortitas de arroz con atún y aguacate', 5, ['rapida', 'sincocinar'],
+  [['tortitas', 3], ['atun', 2], ['aguacate', 40], ['limon', 0.5]],
+  ['Aplasta el aguacate con el limón y úntalo en las tortitas.', 'Reparte el atún escurrido por encima.']);
+R('m5', 'mer', 'Requesón con miel y nueces', 2, ['rapida', 'sincocinar'],
+  [['cottage', 200], ['miel', 10], ['nueces', 15]],
+  ['Sirve el requesón con la miel y las nueces por encima.']);
+R('m6', 'mer', 'Huevos duros, pavo y fruta', 12, ['taper'],
+  [['huevo', 2], ['pavo', 40], ['fruta', 1]],
+  ['Cuece los huevos 10 minutos y enfríalos.', 'Acompaña con el pavo y la fruta.'],
+  'Cuece seis huevos de una vez; duran cinco días en la nevera con cáscara.');
+R('m7', 'mer', 'Tostada de crema de cacahuete y plátano', 4, ['rapida', 'sincocinar'],
+  [['pan', 40], ['cacahuete', 15], ['platano', 0.5], ['skyr', 125]],
+  ['Tuesta el pan, unta la crema de cacahuete y pon el plátano en rodajas.', 'Acompaña con el skyr.']);
+R('m8', 'mer', 'Rollito de jamón y queso', 4, ['rapida', 'sincocinar', 'taper'],
+  [['tortilla', 1], ['cocido', 60], ['loncha', 1], ['lechuga', 30]],
+  ['Pon el jamón, el queso y la lechuga sobre la tortilla.', 'Enrolla apretando y corta por la mitad.']);
+R('m9', 'mer', 'Skyr helado con frutos rojos', 4, ['rapida', 'sincocinar'],
+  [['skyr', 250], ['rojos', 150], ['miel', 10], ['choco', 10]],
+  ['Mezcla el skyr con los frutos rojos aún congelados.', 'Añade la miel y el chocolate picado.']);
+
+/* Comidas */
+R('c1', 'com', 'Pollo al horno con patatas y verduras', 45, ['horno', 'taper'],
+  [['pollo', 220], ['patata', 400], ['pimiento', 150], ['calabacin', 100], ['cebolla', 50], ['aceite', 15], ['pimenton', 0], ['fruta', 1]],
+  ['Corta la patata en gajos y las verduras en trozos grandes. Ponlo todo en una bandeja con el aceite, sal y pimentón.', 'Hornea 20 minutos a 200 °C.', 'Añade el pollo en trozos salpimentado y hornea 15-20 minutos más.', 'Fruta de postre.'],
+  'Haz el doble: mañana tienes táper.');
+R('c2', 'com', 'Bol de arroz con ternera', 20, ['taper'],
+  [['ternera', 180], ['arroz', 100], ['salteado', 200], ['aceite', 10], ['soja', 0], ['ajo', 0], ['fruta', 1]],
+  ['Cuece el arroz.', 'Saltea la ternera con el ajo hasta que se dore. Aparta.', 'En la misma sartén saltea las verduras con el aceite 5 minutos.', 'Junta todo sobre el arroz con un chorro de salsa de soja. Fruta de postre.']);
+R('c3', 'com', 'Pasta con atún y tomate', 15, ['rapida', 'taper'],
+  [['pasta', 120], ['atun', 3], ['triturado', 200], ['cebolla', 50], ['aceite', 10], ['ajo', 0], ['oregano', 0], ['fruta', 1]],
+  ['Pon la pasta a cocer.', 'Sofríe la cebolla y el ajo en el aceite, añade el tomate y el orégano y deja 8 minutos.', 'Añade el atún escurrido y mezcla con la pasta. Fruta de postre.']);
+R('c4', 'com', 'Lentejas con pollo', 20, ['taper'],
+  [['lentejas', 350], ['pollo', 150], ['cebolla', 50], ['zanahoria', 80], ['pimiento', 80], ['aceite', 10], ['pimenton', 0], ['caldo', 0], ['pan', 50]],
+  ['Sofríe la cebolla, la zanahoria y el pimiento picados en el aceite.', 'Añade el pollo en dados y dóralo.', 'Echa las lentejas escurridas, pimentón y un vaso de caldo. Cuece 10 minutos.', 'Sirve con el pan.'],
+  'Mejor de un día para otro. Congela bien por raciones.');
+R('c5', 'com', 'Salmón con arroz y brócoli', 20, [],
+  [['salmon', 180], ['arroz', 100], ['brocoli', 250], ['aceite', 5], ['limon', 0.5], ['soja', 0]],
+  ['Cuece el arroz. En los últimos 5 minutos añade el brócoli al agua o hazlo al vapor.', 'Haz el salmón a la plancha, 3-4 minutos por lado, empezando por la piel.', 'Sirve con limón y un poco de soja.']);
+R('c6', 'com', 'Arroz con pollo al curry', 25, ['taper'],
+  [['pollo', 200], ['arroz', 100], ['griego', 100], ['cebolla', 80], ['pimiento', 100], ['aceite', 10], ['curry', 0], ['caldo', 0]],
+  ['Cuece el arroz.', 'Sofríe la cebolla y el pimiento en el aceite. Añade el pollo en dados y dóralo.', 'Echa una cucharada de curry y medio vaso de caldo o agua. Cuece 8 minutos a fuego suave.', 'Aparta del fuego y mezcla el yogur para que la salsa quede cremosa (si hierve, se corta).', 'Sirve sobre el arroz.']);
+R('c7', 'com', 'Macarrones a la boloñesa', 25, ['taper'],
+  [['pasta', 110], ['ternera', 150], ['triturado', 200], ['cebolla', 60], ['zanahoria', 50], ['aceite', 10], ['rallado', 15], ['oregano', 0]],
+  ['Sofríe la cebolla y la zanahoria ralladas en el aceite.', 'Añade la carne y dórala. Echa el tomate y el orégano y cuece 12 minutos.', 'Cuece la pasta, mézclala con la salsa y termina con el queso.'],
+  'La boloñesa congela muy bien: haz el triple y guarda raciones.');
+R('c8', 'com', 'Garbanzos salteados con espinacas y huevo', 12, ['rapida'],
+  [['garbanzos', 300], ['espinacas', 150], ['huevo', 2], ['serrano', 40], ['aceite', 10], ['ajo', 0], ['pimenton', 0], ['pan', 40]],
+  ['Dora el ajo laminado y el jamón en taquitos en el aceite.', 'Añade los garbanzos escurridos, el pimentón y las espinacas. Saltea 4 minutos.', 'Haz los huevos a la plancha y ponlos encima. Acompaña con el pan.']);
+R('c9', 'com', 'Fideos salteados con ternera', 15, ['rapida'],
+  [['noodles', 100], ['filete', 180], ['salteado', 250], ['aceite', 10], ['soja', 0], ['ajo', 0], ['fruta', 1]],
+  ['Cuece los fideos según el paquete y escúrrelos.', 'Corta la ternera en tiras finas y saltéala a fuego fuerte 2 minutos. Aparta.', 'Saltea las verduras con el aceite y el ajo. Añade fideos, ternera y soja y mezcla un minuto. Fruta de postre.']);
+R('c10', 'com', 'Solomillo de cerdo con cuscús y verduras', 20, [],
+  [['solomillo', 220], ['cuscus', 90], ['calabacin', 150], ['pimiento', 100], ['aceite', 15], ['comino', 0], ['fruta', 1]],
+  ['Hidrata el cuscús con la misma cantidad de agua hirviendo y sal, tapado 5 minutos.', 'Saltea el calabacín y el pimiento en dados con la mitad del aceite y comino.', 'Corta el solomillo en medallones y hazlos a la plancha con el resto del aceite, 2-3 minutos por lado. Fruta de postre.']);
+R('c11', 'com', 'Ensalada de pasta con pollo', 20, ['taper'],
+  [['pasta', 100], ['pollo', 180], ['tomate', 150], ['maiz', 60], ['aceitunas', 30], ['mozza', 30], ['aceite', 10], ['oregano', 0]],
+  ['Cuece la pasta y enfríala con agua.', 'Haz el pollo a la plancha y córtalo en dados.', 'Mezcla todo con el tomate troceado, el maíz, las aceitunas y la mozzarella. Aliña con aceite y orégano.'],
+  'Se come fría: perfecta para llevar.');
+R('c12', 'com', 'Bol mexicano de ternera', 20, ['taper'],
+  [['arroz', 80], ['ternera', 150], ['alubias', 150], ['maiz', 50], ['tomate', 100], ['aguacate', 50], ['lechuga', 50], ['aceite', 5], ['comino', 0], ['pimenton', 0]],
+  ['Cuece el arroz.', 'Dora la carne con el aceite, comino y pimentón. Añade las alubias escurridas y calienta 3 minutos.', 'Monta el bol con el arroz, la carne, el maíz, el tomate en dados, la lechuga y el aguacate.']);
+R('c13', 'com', 'Pollo a la plancha con boniato y judías verdes', 30, ['airfryer'],
+  [['pollo', 220], ['boniato', 350], ['judias', 200], ['aceite', 15], ['pimenton', 0], ['fruta', 1]],
+  ['Corta el boniato en bastones, mézclalo con la mitad del aceite y pimentón y hazlo 18-20 minutos en freidora de aire a 190 °C (o 30 minutos al horno).', 'Cuece las judías 8 minutos.', 'Haz el pollo a la plancha con el resto del aceite. Fruta de postre.']);
+R('c14', 'com', 'Arroz salteado con pollo y huevo', 20, ['taper'],
+  [['arroz', 100], ['pollo', 150], ['huevo', 2], ['zanahoria', 60], ['salteado', 100], ['aceite', 10], ['soja', 0]],
+  ['Cuece el arroz y déjalo enfriar un poco (si es del día anterior, mejor).', 'Saltea el pollo en dados con el aceite, añade la zanahoria y las verduras.', 'Aparta a un lado, cuaja los huevos batidos y mezcla todo con el arroz y la soja.']);
+R('c15', 'com', 'Ñoquis con pollo y espinacas', 15, ['rapida'],
+  [['gnocchi', 300], ['pollo', 180], ['espinacas', 100], ['triturado', 150], ['aceite', 5], ['rallado', 15], ['ajo', 0]],
+  ['Dora el pollo en dados con el aceite y el ajo.', 'Añade el tomate y las espinacas y cuece 5 minutos.', 'Cuece los ñoquis (suben en 2 minutos), mézclalos con la salsa y añade el queso.']);
+R('c16', 'com', 'Bol de salmón con arroz y aguacate', 20, [],
+  [['arroz', 100], ['salmon', 160], ['aguacate', 60], ['tomate', 100], ['zanahoria', 50], ['soja', 0], ['limon', 0.5]],
+  ['Cuece el arroz y alíñalo con unas gotas de limón.', 'Corta el salmón en dados y márcalo en la sartén 1-2 minutos por cara.', 'Monta el bol con el arroz, el salmón, el tomate en dados, la zanahoria rallada y el aguacate. Aliña con soja.']);
+R('c17', 'com', 'Estofado de ternera con patata', 60, ['taper'],
+  [['filete', 220], ['patata', 350], ['zanahoria', 100], ['cebolla', 80], ['triturado', 100], ['aceite', 10], ['pimenton', 0], ['caldo', 0], ['pan', 40]],
+  ['Dora la ternera en dados con el aceite. Añade la cebolla y la zanahoria y sofríe.', 'Echa el tomate, pimentón y caldo hasta cubrir. Cuece tapado 35 minutos (15 en olla rápida).', 'Añade la patata troceada y cuece 15 minutos más. Sirve con el pan.'],
+  'Receta de domingo: haz cuatro raciones y congela.');
+R('c18', 'com', 'Tortilla de patatas con ensalada de atún', 30, ['taper'],
+  [['huevo', 3], ['patata', 300], ['cebolla', 50], ['aceite', 15], ['lechuga', 100], ['tomate', 100], ['atun', 2], ['pan', 40]],
+  ['Corta la patata fina y hazla con la cebolla en el microondas tapada, 8-10 minutos, con una cucharadita de aceite.', 'Mezcla con los huevos batidos y cuaja la tortilla en una sartén pequeña con el resto del aceite.', 'Acompaña con la ensalada de lechuga, tomate y atún, y el pan.']);
+
+/* Cenas */
+R('n1', 'cen', 'Tortilla con pavo y ensalada', 10, ['rapida'],
+  [['huevo', 3], ['pavo', 100], ['pan', 80], ['lechuga', 150], ['tomate', 100], ['aceite', 10], ['skyr', 125]],
+  ['Haz una tortilla con los huevos y el pavo troceado.', 'Aliña la ensalada con el aceite.', 'Acompaña con el pan y toma el skyr de postre.']);
+R('n2', 'cen', 'Hamburguesa casera con patatas', 25, ['airfryer'],
+  [['ternera', 200], ['panburger', 1], ['loncha', 1], ['tomate', 50], ['lechuga', 30], ['patata', 250], ['aceite', 5], ['mostaza', 0]],
+  ['Corta la patata en bastones, mézclala con el aceite y hazla en freidora de aire 18 minutos a 190 °C (o al horno 30).', 'Forma dos hamburguesas finas con la carne salpimentada y hazlas a la plancha 2-3 minutos por lado. Pon el queso encima al final.', 'Monta en el pan con tomate, lechuga y mostaza.']);
+R('n3', 'cen', 'Fajitas de pollo', 15, ['rapida'],
+  [['pollo', 200], ['tortilla', 3], ['pimiento', 150], ['cebolla', 50], ['aceite', 10], ['griego', 50], ['comino', 0], ['pimenton', 0]],
+  ['Corta el pollo, el pimiento y la cebolla en tiras.', 'Saltea todo a fuego fuerte con el aceite, comino y pimentón, 6-8 minutos.', 'Calienta las tortillas y rellénalas. El yogur hace de salsa.']);
+R('n4', 'cen', 'Ensalada completa de atún', 20, ['taper'],
+  [['atun', 3], ['huevo', 2], ['patata', 300], ['tomate', 150], ['lechuga', 100], ['aceitunas', 30], ['aceite', 15], ['vinagre', 0]],
+  ['Cuece la patata troceada 15 minutos y los huevos 10.', 'Mezcla con el tomate, la lechuga, las aceitunas y el atún escurrido.', 'Aliña con aceite y vinagre.']);
+R('n5', 'cen', 'Lomo con pimientos y patata', 25, [],
+  [['lomo', 200], ['patata', 300], ['pimiento', 200], ['aceite', 15], ['ajo', 0], ['fruta', 1]],
+  ['Cuece la patata o hazla al microondas 8 minutos.', 'Fríe los pimientos en tiras con el aceite y el ajo a fuego medio, 12 minutos.', 'Haz el lomo a la plancha, 2 minutos por lado. Fruta de postre.']);
+R('n6', 'cen', 'Pizza rápida de tortilla', 12, ['rapida', 'horno'],
+  [['tortilla', 2], ['triturado', 100], ['mozza', 80], ['cocido', 80], ['champi', 100], ['atun', 1], ['oregano', 0], ['lechuga', 100], ['aceite', 5]],
+  ['Extiende el tomate sobre las tortillas y reparte la mozzarella, el jamón, los champiñones laminados y el atún.', 'Hornea 6-8 minutos a 220 °C (o en freidora de aire 5 minutos a 200 °C).', 'Termina con orégano y acompaña con la ensalada aliñada.']);
+R('n7', 'cen', 'Salmón al horno con patata y judías verdes', 25, ['horno'],
+  [['salmon', 170], ['patata', 300], ['judias', 200], ['aceite', 5], ['limon', 0.5], ['skyr', 125]],
+  ['Corta la patata en rodajas finas y ponla en una bandeja con las judías, el aceite y sal. Hornea 12 minutos a 200 °C.', 'Coloca el salmón encima con rodajas de limón y hornea 10-12 minutos más.', 'Skyr de postre.']);
+R('n8', 'cen', 'Revuelto de champiñones y jamón', 12, ['rapida'],
+  [['huevo', 3], ['champi', 250], ['serrano', 50], ['pan', 80], ['aceite', 10], ['ajo', 0], ['skyr', 125]],
+  ['Saltea los champiñones laminados con el ajo y el aceite hasta que pierdan el agua.', 'Añade el jamón en tiras y los huevos batidos. Remueve fuera del fuego para que quede jugoso.', 'Sirve con el pan tostado. Skyr de postre.']);
+R('n9', 'cen', 'Wraps de pollo con salsa de yogur', 15, ['rapida', 'taper'],
+  [['pollo', 180], ['tortilla', 2], ['lechuga', 60], ['tomate', 80], ['loncha', 1], ['griego', 50], ['aceite', 10], ['pimenton', 0], ['fruta', 1]],
+  ['Corta el pollo en tiras, sazónalo con pimentón y hazlo a la plancha con el aceite.', 'Mezcla el yogur con sal y unas gotas de limón o vinagre.', 'Rellena las tortillas con el pollo, el queso, la lechuga, el tomate y la salsa. Fruta de postre.']);
+R('n10', 'cen', 'Pasta carbonara ligera', 15, ['rapida'],
+  [['pasta', 100], ['huevo', 2], ['serrano', 50], ['rallado', 20], ['lechuga', 100], ['aceite', 5]],
+  ['Cuece la pasta y guarda medio vaso del agua.', 'Dora el jamón en tiras sin aceite. Bate los huevos con el queso y pimienta.', 'Fuera del fuego, mezcla la pasta con el jamón, el huevo y un poco del agua hasta que quede cremosa.', 'Acompaña con la ensalada aliñada.']);
+R('n11', 'cen', 'Pollo al limón con cuscús', 15, ['rapida', 'taper'],
+  [['pollo', 200], ['cuscus', 80], ['calabacin', 200], ['aceite', 15], ['limon', 1], ['ajo', 0], ['skyr', 125]],
+  ['Hidrata el cuscús con la misma cantidad de agua hirviendo, tapado 5 minutos.', 'Saltea el calabacín en dados con la mitad del aceite.', 'Dora el pollo en tiras con el ajo y el resto del aceite; al final añade el zumo del limón.', 'Skyr de postre.']);
+R('n12', 'cen', 'Tacos de ternera', 15, ['rapida'],
+  [['ternera', 180], ['tortilla', 3], ['tomate', 100], ['cebolla', 40], ['lechuga', 50], ['aguacate', 50], ['griego', 30], ['comino', 0], ['pimenton', 0]],
+  ['Dora la carne con comino, pimentón y sal.', 'Pica el tomate y la cebolla y mézclalos.', 'Rellena las tortillas calientes con la carne, el picadillo, la lechuga, el aguacate y el yogur.']);
+R('n13', 'cen', 'Berenjena rellena de carne', 40, ['horno', 'taper'],
+  [['berenjena', 300], ['ternera', 180], ['triturado', 150], ['mozza', 50], ['cebolla', 50], ['aceite', 10], ['oregano', 0], ['pan', 60]],
+  ['Parte la berenjena por la mitad, hazle cortes y cuécela en el microondas 8 minutos. Saca la pulpa.', 'Sofríe la cebolla en el aceite, dora la carne y añade el tomate, la pulpa y orégano. Cuece 8 minutos.', 'Rellena, cubre con la mozzarella y gratina 10 minutos. Acompaña con el pan.']);
+R('n14', 'cen', 'Bocadillo de lomo con pimientos y queso', 12, ['rapida'],
+  [['pan', 120], ['lomo', 150], ['pimiento', 100], ['loncha', 1], ['aceite', 10], ['fruta', 1]],
+  ['Fríe el pimiento en tiras con el aceite 6-8 minutos.', 'Haz el lomo a la plancha y funde el queso encima.', 'Monta el bocadillo. Fruta de postre.']);
+R('n15', 'cen', 'Huevos al plato con tomate y jamón', 20, [],
+  [['huevo', 3], ['triturado', 300], ['pimiento', 100], ['cebolla', 60], ['serrano', 40], ['pan', 90], ['aceite', 10], ['comino', 0], ['pimenton', 0]],
+  ['Sofríe la cebolla y el pimiento en el aceite. Añade el tomate, comino y pimentón y cuece 10 minutos.', 'Haz tres huecos, casca los huevos dentro y tapa hasta que cuaje la clara.', 'Reparte el jamón por encima y moja con el pan.']);
+
+/* Cenas ligeras (para los días de restaurante) */
+R('l1', 'cen', 'Tortilla francesa con pavo y ensalada grande', 10, ['rapida', 'ligera'],
+  [['huevo', 3], ['pavo', 100], ['lechuga', 150], ['tomate', 150], ['aceite', 10], ['skyr', 125]],
+  ['Haz una tortilla con los huevos y el pavo.', 'Acompaña con la ensalada aliñada. Skyr de postre.']);
+R('l2', 'cen', 'Ensalada ligera de atún y huevo', 15, ['rapida', 'ligera', 'taper'],
+  [['atun', 3], ['huevo', 2], ['patata', 150], ['tomate', 150], ['lechuga', 100], ['aceite', 10], ['vinagre', 0]],
+  ['Cuece la patata troceada y los huevos.', 'Mezcla con el resto y aliña.']);
+R('l3', 'cen', 'Pollo a la plancha con verduras', 15, ['rapida', 'ligera'],
+  [['pollo', 200], ['calabacin', 200], ['champi', 150], ['pimiento', 100], ['aceite', 10], ['pan', 50]],
+  ['Saltea las verduras troceadas con la mitad del aceite, 8 minutos.', 'Haz el pollo a la plancha con el resto.', 'Acompaña con el pan.']);
+R('l4', 'cen', 'Crema de calabacín con huevo y jamón', 25, ['ligera', 'taper'],
+  [['calabacin', 400], ['patata', 100], ['cebolla', 60], ['huevo', 2], ['serrano', 40], ['aceite', 10], ['caldo', 0], ['skyr', 125]],
+  ['Sofríe la cebolla en el aceite, añade el calabacín y la patata troceados y cubre con caldo. Cuece 15 minutos y tritura.', 'Cuece los huevos 10 minutos.', 'Sirve la crema con el huevo picado y el jamón en tiras. Skyr de postre.'],
+  'La crema aguanta cuatro días en la nevera y congela bien.');
+R('l5', 'cen', 'Salmón a la plancha con ensalada', 12, ['rapida', 'ligera'],
+  [['salmon', 170], ['lechuga', 150], ['tomate', 150], ['aceite', 5], ['limon', 0.5], ['pan', 40]],
+  ['Haz el salmón a la plancha, 3-4 minutos por lado.', 'Aliña la ensalada con el aceite y el limón. Acompaña con el pan.']);
+R('l6', 'cen', 'Wok de pollo y verduras', 12, ['rapida', 'ligera'],
+  [['pollo', 200], ['salteado', 300], ['aceite', 10], ['almendras', 10], ['soja', 0], ['ajo', 0], ['fruta', 1]],
+  ['Saltea el pollo en tiras con el aceite y el ajo a fuego fuerte.', 'Añade las verduras y saltea 5 minutos. Termina con soja y las almendras.', 'Fruta de postre.']);
+R('l7', 'cen', 'Hamburguesa al plato con huevo y ensalada', 12, ['rapida', 'ligera'],
+  [['ternera', 200], ['huevo', 1], ['loncha', 1], ['lechuga', 150], ['tomate', 150], ['aceite', 10]],
+  ['Haz la hamburguesa a la plancha y funde el queso encima.', 'Haz el huevo a la plancha en la misma sartén.', 'Sirve sin pan, con la ensalada aliñada.']);
+
+/* ---------- Fuera de casa ---------- */
+const SITIOS = [
+  { n: 'Menú del día', k: 'Bien elegido: 800-900 kcal',
+    si: ['De primero: ensalada, verduras, gazpacho, caldo, lentejas o garbanzos', 'De segundo: carne o pollo a la plancha o al horno, huevos, atún o salmón', 'Guarnición de verdura o ensalada; patatas, solo la mitad', 'Postre: fruta, yogur o café'],
+    no: ['Dos platos con hidrato (pasta de primero y arroz de segundo)', 'Fritos, rebozados y salsas de nata', 'Pan, patatas y postre dulce en la misma comida'] },
+  { n: 'Asador o brasería', k: 'El sitio más fácil',
+    si: ['Entrecot, solomillo, pollo a la brasa o secreto, con ensalada', 'Verduras a la brasa o pimientos asados', 'Una patata asada como único hidrato'],
+    no: ['Entrantes de fritura para compartir', 'Patatas fritas y pan a la vez', 'Chuletón enorme con todo: pide para compartir'] },
+  { n: 'Italiano', k: 'Un plato, no dos',
+    si: ['Pasta con carne o con atún, ración normal, sin pan', 'Carpaccio, bresaola o ensalada caprese de entrante', 'Pizza fina con jamón, pollo o atún: media pizza y ensalada'],
+    no: ['Carbonara de nata, cuatro quesos y pastas rellenas con salsa cremosa', 'Pan de ajo y entrantes fritos', 'Pizza entera más postre'] },
+  { n: 'Japonés o asiático', k: 'Te gusta el atún y el salmón: aprovecha',
+    si: ['Sashimi y nigiris de salmón y atún', 'Bol de salmón o atún con arroz', 'Edamame, pollo teriyaki, yakitori o ternera salteada con verduras', 'Arroz blanco, una ración'],
+    no: ['Tempura y todo lo que diga crujiente', 'Rolls con mayonesa o queso crema', 'Arroz frito y fideos fritos a la vez'] },
+  { n: 'Hamburguesería', k: 'Una hamburguesa sencilla: 600-750 kcal',
+    si: ['Hamburguesa de ternera o pollo a la plancha, sencilla', 'Ensalada en vez de patatas, o patatas pequeñas para compartir', 'Refresco zero o agua'],
+    no: ['Doble carne con beicon y salsas', 'Patatas grandes con queso', 'Batidos y refrescos normales'] },
+  { n: 'Bar de tapas', k: 'Elige tres tapas y para',
+    si: ['Jamón, lomo, pincho moruno, pollo o carne a la plancha', 'Ensaladilla (una tapa), pimientos de padrón, champiñones, tomate aliñado', 'Tortilla de patatas: un pincho', 'Atún en conserva, mojama o ventresca'],
+    no: ['Croquetas, bravas, calamares y rebozados en cadena', 'Picar pan con todo', 'Una caña por tapa: alterna con agua'] },
+  { n: 'Mexicano', k: 'Fajitas, tu mejor opción',
+    si: ['Fajitas de pollo o ternera: 2-3 tortillas, toda la carne y la verdura', 'Bol de arroz con carne y alubias', 'Guacamole, una cucharada'],
+    no: ['Nachos con queso de entrante', 'Burrito gigante con todo', 'Margaritas: 250 kcal cada una'] },
+  { n: 'Kebab o comida rápida', k: 'Se puede salvar',
+    si: ['Kebab al plato o en durum con mucha ensalada y salsa de yogur', 'Pollo asado con ensalada', 'Bocadillo de lomo, pechuga o tortilla'],
+    no: ['Patatas y refresco del menú: pide solo el principal', 'Salsas a chorro', 'Menús gigantes porque valen casi lo mismo'] },
+  { n: 'Gasolinera o área de servicio', k: 'Cuando no hay otra cosa',
+    si: ['Bocadillo de jamón, lomo o tortilla', 'Yogur alto en proteína o batido de proteína, fruta, frutos secos al natural (un puñado)', 'Agua o café'],
+    no: ['Bollería y snacks de bolsa', 'Sándwiches con mayonesa', 'Bebidas energéticas con azúcar'] },
+  { n: 'Desayuno de bar', k: 'Unas 350-450 kcal',
+    si: ['Tostada con jamón y tomate, media o entera', 'Pincho de tortilla', 'Café con leche o cortado'],
+    no: ['Bollería, churros y napolitanas', 'Zumo grande más tostada con mantequilla y mermelada'] }
+];
+const BEBIDAS = [
+  ['cana', 'Caña', 85],
+  ['tercio', 'Tercio', 140],
+  ['vino', 'Copa de vino', 120],
+  ['cubataz', 'Cubata con zero', 130],
+  ['cubata', 'Cubata normal', 230]
+];
+const REGLAS = [
+  ['Proteína primero', 'Elige el plato por la proteína: carne, pollo, huevos, atún o salmón. Lo demás se decide alrededor.'],
+  ['Un solo hidrato', 'Pan, patata, arroz o pasta. Uno por comida, no todos.'],
+  ['Salsas aparte', 'Pídelas al lado y moja tú. Ahorras 150-300 kcal sin enterarte.'],
+  ['El pan, lejos', 'Si no va a ser tu hidrato, que lo retiren de la mesa.'],
+  ['Si no puedes elegir', 'Cómete toda la proteína y la verdura, y la mitad del hidrato.'],
+  ['Esa noche, cena ligera', 'No te saltes la cena: una de las cenas ligeras del recetario, con proteína.'],
+  ['Si te pasaste', 'Márcalo y sigue. Al día siguiente, plan normal, sin recortar.']
+];
+const SALIR = [
+  'Cena normal y con proteína antes de salir. No salgas con hambre.',
+  'Caña antes que tercio y cubata con refresco zero.',
+  'Un vaso de agua entre copa y copa.',
+  'Decide antes de salir qué vas a cenar o si vas a comer algo al volver. Lo que más suma no es la copa, es lo de después.',
+  'Tope orientativo: 4-5 consumiciones a la semana, mejor en 1-2 días.',
+  'Al día siguiente: desayuno normal, agua y el plan tal cual.'
+];
+const PLAN = { kcal: 2350, kcalMin: 2300, kcalMax: 2400, protMin: 150, protMax: 165, revision: 82, copasTope: 5, entrenos: 3 };
+const EXTRA = { rest_ok: { k: 850, p: 45 }, rest_pas: { k: 1300, p: 50 }, libre: { k: 1200, p: 40 } };
+
+/* ---------- Compra base: los productos que cubren más recetas (calculado sobre el recetario) ---------- */
+const BASE = [
+  ['pollo', '1 kg'], ['ternera', '500 g'], ['lomo', '400 g'], ['pavo', '2 paquetes (400 g)'], ['serrano', '200 g'], ['cocido', '1 paquete (150 g)'], ['atun', '6 latas'],
+  ['huevo', '2 docenas'], ['skyr', '1 kg'], ['griego', '1 pack'], ['burgos', '1 tarrina (250 g)'], ['loncha', '1 paquete'], ['rallado', '1 bolsa pequeña'],
+  ['patata', '2 kg'], ['tomate', '1 kg'], ['pimiento', '4-5 (600 g)'], ['cebolla', '1 malla (1 kg)'], ['calabacin', '2 (500 g)'], ['lechuga', '2 bolsas'], ['champi', '1 bandeja (250 g)'], ['zanahoria', '1 bolsa (500 g)'], ['salteado', '1 bolsa (450 g)'],
+  ['fruta', '8-10 piezas'], ['platano', '3-4'],
+  ['arroz', '1 kg'], ['pasta', '500 g'], ['pan', '1 barra cada 1-2 días'], ['tortilla', '1 paquete (8 ud)'], ['triturado', '2 botes (800 g)'], ['nueces', '1 bolsa (150 g)']
+];
+const BASE2 = [
+  ['salmon', '2 lomos (350 g)'], ['salmonah', '1 sobre (100 g)'], ['mozza', '1 bolsa (150 g)'], ['aguacate', '1-2'], ['judias', '1 bolsa (300 g)'],
+  ['lentejas', '1 bote (400 g)'], ['panburger', '1 paquete (4 ud)'], ['aceitunas', '1 lata pequeña']
+];
+
+/* ---------- Fechas (siempre en hora local) ---------- */
+function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+function dstr(d) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+function dparse(s) { const a = s.split('-'); return new Date(+a[0], +a[1] - 1, +a[2], 12); }
+function todayStr() { return dstr(new Date()); }
+function addDays(s, n) { const d = dparse(s); d.setDate(d.getDate() + n); return dstr(d); }
+function diffDays(a, b) { return Math.round((dparse(a) - dparse(b)) / 864e5); }
+function monday(s) { const d = dparse(s); const w = (d.getDay() + 6) % 7; return addDays(s, -w); }
+const DSEM = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+function fcorta(s) { const d = dparse(s); return DSEM[d.getDay()] + ' ' + d.getDate() + ' ' + MESES[d.getMonth()]; }
+function fmin(s) { const d = dparse(s); return d.getDate() + ' ' + MESES[d.getMonth()]; }
+
+/* ---------- Números ---------- */
+function miles(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+function kgf(n, dec) { return n.toFixed(dec == null ? 1 : dec).replace('.', ','); }
+function sgn(n, dec) { return (n > 0 ? '+' : n < 0 ? '−' : '') + kgf(Math.abs(n), dec); }
+
+/* ---------- Recetas ---------- */
+const RBY = {};
+REC.forEach(function (r) { RBY[r.id] = r; });
+function nut(r) {
+  let k = 0, p = 0;
+  r.ing.forEach(function (x) {
+    const g = ING[x[0]];
+    if (!g || !g.k && !g.p) return;
+    const f = g.u === 'ud' ? x[1] : x[1] / 100;
+    k += g.k * f; p += g.p * f;
+  });
+  return { k: Math.round(k / 5) * 5, p: Math.round(p) };
+}
+REC.forEach(function (r) { const n = nut(r); r.k = n.k; r.p = n.p; });
+
+function cantidad(id, q) {
+  const g = ING[id];
+  if (!g.u || !q) return g.n;
+  if (id === 'aceite') {
+    if (q === 5) return '1 cucharadita de aceite de oliva';
+    const c = q / 10;
+    return kgf(c, c % 1 ? 1 : 0) + (c === 1 ? ' cucharada' : ' cucharadas') + ' de aceite de oliva';
+  }
+  if (g.u === 'ud') {
+    if (q === 0.5) return '½ ' + g.s[0];
+    return q + ' ' + (q === 1 ? g.s[0] : g.s[1]);
+  }
+  return q + ' ' + g.u + ' de ' + g.n.charAt(0).toLowerCase() + g.n.slice(1);
+}
+
+/* ---------- Diario ---------- */
+function slotNut(e) {
+  if (!e) return null;
+  if (e.r && RBY[e.r]) return { k: RBY[e.r].k, p: RBY[e.r].p };
+  if (e.x === 'rest') return e.q === 'pas' ? EXTRA.rest_pas : EXTRA.rest_ok;
+  if (e.x === 'libre') return EXTRA.libre;
+  return null;
+}
+function copasDe(day) {
+  let n = 0, k = 0;
+  const c = (day && day.copas) || {};
+  BEBIDAS.forEach(function (b) { const q = c[b[0]] || 0; n += q; k += q * b[2]; });
+  return { n: n, k: k };
+}
+function totales(day) {
+  const t = { plan: { k: 0, p: 0 }, hecho: { k: 0, p: 0 }, slots: 0, ok: 0 };
+  ['des', 'com', 'mer', 'cen'].forEach(function (s) {
+    const e = day && day.m && day.m[s];
+    const n = slotNut(e);
+    if (!n) return;
+    t.slots++;
+    t.plan.k += n.k; t.plan.p += n.p;
+    if (e.ok) { t.ok++; t.hecho.k += n.k; t.hecho.p += n.p; }
+  });
+  const c = copasDe(day);
+  t.plan.k += c.k; t.hecho.k += c.k;
+  return t;
+}
+function semana(dias, pesos, fecha) {
+  const l = monday(fecha);
+  const r = { entrenos: 0, copas: 0, libres: 0, pesajes: 0 };
+  for (let i = 0; i < 7; i++) {
+    const f = addDays(l, i), d = dias[f];
+    if (pesos[f] != null) r.pesajes++;
+    if (!d) continue;
+    if (d.entreno) r.entrenos++;
+    r.copas += copasDe(d).n;
+    ['com', 'cen'].forEach(function (s) { if (d.m && d.m[s] && d.m[s].x === 'libre') r.libres++; });
+  }
+  return r;
+}
+/* Última fecha en que cada receta aparece en el diario (hecha o planificada). */
+function usos(dias) {
+  const u = {};
+  Object.keys(dias).forEach(function (f) {
+    const m = dias[f].m || {};
+    Object.keys(m).forEach(function (s) {
+      const id = m[s] && m[s].r;
+      if (!id) return;
+      (u[id] = u[id] || []).push(f);
+    });
+  });
+  return u;
+}
+function candidatas(slot, tipo, todas) {
+  return REC.filter(function (r) {
+    if (slot === 'des' || slot === 'mer') return r.t === slot;
+    if (todas) return r.t === 'com' || r.t === 'cen';
+    if (slot === 'com') return r.t === 'com';
+    const lig = r.tags.indexOf('ligera') >= 0;
+    return r.t === 'cen' && (tipo === 'curro' ? lig : !lig);
+  });
+}
+/* Elige una receta para un hueco priorizando las que hace más tiempo que no aparecen cerca de esa fecha. */
+function elegir(slot, tipo, fecha, dias, favs, evitar, rnd, solo) {
+  rnd = rnd || Math.random;
+  const u = usos(dias);
+  let c = candidatas(slot, tipo, false).filter(function (r) { return r.id !== evitar; });
+  if (solo) { const c2 = c.filter(function (r) { return solo[r.id]; }); if (c2.length) c = c2; }
+  if (!c.length) return null;
+  const sc = c.map(function (r) {
+    let dist = 60;
+    (u[r.id] || []).forEach(function (f) { dist = Math.min(dist, Math.abs(diffDays(fecha, f))); });
+    return { r: r, s: Math.min(dist, 21) + (favs && favs[r.id] ? 2 : 0) + rnd() * 4 };
+  });
+  sc.sort(function (a, b) { return b.s - a.s; });
+  return sc[0].r.id;
+}
+
+/* ---------- Lista de la compra ---------- */
+function compra(dias, desde, n, sueltos) {
+  const items = {}; let platos = 0, huecos = 0;
+  for (let i = 0; i < n; i++) {
+    const d = dias[addDays(desde, i)] || { tipo: 'casa', m: {} };
+    ['des', 'com', 'mer', 'cen'].forEach(function (s) {
+      const e = d.m && d.m[s];
+      if (!e) { if (!(s === 'com' && d.tipo === 'curro')) huecos++; return; }
+      if (!e.r || e.ok || !RBY[e.r]) return;
+      platos++;
+      RBY[e.r].ing.forEach(function (x) { items[x[0]] = (items[x[0]] || 0) + x[1]; });
+    });
+  }
+  Object.keys(sueltos || {}).forEach(function (id) {
+    const q = sueltos[id];
+    if (!RBY[id] || !(q > 0)) return;
+    platos += q;
+    RBY[id].ing.forEach(function (x) { items[x[0]] = (items[x[0]] || 0) + x[1] * q; });
+  });
+  return { items: items, platos: platos, huecos: huecos };
+}
+function cantCompra(id, q) {
+  const g = ING[id];
+  if (!g.u || g.c === 'basicos') return '';
+  if (g.u === 'ud') return Math.ceil(q) + ' ud';
+  const r = Math.ceil(q / 10) * 10;
+  if (r >= 1000) return kgf(r / 1000, 1) + (g.u === 'ml' ? ' l' : ' kg');
+  return r + ' ' + g.u;
+}
+
+/* Recetas que salen con un conjunto de productos (los básicos y el limón se dan por comprados). */
+function recetasCon(ids) {
+  const set = {};
+  ids.forEach(function (i) { set[i] = true; });
+  return REC.filter(function (r) {
+    return r.ing.every(function (x) { return ING[x[0]].c === 'basicos' || x[0] === 'limon' || set[x[0]]; });
+  });
+}
+
+/* ---------- Peso ---------- */
+function media(a) { return a.reduce(function (x, y) { return x + y; }, 0) / a.length; }
+function ventana(kg, hoy, desde, hasta) {
+  const v = [];
+  for (let i = desde; i <= hasta; i++) { const x = kg[addDays(hoy, -i)]; if (x != null) v.push(x); }
+  return v;
+}
+function serie(kg) {
+  return Object.keys(kg).sort().map(function (f) {
+    return { f: f, kg: kg[f], m7: media(ventana(kg, f, 0, 6)) };
+  });
+}
+function semanasPeso(kg) {
+  const g = {};
+  Object.keys(kg).forEach(function (f) { const l = monday(f); (g[l] = g[l] || []).push(kg[f]); });
+  const ls = Object.keys(g).sort();
+  return ls.map(function (l, i) {
+    const m = media(g[l]);
+    return { lunes: l, n: g[l].length, media: m, cambio: i ? m - media(g[ls[i - 1]]) : null };
+  });
+}
+function analizar(kg, hoy) {
+  const fs = Object.keys(kg).sort();
+  const r = { n: fs.length, estado: 'vacio' };
+  if (!fs.length) return r;
+  r.primero = kg[fs[0]]; r.fprimero = fs[0];
+  r.ultimo = kg[fs[fs.length - 1]]; r.fultimo = fs[fs.length - 1];
+  const a = ventana(kg, hoy, 0, 6), b = ventana(kg, hoy, 7, 13), c = ventana(kg, hoy, 14, 20);
+  r.n7 = a.length;
+  r.m7 = a.length ? media(a) : null;
+  r.total = (r.m7 != null ? r.m7 : r.ultimo) - r.primero;
+  r.dias = diffDays(hoy, fs[0]) + 1;
+  if (a.length >= 3 && r.m7 <= PLAN.revision) { r.estado = 'revision'; return r; }
+  if (a.length < 3 || b.length < 3) { r.estado = 'pocos'; return r; }
+  r.ritmo = r.m7 - media(b);
+  if (c.length >= 3) { r.ritmo = (r.m7 - media(c)) / 2; r.firme = true; }
+  const baja = -r.ritmo;
+  r.estado = baja > 0.7 ? 'rapido' : baja < 0.25 ? 'lento' : 'bien';
+  return r;
+}
+
+/* ---------- Estado y guardado ---------- */
+const S = {
+  peso: { kg: {}, cintura: {} },
+  diario: { dias: {} },
+  compra: { hechos: {}, extras: [], n: 5, sueltos: {}, modo: 'plan', amp: false, solo: false },
+  prefs: { favs: {} }
+};
+const DOCS = Object.keys(S);
+const SLOTS = ['des', 'com', 'mer', 'cen'];
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+function norm(d, v) {
+  v = v && typeof v === 'object' ? v : {};
+  if (d === 'peso') return { kg: v.kg || {}, cintura: v.cintura || {} };
+  if (d === 'diario') return { dias: v.dias || {} };
+  if (d === 'compra') return { hechos: v.hechos || {}, extras: Array.isArray(v.extras) ? v.extras : [], n: [3, 5, 7].indexOf(v.n) >= 0 ? v.n : 5, sueltos: v.sueltos || {}, modo: v.modo === 'base' ? 'base' : 'plan', amp: !!v.amp, solo: !!v.solo };
+  return { favs: v.favs || {} };
+}
+function loadLocal() {
+  DOCS.forEach(function (d) {
+    try { const v = JSON.parse(localStorage.getItem('plandef.' + d)); if (v) S[d] = norm(d, v); } catch (e) { /* sin almacenamiento local */ }
+  });
+}
+function saveLocal(d) { try { localStorage.setItem('plandef.' + d, JSON.stringify(S[d])); } catch (e) { /* sin almacenamiento local */ } }
+
+let col = null, remoto = 'espera';
+const sucio = {}, volando = {}, timers = {};
+function syncUI() {
+  const el = document.getElementById('sync');
+  if (!el) return;
+  const pend = DOCS.some(function (d) { return sucio[d] || volando[d]; });
+  let s = 'ok', t = 'Guardado en tu cuenta';
+  if (remoto === 'espera') { s = ''; t = 'Conectando…'; }
+  else if (remoto === 'local') { s = STANDALONE ? 'ok' : ''; t = STANDALONE ? 'Guardado en este dispositivo' : 'Guardado solo en este dispositivo'; }
+  else if (remoto === 'error') { s = 'err'; t = 'No se pudo guardar en tu cuenta'; }
+  else if (pend) { s = ''; t = 'Guardando…'; }
+  el.dataset.s = s; el.textContent = t;
+}
+function save(d) {
+  if (d === 'diario') {
+    const lim = addDays(todayStr(), -180);
+    Object.keys(S.diario.dias).forEach(function (f) { if (f < lim) delete S.diario.dias[f]; });
+  }
+  saveLocal(d);
+  if (col) {
+    sucio[d] = true;
+    clearTimeout(timers[d]);
+    timers[d] = setTimeout(function () { flush(d); }, 700);
+  }
+  syncUI();
+}
+async function flush(d, reintento) {
+  if (!col || volando[d] || !sucio[d]) return;
+  sucio[d] = false; volando[d] = true; syncUI();
+  try {
+    await col.doc(d).set(clone(S[d]));
+    if (remoto === 'error') remoto = 'ok';
+  } catch (e) {
+    if (e && e.code === 'unavailable' && !reintento) {
+      volando[d] = false; sucio[d] = true;
+      setTimeout(function () { flush(d, true); }, 1500 + Math.random() * 1500);
+      return;
+    }
+    remoto = 'error';
+  }
+  volando[d] = false;
+  if (sucio[d]) flush(d);
+  syncUI();
+}
+async function initRemoto() {
+  try {
+    if (!window.claude || !window.claude.use) { remoto = 'local'; syncUI(); return; }
+    const r = await Promise.all([window.claude.use('db'), window.claude.use('user')]);
+    const db = r[0], user = r[1];
+    const uid = db && user ? await user.id() : null;
+    if (!uid) { remoto = 'local'; syncUI(); return; }
+    col = db.collection('data/users/' + uid);
+    remoto = 'ok'; syncUI();
+    DOCS.forEach(function (d) {
+      col.doc(d).onSnapshot(function (snap) {
+        if (sucio[d] || volando[d] || snap.metadata.hasPendingWrites || !snap.exists) return;
+        const v = norm(d, clone(snap.data()));
+        if (JSON.stringify(v) === JSON.stringify(S[d])) return;
+        S[d] = v; saveLocal(d); render();
+      }, function () { remoto = 'error'; syncUI(); });
+    });
+  } catch (e) { remoto = 'local'; syncUI(); }
+}
+
+/* ---------- Utilidades de interfaz ---------- */
+const esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+const plano = function (s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); };
+const IC = {
+  hoy: '<svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>',
+  peso: '<svg viewBox="0 0 24 24"><path d="M4 7l5 6 4-3 7 8"/><path d="M15 18h5v-5"/></svg>',
+  recetas: '<svg viewBox="0 0 24 24"><path d="M5 4.5h10.5a3 3 0 0 1 3 3V20H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h10.5"/></svg>',
+  compra: '<svg viewBox="0 0 24 24"><path d="M4 9h16l-1.5 10.5h-13z"/><path d="M8.5 9L12 4l3.5 5"/></svg>',
+  fuera: '<svg viewBox="0 0 24 24"><path d="M7 3v18M4.5 3v4.5a2.5 2.5 0 0 0 5 0V3"/><path d="M17 21V3c-2 1.5-3 4-3 7.5V13h3"/></svg>',
+  check: '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  star: '<svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.9 6.8 19.6l1-5.8L3.5 9.7l5.9-.8z"/></svg>',
+  prev: '<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>',
+  next: '<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>',
+  close: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+};
+const TABS = [['hoy', 'Hoy'], ['peso', 'Peso'], ['recetas', 'Recetas'], ['compra', 'Compra'], ['fuera', 'Fuera']];
+let tab = 'hoy', dia = todayStr();
+const ui = { rtipo: 'todo', rflags: {}, q: '', pesoTodos: false, pickAll: false };
+let hoja = null;
+
+let toastT = null, toastUndo = null;
+function toast(msg, undo) {
+  const el = document.getElementById('toast');
+  toastUndo = undo || null;
+  el.innerHTML = '<span>' + esc(msg) + '</span>' + (undo ? '<button data-a="undo">Deshacer</button>' : '');
+  el.hidden = false;
+  clearTimeout(toastT);
+  toastT = setTimeout(function () { el.hidden = true; toastUndo = null; }, undo ? 6000 : 2600);
+}
+function dayOf(f) { return S.diario.dias[f] || { tipo: 'casa', m: {} }; }
+function mutDay(f) {
+  const d = S.diario.dias[f] || (S.diario.dias[f] = { tipo: 'casa', m: {} });
+  if (!d.m) d.m = {};
+  return d;
+}
+const NPROD = Object.keys(ING).filter(function (i) { return ING[i].c !== 'basicos' && i !== 'limon'; }).length;
+function baseIds() { return (S.compra.amp ? BASE.concat(BASE2) : BASE).map(function (x) { return x[0]; }); }
+function baseMap() { const m = {}; recetasCon(baseIds()).forEach(function (r) { m[r.id] = true; }); return m; }
+function elige(s, tipo, f, evitar) { return elegir(s, tipo, f, S.diario.dias, S.prefs.favs, evitar, null, S.compra.solo ? baseMap() : null); }
+function esLigera(id) { return RBY[id] && RBY[id].tags.indexOf('ligera') >= 0; }
+function cerca(id, f, saltar) {
+  let best = null;
+  Object.keys(S.diario.dias).forEach(function (x) {
+    const m = S.diario.dias[x].m || {};
+    SLOTS.forEach(function (s) {
+      if (!m[s] || m[s].r !== id || (x === f && s === saltar)) return;
+      const d = diffDays(x, f);
+      if (best == null || Math.abs(d) < Math.abs(best)) best = d;
+    });
+  });
+  return best;
+}
+function cercaTxt(d) {
+  if (d == null) return '<span class="tag p">Sin usar</span>';
+  if (d === 0) return '<span class="tag t">Ese día</span>';
+  const n = Math.abs(d);
+  return '<span class="tag' + (n <= 3 ? ' t' : '') + '">' + (d < 0 ? 'Hace ' + n : 'En ' + n) + (n === 1 ? ' día' : ' días') + '</span>';
+}
+function metaRec(r) {
+  return '<span><b>' + r.k + '</b> kcal</span><span><b>' + r.p + ' g</b> proteína</span><span>' + r.min + ' min</span>';
+}
+
+/* ---------- Hoy ---------- */
+function setTipo(f, tipo) {
+  const d = mutDay(f);
+  d.tipo = tipo;
+  if (tipo === 'curro') {
+    if (!d.m.com || !d.m.com.ok) d.m.com = { x: 'rest' };
+    if (d.m.cen && d.m.cen.r && !d.m.cen.ok && !esLigera(d.m.cen.r)) d.m.cen = { r: elige('cen', 'curro', f) };
+  } else if (d.m.com && d.m.com.x === 'rest' && !d.m.com.ok) {
+    delete d.m.com;
+  }
+}
+function rellenar(desde, n) {
+  let c = 0;
+  for (let i = 0; i < n; i++) {
+    const f = addDays(desde, i), d = mutDay(f);
+    SLOTS.forEach(function (s) {
+      if (d.m[s]) return;
+      if (s === 'com' && d.tipo === 'curro') d.m[s] = { x: 'rest' };
+      else { d.m[s] = { r: elige(s, d.tipo, f) }; c++; }
+    });
+  }
+  return c;
+}
+function slotHTML(s, d) {
+  const e = d.m && d.m[s];
+  const lbl = '<span class="lbl">' + TIPOS[s] + '</span>';
+  if (!e) {
+    return '<div class="slot"><div class="grow">' + lbl + '<span class="muted">Sin elegir</span><div class="acts">' +
+      '<button class="btn sm pri" data-a="pick" data-s="' + s + '">Elegir</button>' +
+      '<button class="btn sm" data-a="otra" data-s="' + s + '">Sorpréndeme</button></div></div></div>';
+  }
+  const chk = '<button class="check" data-a="ok" data-s="' + s + '" aria-pressed="' + (!!e.ok) + '" aria-label="Marcar ' + TIPOS[s].toLowerCase() + ' como hecha">' + IC.check + '</button>';
+  let body;
+  if (e.r && RBY[e.r]) {
+    const r = RBY[e.r];
+    body = '<button class="name link" data-a="rec" data-id="' + r.id + '">' + esc(r.n) + '</button>' +
+      '<div class="meta">' + metaRec(r) + '</div><div class="acts">' +
+      '<button class="btn sm" data-a="pick" data-s="' + s + '">Cambiar</button>' +
+      '<button class="btn sm" data-a="otra" data-s="' + s + '">Otra distinta</button></div>';
+  } else if (e.x === 'rest') {
+    const n = slotNut(e);
+    body = '<span class="name">Restaurante</span><div class="meta"><span>≈ <b>' + miles(n.k) + '</b> kcal</span><span>≈ <b>' + n.p + ' g</b> proteína</span></div>' +
+      '<div class="acts"><span class="seg"><button data-a="restq" data-s="' + s + '" data-q="ok" aria-pressed="' + (e.q !== 'pas') + '">Bien elegido</button>' +
+      '<button data-a="restq" data-s="' + s + '" data-q="pas" aria-pressed="' + (e.q === 'pas') + '">Me pasé</button></span>' +
+      '<button class="btn sm" data-a="tab" data-t="fuera">Guía</button><button class="btn sm" data-a="pick" data-s="' + s + '">Cambiar</button></div>';
+  } else {
+    body = '<span class="name">Comida libre</span><div class="meta"><span>≈ <b>' + miles(EXTRA.libre.k) + '</b> kcal, sin pesar nada</span></div>' +
+      '<div class="acts"><button class="btn sm" data-a="pick" data-s="' + s + '">Cambiar</button></div>';
+  }
+  return '<div class="slot' + (e.ok ? ' ok' : '') + '">' + chk + '<div class="grow">' + lbl + body + '</div></div>';
+}
+function vHoy() {
+  const hoy = todayStr(), d = dayOf(dia), t = totales(d), w = semana(S.diario.dias, S.peso.kg, dia), l = monday(dia);
+  let h = '<div class="daynav"><button class="icon" data-a="dia" data-f="' + addDays(dia, -1) + '" aria-label="Día anterior">' + IC.prev + '</button>' +
+    '<div class="grow"><div class="fecha">' + (dia === hoy ? 'Hoy, ' : '') + fcorta(dia) + '</div></div>' +
+    '<button class="icon" data-a="dia" data-f="' + addDays(dia, 1) + '" aria-label="Día siguiente">' + IC.next + '</button></div>';
+  h += '<div class="week">';
+  for (let i = 0; i < 7; i++) {
+    const f = addDays(l, i), x = dayOf(f);
+    h += '<button class="wd' + (f === hoy ? ' hoy' : '') + '" data-a="dia" data-f="' + f + '" aria-current="' + (f === dia) + '"><span>' + DSEM[dparse(f).getDay()].charAt(0) + '</span><b>' + dparse(f).getDate() + '</b><i>' + (x.tipo === 'curro' ? 'CURRO' : '') + '</i></button>';
+  }
+  h += '</div>';
+  h += '<div class="row"><span class="seg"><button data-a="tipo" data-t="casa" aria-pressed="' + (d.tipo !== 'curro') + '">Día en casa</button><button data-a="tipo" data-t="curro" aria-pressed="' + (d.tipo === 'curro') + '">Día de curro</button></span>' +
+    (dia !== hoy ? '<button class="btn sm ghost" data-a="dia" data-f="' + hoy + '">Volver a hoy</button>' : '') + '</div>';
+
+  const pk = Math.min(100, t.plan.k / PLAN.kcalMax * 100), hk = Math.min(100, t.hecho.k / PLAN.kcalMax * 100);
+  const pp = Math.min(100, t.plan.p / PLAN.protMax * 100), hp = Math.min(100, t.hecho.p / PLAN.protMax * 100);
+  const sobra = t.plan.k > PLAN.kcalMax + 100;
+  h += '<div class="card"><div class="meters">' +
+    '<div class="meter"><span class="lbl">Calorías</span><div class="num">' + miles(t.hecho.k) + '</div><span class="small muted">de ' + miles(PLAN.kcal) + ' kcal</span><div class="bar k"><i style="width:' + pk + '%"></i><b style="width:' + hk + '%"></b></div>' +
+    '<span class="small ' + (sobra ? 'up' : 'muted') + '">Plan del día: ' + miles(t.plan.k) + ' kcal' + (sobra ? ', por encima del objetivo' : '') + '</span></div>' +
+    '<div class="meter"><span class="lbl">Proteína</span><div class="num">' + t.hecho.p + ' g</div><span class="small muted">de ' + PLAN.protMin + '-' + PLAN.protMax + ' g</span><div class="bar p"><i style="width:' + pp + '%"></i><b style="width:' + hp + '%"></b></div>' +
+    '<span class="small muted">Plan del día: ' + t.plan.p + ' g</span></div></div></div>';
+
+  h += '<div class="card">' + SLOTS.map(function (s) { return slotHTML(s, d); }).join('') + '</div>';
+  if (t.slots < 4) h += '<button class="btn pri" data-a="fill7">Rellenar los huecos de los próximos 7 días</button>';
+
+  if (dia === hoy) {
+    const p = S.peso.kg[hoy];
+    h += '<div class="card"><div class="row"><div class="grow"><span class="lbl">Peso de esta mañana</span>' +
+      (p != null ? '<div class="num" style="font-size:30px;margin-top:4px">' + kgf(p, 2).replace(/0$/, '') + ' kg</div>' : '<div class="small muted">En ayunas, después de ir al baño.</div>') + '</div>' +
+      (p != null ? '<button class="btn sm" data-a="tab" data-t="peso">Ver progreso</button>' :
+        '<input type="text" inputmode="decimal" id="hoy-kg" placeholder="84,2" aria-label="Peso en kilos" style="width:96px"><button class="btn pri" data-a="peso-hoy">Guardar</button>') + '</div></div>';
+  }
+
+  const c = copasDe(d), cs = d.copas || {};
+  h += '<div class="card"><div class="row"><button class="check sq" data-a="entreno" aria-pressed="' + (!!d.entreno) + '" aria-label="Entreno hecho">' + IC.check + '</button><div class="grow"><b>Entreno de fuerza hecho</b><div class="small muted">' + w.entrenos + ' de ' + PLAN.entrenos + ' esta semana</div></div></div></div>';
+  h += '<div class="card"><div class="row"><span class="lbl grow">Alcohol de este día</span><span class="small muted">' + (c.n ? c.n + (c.n === 1 ? ' consumición' : ' consumiciones') + ' · ' + c.k + ' kcal' : 'Nada') + '</span></div><div class="chips">' +
+    BEBIDAS.map(function (b) {
+      const q = cs[b[0]] || 0;
+      return '<span class="copa"><button data-a="copa+" data-b="' + b[0] + '">+ ' + b[1] + (q ? '<b>' + q + '</b>' : '') + '</button>' + (q ? '<button class="menos" data-a="copa-" data-b="' + b[0] + '" aria-label="Quitar ' + b[1] + '">−</button>' : '') + '</span>';
+    }).join('') + '</div></div>';
+
+  h += '<div class="card"><span class="lbl">Semana del ' + fmin(l) + ' al ' + fmin(addDays(l, 6)) + '</span><div class="stats">' +
+    stat(w.entrenos, PLAN.entrenos, 'Entrenos', false) + stat(w.copas, PLAN.copasTope, 'Copas (tope)', w.copas > PLAN.copasTope) +
+    stat(w.libres, 1, 'Comida libre', w.libres > 1) + stat(w.pesajes, 4, 'Pesajes', false) + '</div></div>';
+  return h;
+}
+function stat(a, b, l, over) {
+  return '<div class="stat' + (over ? ' over' : '') + '"><div class="num">' + a + '<small> / ' + b + '</small></div><span>' + l + '</span></div>';
+}
+
+/* ---------- Peso ---------- */
+function chartSVG(kg, hoy) {
+  const s = serie(kg);
+  const vw = document.getElementById('view').clientWidth || 360;
+  const W = Math.max(280, Math.min(728, vw - 32)), H = W < 500 ? 230 : 300, L = 38, R = 14, T = 14, B = 28;
+  const f0 = s[0].f, span = Math.max(13, diffDays(hoy, f0));
+  let lo = Math.min.apply(null, s.map(function (x) { return x.kg; }).concat([PLAN.revision - 1]));
+  let hi = Math.max.apply(null, s.map(function (x) { return x.kg; }));
+  lo = Math.floor((lo - 0.3) * 2) / 2; hi = Math.ceil((hi + 0.3) * 2) / 2;
+  const X = function (f) { return L + diffDays(f, f0) / span * (W - L - R); };
+  const Y = function (v) { return T + (hi - v) / (hi - lo) * (H - T - B); };
+  let g = '';
+  const step = hi - lo > 6 ? 2 : hi - lo > 3 ? 1 : 0.5;
+  for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) {
+    g += '<line class="grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v).toFixed(1) + '" y2="' + Y(v).toFixed(1) + '"/><text x="' + (L - 8) + '" y="' + (Y(v) + 4).toFixed(1) + '" text-anchor="end">' + kgf(v, step < 1 ? 1 : 0) + '</text>';
+  }
+  const yb1 = Y(PLAN.revision), yb0 = Y(Math.max(lo, PLAN.revision - 1));
+  g += '<rect class="band" x="' + L + '" y="' + yb1.toFixed(1) + '" width="' + (W - L - R) + '" height="' + (yb0 - yb1).toFixed(1) + '"/><text class="bandt" x="' + (L + 8) + '" y="' + (yb1 + 16).toFixed(1) + '">Revisión: ' + (PLAN.revision - 1) + '-' + PLAN.revision + ' kg</text>';
+  const nt = W < 420 ? 3 : 4;
+  for (let i = 0; i <= nt; i++) {
+    const f = addDays(f0, Math.round(span * i / nt));
+    g += '<text x="' + X(f).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="' + (i === 0 ? 'start' : i === nt ? 'end' : 'middle') + '">' + fmin(f) + '</text>';
+  }
+  s.forEach(function (x) { g += '<circle class="pt" cx="' + X(x.f).toFixed(1) + '" cy="' + Y(x.kg).toFixed(1) + '" r="3.5"><title>' + fcorta(x.f) + ': ' + kgf(x.kg, 2) + ' kg</title></circle>'; });
+  if (s.length > 1) g += '<polyline class="ln" points="' + s.map(function (x) { return X(x.f).toFixed(1) + ',' + Y(x.m7).toFixed(1); }).join(' ') + '"/>';
+  const u = s[s.length - 1];
+  g += '<circle class="end" cx="' + X(u.f).toFixed(1) + '" cy="' + Y(u.m7).toFixed(1) + '" r="5.5"/>';
+  return '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Gráfica de peso: pesajes diarios y media de 7 días">' + g + '</svg>';
+}
+function veredicto(a) {
+  const r = a.ritmo, x = r != null ? kgf(Math.abs(r), 2) : '';
+  if (a.estado === 'revision') return ['', 'Punto de revisión', 'Tu media de 7 días es ' + kgf(a.m7, 1) + ' kg. Para aquí: mira espejo y cintura y decide si sigues bajando o pasas a mantenimiento (unas 2.700-2.900 kcal).'];
+  if (a.estado === 'pocos') return ['', 'Faltan datos', 'Llevas ' + a.n7 + (a.n7 === 1 ? ' pesaje' : ' pesajes') + ' en los últimos 7 días. Con 3-4 por semana durante dos semanas te digo si hay que ajustar algo.'];
+  if (a.estado === 'bien') return ['', 'Ritmo correcto', 'Bajas ' + x + ' kg por semana. No toques nada.'];
+  const que = r >= 0.05 ? 'Has subido ' + x + ' kg por semana' : r > -0.05 ? 'El peso no se mueve' : 'Bajas ' + x + ' kg por semana';
+  if (a.estado === 'lento') {
+    return a.firme ? ['warn', 'Toca ajustar', que + '. Quita unas 150-200 kcal: media ración de arroz, pasta, patata o pan en comida y cena.']
+      : ['warn', 'Vas lento, pero espera', que + '. Dale una semana más antes de cambiar nada.'];
+  }
+  return a.firme ? ['alert', 'Bajas demasiado rápido', que + '. Sube unas 200 kcal: más arroz, pasta o patata.']
+    : ['warn', 'Bajada rápida', que + '. Las dos primeras semanas se pierde líquido; si la semana que viene sigue igual, sube 200 kcal.'];
+}
+function vPeso() {
+  const hoy = todayStr(), kg = S.peso.kg, a = analizar(kg, hoy);
+  let h = '<h2 class="h2">Peso</h2><div class="card"><form class="pesoform" data-form="peso"><label>Fecha<input type="date" id="peso-fecha" value="' + hoy + '" max="' + hoy + '"></label>' +
+    '<label>Peso (kg)<input type="text" inputmode="decimal" id="peso-kg" placeholder="84,2" autocomplete="off"></label><button class="btn pri" type="submit">Guardar</button></form>' +
+    '<span class="small muted">Pésate 3-4 mañanas por semana, en ayunas y después de ir al baño. Lo que cuenta es la media de la semana.</span></div>';
+  if (!a.n) {
+    return h + '<div class="card empty"><b>Aún no hay pesajes</b><span>Apunta el primero arriba. Aquí verás la gráfica, la media de 7 días y el aviso de cuándo ajustar las calorías.</span></div>';
+  }
+  const v = veredicto(a);
+  h += '<div class="card"><div class="big4">' +
+    '<div class="stat"><div class="num">' + kgf(a.ultimo, 1) + '</div><span>Último, ' + fmin(a.fultimo) + '</span></div>' +
+    '<div class="stat"><div class="num">' + (a.m7 != null ? kgf(a.m7, 1) : '–') + '</div><span>Media de 7 días</span></div>' +
+    '<div class="stat"><div class="num">' + (a.ritmo != null ? sgn(a.ritmo, 2) : '–') + '</div><span>kg por semana</span></div>' +
+    '<div class="stat"><div class="num">' + sgn(a.total, 1) + '</div><span>Desde ' + kgf(a.primero, 1) + ' kg</span></div></div></div>';
+  h += '<div class="verdict ' + v[0] + '"><b>' + v[1] + '</b><span>' + v[2] + '</span></div>';
+  h += '<div class="card">' + chartSVG(kg, hoy) + '<div class="meta"><span><span class="key pt"></span> Pesaje</span><span><span class="key ln"></span> Media de 7 días</span></div></div>';
+
+  const ws = semanasPeso(kg).reverse();
+  h += '<div class="card"><span class="lbl">Medias semanales</span><div class="tw"><table><thead><tr><th>Semana del</th><th class="r">Pesajes</th><th class="r">Media</th><th class="r">Cambio</th></tr></thead><tbody>' +
+    ws.map(function (w) {
+      return '<tr><td>' + fmin(w.lunes) + '</td><td class="r">' + w.n + '</td><td class="r">' + kgf(w.media, 2) + ' kg</td><td class="r ' + (w.cambio == null ? '' : w.cambio < 0 ? 'down' : w.cambio > 0 ? 'up' : '') + '">' + (w.cambio == null ? '–' : sgn(w.cambio, 2)) + '</td></tr>';
+    }).join('') + '</tbody></table></div></div>';
+
+  const fs = Object.keys(kg).sort().reverse(), lista = ui.pesoTodos ? fs : fs.slice(0, 7);
+  h += '<div class="card"><span class="lbl">Pesajes</span><div class="tw"><table><tbody>' + lista.map(function (f) {
+    return '<tr><td>' + fcorta(f) + '</td><td class="r">' + kgf(kg[f], 2).replace(/0$/, '') + ' kg</td><td class="r" style="width:36px"><button class="x" data-a="peso-del" data-f="' + f + '" aria-label="Borrar pesaje del ' + fcorta(f) + '">×</button></td></tr>';
+  }).join('') + '</tbody></table></div>' + (fs.length > 7 ? '<button class="btn sm" data-a="peso-todos">' + (ui.pesoTodos ? 'Ver solo los últimos' : 'Ver los ' + fs.length) + '</button>' : '') + '</div>';
+
+  const cf = Object.keys(S.peso.cintura).sort().reverse();
+  h += '<div class="card"><span class="lbl">Cintura, cada 2 semanas</span><form class="row" data-form="cintura"><input type="text" inputmode="decimal" id="cintura-cm" placeholder="cm, a la altura del ombligo" class="grow" autocomplete="off"><button class="btn" type="submit">Guardar</button></form>' +
+    (cf.length ? '<div class="tw"><table><tbody>' + cf.slice(0, 6).map(function (f, i) {
+      const prev = cf[i + 1], dif = prev ? S.peso.cintura[f] - S.peso.cintura[prev] : null;
+      return '<tr><td>' + fcorta(f) + '</td><td class="r">' + kgf(S.peso.cintura[f], 1) + ' cm</td><td class="r ' + (dif == null ? '' : dif < 0 ? 'down' : dif > 0 ? 'up' : '') + '">' + (dif == null ? '' : sgn(dif, 1)) + '</td><td class="r" style="width:36px"><button class="x" data-a="cint-del" data-f="' + f + '" aria-label="Borrar medida">×</button></td></tr>';
+    }).join('') + '</tbody></table></div>' : '<span class="small muted">Mismo día y misma hora cada vez. La cintura dice más que la báscula cuando entrenas fuerza.</span>') + '</div>';
+  return h;
+}
+function leerNum(id, min, max) {
+  const el = document.getElementById(id);
+  const v = parseFloat(String(el.value).replace(',', '.'));
+  if (!isFinite(v) || v < min || v > max) { toast('Escribe un número entre ' + min + ' y ' + max); el.focus(); return null; }
+  return Math.round(v * 100) / 100;
+}
+
+/* ---------- Recetas ---------- */
+const RFLAGS = [['base', 'Con la compra base'], ['rapida', '15 min o menos'], ['taper', 'Para táper'], ['ligera', 'Cena ligera'], ['fav', 'Favoritas'], ['nuevas', 'Sin repetir']];
+function filtradas() {
+  const q = plano(ui.q.trim()), u = usos(S.diario.dias), hoy = todayStr(), bm = ui.rflags.base ? baseMap() : null;
+  return REC.filter(function (r) {
+    if (bm && !bm[r.id]) return false;
+    if (ui.rtipo !== 'todo' && r.t !== ui.rtipo) return false;
+    if (ui.rflags.rapida && r.min > 15) return false;
+    if (ui.rflags.taper && r.tags.indexOf('taper') < 0) return false;
+    if (ui.rflags.ligera && r.tags.indexOf('ligera') < 0) return false;
+    if (ui.rflags.fav && !S.prefs.favs[r.id]) return false;
+    if (ui.rflags.nuevas && (u[r.id] || []).some(function (f) { return diffDays(hoy, f) < 14; })) return false;
+    if (q) {
+      const txt = plano(r.n + ' ' + r.ing.map(function (x) { return ING[x[0]].n; }).join(' '));
+      if (!q.split(/\s+/).every(function (w) { return txt.indexOf(w) >= 0; })) return false;
+    }
+    return true;
+  });
+}
+function recList() {
+  const l = filtradas(), hoy = todayStr();
+  if (!l.length) return '<div class="card empty"><b>Ninguna receta con esos filtros</b><button class="btn sm" data-a="rclear">Quitar filtros</button></div>';
+  return '<span class="small muted">' + l.length + (l.length === 1 ? ' receta' : ' recetas') + '</span><div class="recgrid">' + l.map(function (r) {
+    return '<button class="rec" data-a="rec" data-id="' + r.id + '"><span class="name">' + (S.prefs.favs[r.id] ? '<span class="star" aria-label="Favorita">★</span> ' : '') + esc(r.n) + '</span><span class="meta">' + metaRec(r) + '</span>' +
+      '<span class="foot"><span class="tag">' + (esLigera(r.id) ? 'Cena ligera' : TIPOS[r.t]) + '</span>' + cercaTxt(cerca(r.id, hoy)) + '</span></button>';
+  }).join('') + '</div>';
+}
+function vRecetas() {
+  return '<h2 class="h2">Recetario</h2><input type="search" id="buscar" placeholder="Buscar plato o ingrediente: pollo, arroz, atún…" value="' + esc(ui.q) + '" aria-label="Buscar recetas">' +
+    '<div class="chips">' + [['todo', 'Todo']].concat(SLOTS.map(function (s) { return [s, TIPOS[s]]; })).map(function (x) {
+      return '<button class="chip" data-a="rtipo" data-t="' + x[0] + '" aria-pressed="' + (ui.rtipo === x[0]) + '">' + x[1] + '</button>';
+    }).join('') + '</div><div class="chips">' + RFLAGS.map(function (x) {
+      return '<button class="chip" data-a="rflag" data-f="' + x[0] + '" aria-pressed="' + (!!ui.rflags[x[0]]) + '">' + x[1] + '</button>';
+    }).join('') + '</div><div class="sec" id="rec-list">' + recList() + '</div>';
+}
+
+/* ---------- Compra ---------- */
+function listaCompra() {
+  const c = compra(S.diario.dias, todayStr(), S.compra.n, S.compra.sueltos), g = {};
+  Object.keys(c.items).forEach(function (id) { (g[ING[id].c] = g[ING[id].c] || []).push(id); });
+  return { c: c, g: g };
+}
+function textoCompra() {
+  if (S.compra.modo === 'base') {
+    const l = S.compra.amp ? BASE.concat(BASE2) : BASE;
+    let t = 'COMPRA BASE (una semana)\n';
+    CATS.forEach(function (cat) {
+      const it = l.filter(function (x) { return ING[x[0]].c === cat[0] && !S.compra.hechos[x[0]]; });
+      if (it.length) t += '\n' + cat[1] + '\n' + it.map(function (x) { return '- ' + ING[x[0]].n + ': ' + x[1]; }).join('\n') + '\n';
+    });
+    const ex = S.compra.extras.filter(function (e) { return !e.ok; });
+    if (ex.length) t += '\nOtros\n' + ex.map(function (e) { return '- ' + e.t; }).join('\n') + '\n';
+    return t;
+  }
+  const x = listaCompra();
+  let t = 'LISTA DE LA COMPRA (' + S.compra.n + ' días)\n';
+  CATS.forEach(function (cat) {
+    const ids = (x.g[cat[0]] || []).filter(function (id) { return !S.compra.hechos[id]; });
+    if (!ids.length) return;
+    t += '\n' + cat[1] + '\n' + ids.sort(function (a, b) { return ING[a].n.localeCompare(ING[b].n, 'es'); }).map(function (id) {
+      const q = cantCompra(id, x.c.items[id]); return '- ' + ING[id].n + (q ? ': ' + q : '');
+    }).join('\n') + '\n';
+  });
+  const ex = S.compra.extras.filter(function (e) { return !e.ok; });
+  if (ex.length) t += '\nOtros\n' + ex.map(function (e) { return '- ' + e.t; }).join('\n') + '\n';
+  return t;
+}
+function modoSeg() {
+  return '<h2 class="h2">Lista de la compra</h2><span class="seg" style="align-self:flex-start"><button data-a="cmodo" data-m="plan" aria-pressed="' + (S.compra.modo !== 'base') + '">Según mi plan</button><button data-a="cmodo" data-m="base" aria-pressed="' + (S.compra.modo === 'base') + '">Compra base</button></span>';
+}
+function buyRow(id, q) {
+  const ok = !!S.compra.hechos[id];
+  return '<button class="buy' + (ok ? ' ok' : '') + '" data-a="chk" data-id="' + id + '" aria-pressed="' + ok + '"><span class="check sq" aria-pressed="' + ok + '">' + IC.check + '</span><span class="grow">' + ING[id].n + '</span><span class="q q2">' + q + '</span></button>';
+}
+function extrasCard() {
+  return '<div class="card"><span class="lbl">Otras cosas</span><form class="row" data-form="extra"><input type="text" id="extra-txt" class="grow" placeholder="Papel de horno, café, refrescos zero…" maxlength="80" autocomplete="off"><button class="btn" type="submit">Añadir</button></form>' +
+    (S.compra.extras.length ? '<div>' + S.compra.extras.map(function (e, i) {
+      return '<div class="buy' + (e.ok ? ' ok' : '') + '"><button class="check sq" data-a="extra-chk" data-i="' + i + '" aria-pressed="' + (!!e.ok) + '" aria-label="Marcar">' + IC.check + '</button><span class="grow">' + esc(e.t) + '</span><button class="x" data-a="extra-del" data-i="' + i + '" aria-label="Quitar">×</button></div>';
+    }).join('') + '</div>' : '') + '</div>';
+}
+function vCompraBase() {
+  const r1 = recetasCon(BASE.map(function (x) { return x[0]; })), r2 = recetasCon(BASE.concat(BASE2).map(function (x) { return x[0]; }));
+  const act = S.compra.amp ? r2 : r1, l = S.compra.amp ? BASE.concat(BASE2) : BASE;
+  const cnt = function (t) { return act.filter(function (r) { return r.t === t; }).length; };
+  const hechos = l.filter(function (x) { return S.compra.hechos[x[0]]; }).length;
+  let h = modoSeg() + '<div class="card"><div class="stats" style="grid-template-columns:1fr 1fr">' + stat(l.length, NPROD, 'Productos de los ' + NPROD + ' del recetario', false) + stat(act.length, REC.length, 'Recetas que puedes hacer', false) + '</div>' +
+    '<span class="small muted">' + cnt('des') + ' desayunos, ' + cnt('com') + ' comidas, ' + cnt('cen') + ' cenas y ' + cnt('mer') + ' meriendas. Son los productos que más recetas completas cubren. Las cantidades son para una semana comiendo en casa: si curras 3 días, compra un tercio menos de carne y verdura fresca, o congela.</span>' +
+    '<div class="row"><button class="btn pri" data-a="verbase">Ver las ' + act.length + ' recetas</button></div>' +
+    '<div class="row"><button class="check sq" data-a="csolo" aria-pressed="' + S.compra.solo + '" aria-label="Elegir solo entre estos platos">' + IC.check + '</button><div class="grow"><b>Elegir por mí solo entre estos platos</b><div class="small muted">«Sorpréndeme» y «Elegir por mí» no te propondrán nada que no puedas cocinar con esta compra.</div></div></div></div>';
+  h += '<div class="row"><span class="small muted grow">' + hechos + ' de ' + l.length + ' en el carro</span><button class="btn sm" data-a="copy">Copiar lista</button>' + (hechos ? '<button class="btn sm" data-a="uncheck">Desmarcar todo</button>' : '') + '</div>';
+  CATS.forEach(function (cat) {
+    const it = BASE.filter(function (x) { return ING[x[0]].c === cat[0]; });
+    if (it.length) h += '<div class="card"><span class="lbl">' + cat[1] + '</span><div>' + it.map(function (x) { return buyRow(x[0], x[1]); }).join('') + '</div></div>';
+  });
+  h += '<div class="card"><div class="row"><button class="check sq" data-a="camp" aria-pressed="' + S.compra.amp + '" aria-label="Añadir la ampliación">' + IC.check + '</button><div class="grow"><b>Ampliación: ' + BASE2.length + ' productos más, ' + r2.length + ' recetas</b><div class="small muted">Añade salmón, lentejas, hamburguesas y ' + (r2.length - r1.length) + ' platos nuevos. Márcala para incluirla en tu compra base.</div></div></div><div>' +
+    BASE2.map(function (x) { return buyRow(x[0], x[1]); }).join('') + '</div></div>';
+  const bas = Object.keys(ING).filter(function (i) { return ING[i].c === 'basicos'; }).concat(['limon']);
+  h += '<div class="card"><span class="lbl">Básicos (mira si ya tienes)</span><div>' + bas.map(function (i) { return buyRow(i, ''); }).join('') + '</div></div>';
+  return h + extrasCard();
+}
+function vCompra() {
+  if (S.compra.modo === 'base') return vCompraBase();
+  const hoy = todayStr(), n = S.compra.n, x = listaCompra(), c = x.c;
+  let h = modoSeg() + '<div class="row"><span class="small muted grow">Comprar para</span><span class="seg">' + [3, 5, 7].map(function (k) {
+    return '<button data-a="cn" data-n="' + k + '" aria-pressed="' + (n === k) + '">' + k + ' días</button>';
+  }).join('') + '</span></div>';
+  h += '<details' + (c.huecos ? ' open' : '') + '><summary><span>Del ' + fcorta(hoy) + ' al ' + fcorta(addDays(hoy, n - 1)) + '</span><span class="small muted">' + c.platos + ' platos' + (c.huecos ? ' · ' + c.huecos + ' sin elegir' : '') + '</span></summary><div>';
+  if (c.huecos) h += '<span class="small muted">Te faltan ' + c.huecos + ' platos por elegir en estos días. Marca abajo los días de curro y pulsa el botón: elijo platos variados y la lista sale completa.</span><button class="btn pri" data-a="fillrange">Elegir por mí los ' + c.huecos + ' platos que faltan</button>';
+  for (let i = 0; i < n; i++) {
+    const f = addDays(hoy, i), d = dayOf(f);
+    const noms = SLOTS.map(function (s) {
+      const e = d.m && d.m[s];
+      return e ? (e.r && RBY[e.r] ? esc(RBY[e.r].n) : e.x === 'rest' ? 'Restaurante' : 'Comida libre') : null;
+    }).filter(Boolean);
+    h += '<div class="dayline"><div class="grow"><button class="btn ghost sm" style="padding:0;font-size:15px" data-a="ir" data-f="' + f + '">' + fcorta(f) + '</button><div class="small muted">' + (noms.length ? noms.join(' · ') : 'Sin platos elegidos') + '</div></div>' +
+      '<span class="seg"><button data-a="ctipo" data-f="' + f + '" data-t="casa" aria-pressed="' + (d.tipo !== 'curro') + '">Casa</button><button data-a="ctipo" data-f="' + f + '" data-t="curro" aria-pressed="' + (d.tipo === 'curro') + '">Curro</button></span></div>';
+  }
+  const su = Object.keys(S.compra.sueltos).filter(function (id) { return RBY[id]; });
+  if (su.length) h += '<div class="dayline"><div class="grow"><span class="lbl">Platos sueltos</span></div></div>' + su.map(function (id) {
+    return '<div class="row"><button class="btn ghost sm grow" style="padding:0;text-align:left;font-size:15px" data-a="rec" data-id="' + id + '">' + esc(RBY[id].n) + '</button><button class="btn sm" data-a="buy-" data-id="' + id + '" aria-label="Quitar una ración">−</button><b class="num" style="font-size:20px;min-width:16px;text-align:center">' + S.compra.sueltos[id] + '</b><button class="btn sm" data-a="buy+" data-id="' + id + '" aria-label="Añadir una ración">+</button></div>';
+  }).join('');
+  h += '<button class="btn" data-a="tab" data-t="recetas">Añadir platos sueltos desde el recetario</button></div></details>';
+
+  if (!c.platos) {
+    h += '<div class="card empty"><b>Aún no hay platos para esta compra</b><span>Pulsa arriba el botón para que elija los platos por ti, o entra en una receta y pulsa «Añadir a la lista de la compra». La lista se calcula sola con las cantidades.</span></div>';
+  } else {
+    const hechos = Object.keys(c.items).filter(function (id) { return S.compra.hechos[id]; }).length;
+    h += '<div class="row"><span class="small muted grow">' + hechos + ' de ' + Object.keys(c.items).length + ' en el carro</span><button class="btn sm" data-a="copy">Copiar lista</button>' + (hechos ? '<button class="btn sm" data-a="uncheck">Desmarcar todo</button>' : '') + '</div>';
+    CATS.forEach(function (cat) {
+      const ids = x.g[cat[0]];
+      if (!ids) return;
+      ids.sort(function (a, b) { return ING[a].n.localeCompare(ING[b].n, 'es'); });
+      h += '<div class="card"><span class="lbl">' + cat[1] + '</span><div>' + ids.map(function (id) {
+        const ok = !!S.compra.hechos[id];
+        return '<button class="buy' + (ok ? ' ok' : '') + '" data-a="chk" data-id="' + id + '" aria-pressed="' + ok + '"><span class="check sq" aria-pressed="' + ok + '">' + IC.check + '</span><span class="grow">' + ING[id].n + '</span><span class="q">' + cantCompra(id, c.items[id]) + '</span></button>';
+      }).join('') + '</div></div>';
+    });
+  }
+  return h + extrasCard();
+}
+
+/* ---------- Fuera de casa ---------- */
+function vFuera() {
+  const w = semana(S.diario.dias, S.peso.kg, todayStr());
+  let h = '<h2 class="h2">Comer fuera</h2><div class="card"><span class="lbl">Las reglas que valen en cualquier sitio</span><div class="reglas">' + REGLAS.map(function (r) {
+    return '<div><b>' + r[0] + '</b><span class="small muted">' + r[1] + '</span></div>';
+  }).join('') + '</div></div><div class="sec"><span class="lbl">Qué pedir según el sitio</span>';
+  SITIOS.forEach(function (s) {
+    h += '<details><summary><span>' + s.n + '</span><span class="small muted">' + s.k + '</span></summary><div><div class="sino"><div class="sec"><span class="tag p" style="align-self:flex-start">Pide</span><ul>' +
+      s.si.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul></div><div class="sec"><span class="tag t" style="align-self:flex-start">Evita</span><ul class="no">' +
+      s.no.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul></div></div></div></details>';
+  });
+  h += '</div><div class="card"><div class="row"><span class="lbl grow">Cuando sales de copas</span><span class="tag' + (w.copas > PLAN.copasTope ? ' t' : ' p') + '">Esta semana: ' + w.copas + ' de ' + PLAN.copasTope + '</span></div><ul class="dots">' +
+    SALIR.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul><div class="tw"><table><thead><tr><th>Bebida</th><th class="r">kcal</th><th class="r">4 unidades</th></tr></thead><tbody>' +
+    BEBIDAS.map(function (b) { return '<tr><td>' + b[1] + '</td><td class="r">' + b[2] + '</td><td class="r">' + miles(b[2] * 4) + '</td></tr>'; }).join('') +
+    '</tbody></table></div><span class="small muted">Apunta las copas en la pestaña Hoy y se suman a las calorías del día.</span></div>';
+  return h;
+}
+
+/* ---------- Hojas (receta y selector) ---------- */
+function hojaRec(id) {
+  const r = RBY[id], fav = !!S.prefs.favs[id], d = dayOf(dia);
+  const dest = r.t === 'des' || r.t === 'mer' ? [r.t] : ['com', 'cen'];
+  return '<div class="sh-head"><div class="grow"><span class="lbl">' + (esLigera(id) ? 'Cena ligera' : TIPOS[r.t]) + '</span><h2 class="h2">' + esc(r.n) + '</h2><div class="meta">' + metaRec(r) + '</div></div>' +
+    '<button class="icon' + (fav ? ' on' : '') + '" data-a="fav" data-id="' + id + '" aria-pressed="' + fav + '" aria-label="Favorita">' + IC.star + '</button><button class="icon" data-a="close" aria-label="Cerrar">' + IC.close + '</button></div>' +
+    '<div class="sh-body"><div class="card"><span class="lbl">Ingredientes, 1 ración (peso en crudo)</span><ul class="dots">' + r.ing.map(function (x) { return '<li>' + cantidad(x[0], x[1]) + '</li>'; }).join('') + '</ul></div>' +
+    '<div class="card"><span class="lbl">Pasos</span><ol class="pasos">' + r.pasos.map(function (p) { return '<li>' + p + '</li>'; }).join('') + '</ol>' + (r.nota ? '<span class="small muted">' + r.nota + '</span>' : '') + '</div>' +
+    '<div class="row">' + dest.map(function (s) {
+      const ya = d.m && d.m[s] && d.m[s].r === id;
+      return '<button class="btn ' + (ya ? '' : 'pri') + ' grow" data-a="set" data-s="' + s + '" data-id="' + id + '"' + (ya ? ' disabled' : '') + '>' + (ya ? 'Ya es tu ' + TIPOS[s].toLowerCase() : 'Poner de ' + TIPOS[s].toLowerCase()) + ' el ' + fcorta(dia) + '</button>';
+    }).join('') + '</div>' + (function () {
+      const q = S.compra.sueltos[id] || 0;
+      return q ? '<div class="row"><span class="grow small muted">En la lista de la compra: ' + q + (q === 1 ? ' ración' : ' raciones') + '</span><button class="btn sm" data-a="buy-" data-id="' + id + '" aria-label="Quitar una ración">−</button><button class="btn sm" data-a="buy+" data-id="' + id + '" aria-label="Añadir una ración">+</button></div>'
+        : '<button class="btn" data-a="buy+" data-id="' + id + '">Añadir a la lista de la compra</button>';
+    })() + '</div>';
+}
+function hojaPick(s) {
+  const d = dayOf(dia), cur = d.m && d.m[s], main = s === 'com' || s === 'cen';
+  const w = semana(S.diario.dias, S.peso.kg, dia);
+  const l = candidatas(s, d.tipo, ui.pickAll).map(function (r) { return { r: r, c: cerca(r.id, dia, s) }; });
+  l.sort(function (a, b) { return (b.c == null ? 99 : Math.abs(b.c)) - (a.c == null ? 99 : Math.abs(a.c)) || a.r.n.localeCompare(b.r.n, 'es'); });
+  let h = '<div class="sh-head"><div class="grow"><span class="lbl">' + fcorta(dia) + '</span><h2 class="h2">Elegir ' + TIPOS[s].toLowerCase() + '</h2><span class="small muted">Primero las que hace más que no comes.</span></div><button class="icon" data-a="close" aria-label="Cerrar">' + IC.close + '</button></div><div class="sh-body">';
+  if (main) {
+    h += '<div class="chips"><button class="chip" data-a="pickall" aria-pressed="' + ui.pickAll + '">Ver comidas y cenas juntas</button></div>' +
+      '<button class="opt' + (cur && cur.x === 'rest' ? ' cur' : '') + '" data-a="set" data-s="' + s + '" data-x="rest"><span class="grow"><b>Restaurante</b><span class="small muted">≈ 850 kcal si eliges bien</span></span></button>' +
+      '<button class="opt' + (cur && cur.x === 'libre' ? ' cur' : '') + '" data-a="set" data-s="' + s + '" data-x="libre"><span class="grow"><b>Comida libre</b><span class="small muted">Una a la semana. Llevas ' + w.libres + '.</span></span></button>';
+  }
+  h += l.map(function (x) {
+    const r = x.r;
+    return '<button class="opt' + (cur && cur.r === r.id ? ' cur' : '') + '" data-a="set" data-s="' + s + '" data-id="' + r.id + '"><span class="grow"><b>' + (S.prefs.favs[r.id] ? '<span class="star">★</span> ' : '') + esc(r.n) + '</b><span class="meta">' + metaRec(r) + '</span></span>' + cercaTxt(x.c) + '</button>';
+  }).join('');
+  if (cur) h += '<button class="btn" data-a="clear" data-s="' + s + '">Dejar este hueco vacío</button>';
+  return h + '</div>';
+}
+function hojaTexto(t) {
+  return '<div class="sh-head"><div class="grow"><h2 class="h2">Lista para copiar</h2><span class="small muted">Mantén pulsado el texto y elige Copiar.</span></div><button class="icon" data-a="close" aria-label="Cerrar">' + IC.close + '</button></div><div class="sh-body"><textarea id="copytxt" readonly rows="14" style="width:100%;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit">' + esc(t) + '</textarea></div>';
+}
+let bakPend = null;
+function hojaBak() {
+  const n = Object.keys(S.peso.kg).length, d = Object.keys(S.diario.dias).length;
+  let h = '<div class="sh-head"><div class="grow"><h2 class="h2">Copia de seguridad</h2><span class="small muted">Tus datos se guardan solo en este dispositivo. Descarga una copia de vez en cuando, o para pasarlos a otro móvil.</span></div><button class="icon" data-a="close" aria-label="Cerrar">' + IC.close + '</button></div><div class="sh-body">';
+  h += '<div class="card"><span class="lbl">Lo que hay ahora</span><span>' + n + (n === 1 ? ' pesaje' : ' pesajes') + ' y ' + d + (d === 1 ? ' día' : ' días') + ' de diario.</span><button class="btn pri" data-a="bak-dl">Descargar copia</button></div>';
+  if (bakPend) {
+    const pn = Object.keys(bakPend.peso.kg).length, pd = Object.keys(bakPend.diario.dias).length;
+    h += '<div class="verdict warn"><b>¿Restaurar esta copia?</b><span>Tiene ' + pn + ' pesajes y ' + pd + ' días de diario' + (bakPend.fecha ? ', guardada el ' + fcorta(bakPend.fecha) : '') + '. Sustituye todo lo que hay ahora en este dispositivo.</span><div class="row"><button class="btn pri" data-a="bak-ok">Restaurar</button><button class="btn" data-a="bak-cancel">Cancelar</button></div></div>';
+  } else {
+    h += '<div class="card"><span class="lbl">Restaurar desde un archivo</span><input type="file" id="bak-file" accept="application/json,.json" aria-label="Archivo de copia"><span class="small muted">Elige un archivo «mi-plan-copia» descargado antes.</span></div>';
+  }
+  return h + '</div>';
+}
+function renderHoja() {
+  const el = document.getElementById('sheet');
+  if (!hoja) { if (el.open) el.close(); return; }
+  el.innerHTML = hoja.k === 'rec' ? hojaRec(hoja.id) : hoja.k === 'pick' ? hojaPick(hoja.s) : hoja.k === 'bak' ? hojaBak() : hojaTexto(hoja.t);
+  if (!el.open) { try { el.showModal(); } catch (e) { el.setAttribute('open', ''); } }
+}
+function abrir(h) { hoja = h; renderHoja(); const b = document.querySelector('#sheet .sh-body'); if (b) b.scrollTop = 0; }
+
+/* ---------- Render y eventos ---------- */
+function render() {
+  document.getElementById('tabs').innerHTML = '<div>' + TABS.map(function (t) {
+    return '<button class="tab" role="tab" data-a="tab" data-t="' + t[0] + '" aria-selected="' + (tab === t[0]) + '">' + IC[t[0]] + '<span>' + t[1] + '</span></button>';
+  }).join('') + '</div>';
+  const v = document.getElementById('view');
+  v.innerHTML = tab === 'hoy' ? vHoy() : tab === 'peso' ? vPeso() : tab === 'recetas' ? vRecetas() : tab === 'compra' ? vCompra() : vFuera();
+  if (hoja) renderHoja();
+  syncUI();
+}
+function irTab(t) {
+  tab = t; hoja = null; renderHoja(); render(); window.scrollTo(0, 0);
+  try { history.replaceState(null, '', '#' + t); } catch (e) { /* sin historial */ }
+}
+function guardarPeso(f, v) {
+  const prev = S.peso.kg[f];
+  S.peso.kg[f] = v; save('peso'); render();
+  toast('Guardado: ' + kgf(v, 2).replace(/0$/, '') + ' kg el ' + fcorta(f), function () {
+    if (prev == null) delete S.peso.kg[f]; else S.peso.kg[f] = prev;
+    save('peso'); render();
+  });
+}
+document.addEventListener('click', function (ev) {
+  const sheet = document.getElementById('sheet');
+  if (ev.target === sheet) { hoja = null; renderHoja(); return; }
+  const b = ev.target.closest('[data-a]');
+  if (!b) return;
+  const a = b.dataset.a, s = b.dataset.s;
+  let d;
+  switch (a) {
+    case 'tab': irTab(b.dataset.t); break;
+    case 'undo': if (toastUndo) { const f = toastUndo; toastUndo = null; document.getElementById('toast').hidden = true; f(); } break;
+    case 'close': hoja = null; renderHoja(); break;
+    case 'dia': dia = b.dataset.f; render(); break;
+    case 'ir': dia = b.dataset.f; irTab('hoy'); break;
+    case 'tipo': setTipo(dia, b.dataset.t); save('diario'); render(); if (b.dataset.t === 'curro') toast('Comida de restaurante y cena ligera'); break;
+    case 'ctipo': setTipo(b.dataset.f, b.dataset.t); save('diario'); render(); break;
+    case 'ok': d = mutDay(dia); if (d.m[s]) { d.m[s].ok = !d.m[s].ok; save('diario'); render(); } break;
+    case 'restq': d = mutDay(dia); if (d.m[s]) { d.m[s].q = b.dataset.q; save('diario'); render(); } break;
+    case 'pick': ui.pickAll = false; abrir({ k: 'pick', s: s }); break;
+    case 'pickall': ui.pickAll = !ui.pickAll; renderHoja(); break;
+    case 'otra': {
+      d = mutDay(dia);
+      const id = elige(s, d.tipo, dia, d.m[s] && d.m[s].r);
+      if (id) { d.m[s] = { r: id }; save('diario'); render(); }
+      break;
+    }
+    case 'set': {
+      d = mutDay(dia);
+      const prev = d.m[s] ? clone(d.m[s]) : null, f = dia;
+      d.m[s] = b.dataset.x ? { x: b.dataset.x } : { r: b.dataset.id };
+      save('diario'); hoja = null; renderHoja();
+      if (tab !== 'hoy') {
+        render();
+        toast(TIPOS[s] + ' del ' + fcorta(f) + ' cambiada', function () { const x = mutDay(f); if (prev) x.m[s] = prev; else delete x.m[s]; save('diario'); render(); });
+      } else render();
+      break;
+    }
+    case 'clear': d = mutDay(dia); delete d.m[s]; save('diario'); hoja = null; renderHoja(); render(); break;
+    case 'rec': abrir({ k: 'rec', id: b.dataset.id }); break;
+    case 'fav': if (S.prefs.favs[b.dataset.id]) delete S.prefs.favs[b.dataset.id]; else S.prefs.favs[b.dataset.id] = true; save('prefs'); render(); break;
+    case 'entreno': d = mutDay(dia); d.entreno = !d.entreno; save('diario'); render(); break;
+    case 'copa+': d = mutDay(dia); d.copas = d.copas || {}; d.copas[b.dataset.b] = (d.copas[b.dataset.b] || 0) + 1; save('diario'); render(); break;
+    case 'copa-': d = mutDay(dia); if (d.copas && d.copas[b.dataset.b]) { d.copas[b.dataset.b]--; if (!d.copas[b.dataset.b]) delete d.copas[b.dataset.b]; save('diario'); render(); } break;
+    case 'fill7': { const n = rellenar(dia, 7); save('diario'); render(); toast(n + ' platos añadidos a los próximos 7 días'); break; }
+    case 'fillrange': { const n = rellenar(todayStr(), S.compra.n); save('diario'); render(); toast(n + ' platos añadidos'); break; }
+    case 'peso-hoy': { const v = leerNum('hoy-kg', 40, 200); if (v != null) guardarPeso(todayStr(), v); break; }
+    case 'peso-del': {
+      const f = b.dataset.f, prev = S.peso.kg[f];
+      delete S.peso.kg[f]; save('peso'); render();
+      toast('Pesaje borrado', function () { S.peso.kg[f] = prev; save('peso'); render(); });
+      break;
+    }
+    case 'cint-del': {
+      const f = b.dataset.f, prev = S.peso.cintura[f];
+      delete S.peso.cintura[f]; save('peso'); render();
+      toast('Medida borrada', function () { S.peso.cintura[f] = prev; save('peso'); render(); });
+      break;
+    }
+    case 'peso-todos': ui.pesoTodos = !ui.pesoTodos; render(); break;
+    case 'rtipo': ui.rtipo = b.dataset.t; render(); break;
+    case 'rflag': ui.rflags[b.dataset.f] = !ui.rflags[b.dataset.f]; render(); break;
+    case 'rclear': ui.rtipo = 'todo'; ui.rflags = {}; ui.q = ''; render(); break;
+    case 'cn': S.compra.n = +b.dataset.n; save('compra'); render(); break;
+    case 'chk': if (S.compra.hechos[b.dataset.id]) delete S.compra.hechos[b.dataset.id]; else S.compra.hechos[b.dataset.id] = true; save('compra'); render(); break;
+    case 'buy+': S.compra.sueltos[b.dataset.id] = (S.compra.sueltos[b.dataset.id] || 0) + 1; save('compra'); render(); if (S.compra.sueltos[b.dataset.id] === 1) toast('Añadido a la lista de la compra'); break;
+    case 'buy-': if (S.compra.sueltos[b.dataset.id] > 1) S.compra.sueltos[b.dataset.id]--; else delete S.compra.sueltos[b.dataset.id]; save('compra'); render(); break;
+    case 'cmodo': S.compra.modo = b.dataset.m; save('compra'); render(); break;
+    case 'camp': S.compra.amp = !S.compra.amp; save('compra'); render(); break;
+    case 'csolo': S.compra.solo = !S.compra.solo; save('compra'); render(); break;
+    case 'verbase': ui.rtipo = 'todo'; ui.rflags = { base: true }; ui.q = ''; irTab('recetas'); break;
+    case 'backup': bakPend = null; abrir({ k: 'bak' }); break;
+    case 'bak-dl': {
+      const data = { app: 'mi-plan-deficit', fecha: todayStr() };
+      DOCS.forEach(function (d) { data[d] = S[d]; });
+      try {
+        const url = URL.createObjectURL(new Blob([JSON.stringify(data)], { type: 'application/json' }));
+        const a2 = document.createElement('a');
+        a2.href = url; a2.download = 'mi-plan-copia-' + todayStr() + '.json';
+        document.body.appendChild(a2); a2.click(); a2.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+        toast('Copia descargada');
+      } catch (e) { toast('No se pudo descargar la copia'); }
+      break;
+    }
+    case 'bak-ok':
+      if (bakPend) { DOCS.forEach(function (d) { S[d] = norm(d, bakPend[d]); save(d); }); bakPend = null; hoja = null; renderHoja(); render(); toast('Copia restaurada'); }
+      break;
+    case 'bak-cancel': bakPend = null; renderHoja(); break;
+    case 'uncheck': {
+      const prev = clone(S.compra.hechos);
+      S.compra.hechos = {}; save('compra'); render();
+      toast('Lista desmarcada', function () { S.compra.hechos = prev; save('compra'); render(); });
+      break;
+    }
+    case 'extra-chk': { const e = S.compra.extras[+b.dataset.i]; if (e) { e.ok = !e.ok; save('compra'); render(); } break; }
+    case 'extra-del': S.compra.extras.splice(+b.dataset.i, 1); save('compra'); render(); break;
+    case 'copy': {
+      const t = textoCompra();
+      const fallo = function () { abrir({ k: 'txt', t: t }); const ta = document.getElementById('copytxt'); if (ta) { ta.focus(); ta.select(); } };
+      try { navigator.clipboard.writeText(t).then(function () { toast('Lista copiada'); }, fallo); } catch (e) { fallo(); }
+      break;
+    }
+  }
+});
+document.addEventListener('submit', function (ev) {
+  const f = ev.target.dataset.form;
+  if (!f) return;
+  ev.preventDefault();
+  if (f === 'peso') {
+    const v = leerNum('peso-kg', 40, 200), fecha = document.getElementById('peso-fecha').value || todayStr();
+    if (v == null) return;
+    if (fecha > todayStr()) { toast('La fecha no puede ser futura'); return; }
+    guardarPeso(fecha, v);
+  } else if (f === 'cintura') {
+    const v = leerNum('cintura-cm', 50, 150);
+    if (v == null) return;
+    S.peso.cintura[todayStr()] = v; save('peso'); render(); toast('Cintura guardada: ' + kgf(v, 1) + ' cm');
+  } else if (f === 'extra') {
+    const el = document.getElementById('extra-txt'), t = el.value.trim();
+    if (!t) return;
+    S.compra.extras.push({ t: t.slice(0, 80) }); save('compra'); render();
+    const n = document.getElementById('extra-txt'); if (n) n.focus();
+  }
+});
+document.addEventListener('input', function (ev) {
+  if (ev.target.id !== 'buscar') return;
+  ui.q = ev.target.value;
+  document.getElementById('rec-list').innerHTML = recList();
+});
+document.addEventListener('change', function (ev) {
+  if (ev.target.id !== 'bak-file' || !ev.target.files || !ev.target.files[0]) return;
+  const fr = new FileReader();
+  fr.onload = function () {
+    try {
+      const v = JSON.parse(fr.result);
+      if (!v || v.app !== 'mi-plan-deficit' || !v.peso || !v.diario) throw new Error('formato');
+      bakPend = { fecha: /^\d{4}-\d{2}-\d{2}$/.test(v.fecha) ? v.fecha : null };
+      DOCS.forEach(function (d) { bakPend[d] = norm(d, v[d]); });
+      renderHoja();
+    } catch (e) { toast('Ese archivo no es una copia de esta app'); }
+  };
+  fr.readAsText(ev.target.files[0]);
+});
+document.addEventListener('keydown', function (ev) {
+  if (ev.key === 'Enter' && ev.target.id === 'hoy-kg') { const v = leerNum('hoy-kg', 40, 200); if (v != null) guardarPeso(todayStr(), v); }
+});
+document.getElementById('sheet').addEventListener('close', function () { hoja = null; });
+let rsT = null, rsW = window.innerWidth;
+window.addEventListener('resize', function () {
+  if (tab !== 'peso' || window.innerWidth === rsW) return;
+  rsW = window.innerWidth;
+  clearTimeout(rsT);
+  rsT = setTimeout(function () { const a = document.activeElement; if (!a || a.tagName !== 'INPUT') render(); }, 200);
+});
+
+(function () {
+  const h = (location.hash || '').slice(1);
+  if (TABS.some(function (t) { return t[0] === h; })) tab = h;
+  loadLocal();
+  render();
+  initRemoto();
+  if (STANDALONE) {
+    const bk = document.getElementById('bak-btn'); if (bk) bk.hidden = false;
+    try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) { /* opcional */ }
+    if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) navigator.serviceWorker.register('sw.js').catch(function () { /* sin modo offline */ });
+  }
+})();
+
+</script>
+</body>
+</html>
