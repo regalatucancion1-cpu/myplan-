@@ -634,6 +634,30 @@ R('m11', 'mer', 'Requesón con frutos rojos y avena', 3, ['rapida', 'sincocinar'
   [['cottage', 200], ['rojos', 100], ['avena', 20]],
   ['Mezcla el requesón con los frutos rojos y la avena por encima.']);
 
+/* Más ñoquis */
+R('c27', 'com', 'Ñoquis con carne picada y guacamole', 15, ['rapida'],
+  [['gnocchi', 250], ['ternera', 170], ['aguacate', 70], ['tomate', 80], ['cebolla', 30], ['aceite', 5], ['limon', 0.5], ['comino', 0], ['pimenton', 0], ['picante', 0]],
+  ['Aplasta el aguacate con el limón, sal y la mitad del tomate y la cebolla picados muy finos: ese es el guacamole.', 'Dora la carne con comino, pimentón y picante. Aparta.', 'En la misma sartén, con el aceite, dora los ñoquis sin cocerlos antes, 5-6 minutos, hasta que queden crujientes por fuera.', 'Mezcla con la carne y el resto del tomate y sirve con el guacamole encima.']);
+R('c28', 'com', 'Ñoquis con salmón y espinacas', 15, ['rapida'],
+  [['gnocchi', 250], ['salmon', 150], ['espinacas', 150], ['griego', 50], ['aceite', 5], ['limon', 0.5], ['ajo', 0]],
+  ['Corta el salmón en dados y dóralo 2 minutos con el aceite. Aparta.', 'Saltea el ajo y las espinacas hasta que reduzcan.', 'Cuece los ñoquis (suben en 2 minutos) y mézclalos con las espinacas, el salmón, el yogur y unas gotas de limón, fuera del fuego.']);
+R('c29', 'com', 'Ñoquis picantes con atún y tomate', 10, ['rapida', 'taper'],
+  [['gnocchi', 300], ['atun', 3], ['triturado', 200], ['cebolla', 50], ['aceite', 10], ['ajo', 0], ['oregano', 0], ['picante', 0]],
+  ['Sofríe la cebolla y el ajo en el aceite. Añade el tomate, el orégano y el picante y cuece 6 minutos.', 'Cuece los ñoquis (suben en 2 minutos).', 'Mézclalos con la salsa y el atún escurrido.'],
+  'Todo de despensa: el plato para el día que la nevera está vacía.');
+R('c30', 'com', 'Ñoquis con pollo al curry', 15, ['rapida', 'taper'],
+  [['gnocchi', 280], ['pollo', 180], ['griego', 80], ['cebolla', 60], ['espinacas', 80], ['aceite', 5], ['curry', 0], ['caldo', 0]],
+  ['Sofríe la cebolla en el aceite y dora el pollo en dados con una cucharada de curry.', 'Añade las espinacas y medio vaso de caldo y cuece 5 minutos.', 'Cuece los ñoquis, mézclalos con el pollo y, fuera del fuego, añade el yogur.']);
+R('n22', 'cen', 'Ñoquis crujientes con pollo y pimientos', 15, ['rapida', 'airfryer'],
+  [['gnocchi', 220], ['pollo', 180], ['pimiento', 150], ['cebolla', 50], ['aceite', 10], ['pimenton', 0], ['skyr', 125]],
+  ['Mezcla los ñoquis crudos con una cucharadita de aceite y hazlos 10-12 minutos en freidora de aire a 200 °C, moviendo a la mitad.', 'Saltea el pollo en tiras con el pimiento y la cebolla, el resto del aceite y pimentón.', 'Junta todo. Skyr de postre.']);
+R('n23', 'cen', 'Ñoquis gratinados con ternera y mozzarella', 20, ['horno'],
+  [['gnocchi', 220], ['ternera', 150], ['triturado', 150], ['mozza', 60], ['cebolla', 40], ['oregano', 0]],
+  ['Dora la carne con la cebolla picada. Añade el tomate y el orégano y cuece 5 minutos.', 'Cuece los ñoquis y mézclalos con la salsa en una fuente.', 'Cubre con la mozzarella y gratina 6-8 minutos en el horno o en la freidora de aire a 200 °C.']);
+R('n24', 'cen', 'Ñoquis salteados con ternera y verduras', 15, ['rapida'],
+  [['gnocchi', 220], ['ternera', 170], ['salteado', 200], ['aceite', 10], ['soja', 0], ['ajo', 0], ['picante', 0]],
+  ['Dora los ñoquis crudos en la sartén con el aceite, 5-6 minutos, hasta que queden crujientes. Aparta.', 'Saltea la carne con el ajo a fuego fuerte y añade las verduras 4 minutos.', 'Junta todo y termina con soja y picante.']);
+
 /* ---------- Fuera de casa ---------- */
 const SITIOS = [
   { n: 'Menú del día', k: 'Bien elegido: 800-900 kcal',
@@ -691,6 +715,8 @@ const SALIR = [
   'Tope orientativo: 4-5 consumiciones a la semana, mejor en 1-2 días.',
   'Al día siguiente: desayuno normal, agua y el plan tal cual.'
 ];
+/* Ingredientes que le encantan: sus platos salen más a menudo cuando elige la app. */
+const ME_GUSTA = ['gnocchi'];
 const PLAN = { kcal: 2350, kcalMin: 2300, kcalMax: 2400, protMin: 150, protMax: 165, revision: 82, copasTope: 5, entrenos: 3, maxMin: 20 };
 const EXTRA = { rest_ok: { k: 850, p: 45 }, rest_pas: { k: 1300, p: 50 }, libre: { k: 1200, p: 40 } };
 
@@ -828,7 +854,8 @@ function elegir(slot, tipo, fecha, dias, favs, evitar, rnd, solo) {
   const sc = c.map(function (r) {
     let dist = 60;
     (u[r.id] || []).forEach(function (f) { dist = Math.min(dist, Math.abs(diffDays(fecha, f))); });
-    return { r: r, s: Math.min(dist, 21) + (favs && favs[r.id] ? 2 : 0) + rnd() * 4 };
+    const gusta = r.ing.some(function (x) { return ME_GUSTA.indexOf(x[0]) >= 0; });
+    return { r: r, s: Math.min(dist, 21) + (favs && favs[r.id] ? 2 : 0) + (gusta ? 0.5 : 0) + rnd() * 4 };
   });
   sc.sort(function (a, b) { return b.s - a.s; });
   return sc[0].r.id;
