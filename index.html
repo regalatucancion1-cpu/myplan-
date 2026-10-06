@@ -252,6 +252,23 @@ dialog::backdrop { background: var(--shade); }
 .buy .q2 { white-space: normal; text-align: right; max-width: 48%; font-weight: 500; font-size: 14px; color: var(--muted); }
 .buy.ok .q2 { text-decoration: line-through; }
 
+.bar.h i, .bar.h b { background: var(--pine); }
+.bar.g i, .bar.g b { background: var(--muted); }
+.meter.mini { gap: 5px; }
+.meter.mini .num { font-size: 22px; }
+.meter.mini .bar { height: 7px; }
+.sup { display: flex; flex-direction: column; gap: 5px; padding-top: 12px; border-top: 1px solid var(--line); }
+.sup:first-of-type { border-top: 0; padding-top: 0; }
+.dots.small li { font-size: 13.5px; color: var(--muted); }
+@media (max-width: 460px) { .tab { font-size: 10.5px; } .tab svg { width: 22px; height: 22px; } }
+
+.kv { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-top: 1px solid var(--line); }
+.kv:first-child { border-top: 0; padding-top: 0; }
+.kv .num { font-size: 24px; white-space: nowrap; }
+.tp th, .tp td { white-space: nowrap; padding-left: 12px; }
+.tp th:first-child, .tp td:first-child { white-space: normal; padding-left: 0; }
+.dose { align-self: flex-start; background: var(--pine-soft); color: var(--pine); font-size: 13.5px; font-weight: 600; padding: 3px 9px; border-radius: 8px; }
+
 .chart .grid { stroke: var(--line); stroke-width: 1; }
 .chart .band { fill: var(--pine); opacity: .13; }
 .chart .bandt { fill: var(--pine); font-weight: 600; }
@@ -289,70 +306,74 @@ const CATS = [
   ['basicos', 'Básicos (mira si ya tienes)']
 ];
 const ING = {
-  pollo: { n: 'Pechuga de pollo', c: 'carne', u: 'g', k: 110, p: 23 },
-  ternera: { n: 'Ternera picada magra', c: 'carne', u: 'g', k: 135, p: 21 },
-  filete: { n: 'Ternera (filete o para guisar)', c: 'carne', u: 'g', k: 125, p: 22 },
-  lomo: { n: 'Lomo de cerdo', c: 'carne', u: 'g', k: 145, p: 22 },
-  solomillo: { n: 'Solomillo de cerdo', c: 'carne', u: 'g', k: 120, p: 21 },
-  pavo: { n: 'Pechuga de pavo en lonchas', c: 'carne', u: 'g', k: 105, p: 20 },
-  serrano: { n: 'Jamón serrano', c: 'carne', u: 'g', k: 240, p: 30 },
-  cocido: { n: 'Jamón cocido', c: 'carne', u: 'g', k: 110, p: 19 },
-  salmon: { n: 'Salmón fresco', c: 'carne', u: 'g', k: 205, p: 20 },
-  salmonah: { n: 'Salmón ahumado', c: 'carne', u: 'g', k: 180, p: 23 },
-  atun: { n: 'Atún al natural (lata pequeña)', c: 'carne', u: 'ud', k: 58, p: 13, s: ['lata pequeña de atún al natural', 'latas pequeñas de atún al natural'] },
+  pollo: { n: 'Pechuga de pollo', c: 'carne', u: 'g', k: 110, p: 23, h: 0, g: 2 },
+  ternera: { n: 'Ternera picada magra', c: 'carne', u: 'g', k: 135, p: 21, h: 0, g: 5.5 },
+  filete: { n: 'Ternera (filete o para guisar)', c: 'carne', u: 'g', k: 125, p: 22, h: 0, g: 4 },
+  lomo: { n: 'Lomo de cerdo', c: 'carne', u: 'g', k: 145, p: 22, h: 0, g: 6 },
+  solomillo: { n: 'Solomillo de cerdo', c: 'carne', u: 'g', k: 120, p: 21, h: 0, g: 4 },
+  pavo: { n: 'Pechuga de pavo en lonchas', c: 'carne', u: 'g', k: 105, p: 20, h: 1.5, g: 2 },
+  serrano: { n: 'Jamón serrano', c: 'carne', u: 'g', k: 240, p: 30, h: 0.5, g: 13 },
+  cocido: { n: 'Jamón cocido', c: 'carne', u: 'g', k: 110, p: 19, h: 1.5, g: 3 },
+  salmon: { n: 'Salmón fresco', c: 'carne', u: 'g', k: 205, p: 20, h: 0, g: 14 },
+  salmonah: { n: 'Salmón ahumado', c: 'carne', u: 'g', k: 180, p: 23, h: 0, g: 10 },
+  atun: { n: 'Atún al natural (lata pequeña)', c: 'carne', u: 'ud', k: 58, p: 13, h: 0, g: 0.5, s: ['lata pequeña de atún al natural', 'latas pequeñas de atún al natural'] },
 
-  huevo: { n: 'Huevos', c: 'lacteos', u: 'ud', k: 75, p: 6.5, s: ['huevo', 'huevos'] },
-  claras: { n: 'Claras de huevo', c: 'lacteos', u: 'g', k: 48, p: 11 },
-  skyr: { n: 'Skyr (yogur alto en proteína) o queso fresco batido 0%', c: 'lacteos', u: 'g', k: 62, p: 11 },
-  griego: { n: 'Yogur griego natural', c: 'lacteos', u: 'g', k: 115, p: 5 },
-  cottage: { n: 'Requesón o cottage', c: 'lacteos', u: 'g', k: 95, p: 12 },
-  burgos: { n: 'Queso fresco tipo Burgos', c: 'lacteos', u: 'g', k: 175, p: 13 },
-  loncha: { n: 'Queso en lonchas', c: 'lacteos', u: 'ud', k: 60, p: 4.5, s: ['loncha de queso', 'lonchas de queso'] },
-  mozza: { n: 'Mozzarella', c: 'lacteos', u: 'g', k: 250, p: 18 },
-  rallado: { n: 'Queso rallado', c: 'lacteos', u: 'g', k: 380, p: 25 },
-  leche: { n: 'Leche semidesnatada', c: 'lacteos', u: 'ml', k: 46, p: 3.3 },
+  huevo: { n: 'Huevos', c: 'lacteos', u: 'ud', k: 75, p: 6.5, h: 0.4, g: 5.3, s: ['huevo', 'huevos'] },
+  claras: { n: 'Claras de huevo', c: 'lacteos', u: 'g', k: 48, p: 11, h: 0.7, g: 0.2 },
+  skyr: { n: 'Skyr (yogur alto en proteína) o queso fresco batido 0%', c: 'lacteos', u: 'g', k: 62, p: 11, h: 4, g: 0.2 },
+  griego: { n: 'Yogur griego natural', c: 'lacteos', u: 'g', k: 115, p: 5, h: 4, g: 9 },
+  cottage: { n: 'Requesón o cottage', c: 'lacteos', u: 'g', k: 95, p: 12, h: 3, g: 4 },
+  burgos: { n: 'Queso fresco tipo Burgos', c: 'lacteos', u: 'g', k: 175, p: 13, h: 3, g: 12.5 },
+  loncha: { n: 'Queso en lonchas', c: 'lacteos', u: 'ud', k: 60, p: 4.5, h: 0.3, g: 4.6, s: ['loncha de queso', 'lonchas de queso'] },
+  mozza: { n: 'Mozzarella', c: 'lacteos', u: 'g', k: 250, p: 18, h: 2, g: 19 },
+  rallado: { n: 'Queso rallado', c: 'lacteos', u: 'g', k: 380, p: 25, h: 2, g: 30 },
+  yogur: { n: 'Yogur natural', c: 'lacteos', u: 'g', k: 60, p: 3.5, h: 4.7, g: 3 },
+  kefir: { n: 'Kéfir natural', c: 'lacteos', u: 'ml', k: 60, p: 3.3, h: 4.5, g: 3.2 },
+  yopro: { n: 'Yogur alto en proteína', c: 'lacteos', u: 'ud', k: 75, p: 11, h: 5.5, g: 0.5, s: ['yogur alto en proteína', 'yogures altos en proteína'] },
+  gelatina: { n: 'Gelatina sin azúcar', c: 'lacteos', u: 'ud', k: 10, p: 1.5, h: 0.5, g: 0, s: ['gelatina sin azúcar', 'gelatinas sin azúcar'] },
+  leche: { n: 'Leche semidesnatada', c: 'lacteos', u: 'ml', k: 46, p: 3.3, h: 4.8, g: 1.6 },
 
-  patata: { n: 'Patatas', c: 'verdura', u: 'g', k: 78, p: 2 },
-  boniato: { n: 'Boniato', c: 'verdura', u: 'g', k: 86, p: 1.6 },
-  pimiento: { n: 'Pimientos', c: 'verdura', u: 'g', k: 27, p: 1 },
-  cebolla: { n: 'Cebolla', c: 'verdura', u: 'g', k: 40, p: 1.1 },
-  calabacin: { n: 'Calabacín', c: 'verdura', u: 'g', k: 17, p: 1.2 },
-  zanahoria: { n: 'Zanahoria', c: 'verdura', u: 'g', k: 40, p: 0.9 },
-  tomate: { n: 'Tomate', c: 'verdura', u: 'g', k: 20, p: 0.9 },
-  lechuga: { n: 'Lechuga o ensalada de bolsa', c: 'verdura', u: 'g', k: 17, p: 1.3 },
-  espinacas: { n: 'Espinacas', c: 'verdura', u: 'g', k: 23, p: 2.9 },
-  judias: { n: 'Judías verdes', c: 'verdura', u: 'g', k: 30, p: 1.8 },
-  berenjena: { n: 'Berenjena', c: 'verdura', u: 'g', k: 25, p: 1 },
-  salteado: { n: 'Verduras para saltear (congeladas)', c: 'verdura', u: 'g', k: 45, p: 2.5 },
-  aguacate: { n: 'Aguacate', c: 'verdura', u: 'g', k: 160, p: 2 },
+  patata: { n: 'Patatas', c: 'verdura', u: 'g', k: 78, p: 2, h: 17, g: 0.1 },
+  boniato: { n: 'Boniato', c: 'verdura', u: 'g', k: 86, p: 1.6, h: 20, g: 0.1 },
+  pimiento: { n: 'Pimientos', c: 'verdura', u: 'g', k: 27, p: 1, h: 5, g: 0.3 },
+  cebolla: { n: 'Cebolla', c: 'verdura', u: 'g', k: 40, p: 1.1, h: 8, g: 0.1 },
+  calabacin: { n: 'Calabacín', c: 'verdura', u: 'g', k: 17, p: 1.2, h: 3, g: 0.3 },
+  zanahoria: { n: 'Zanahoria', c: 'verdura', u: 'g', k: 40, p: 0.9, h: 8, g: 0.2 },
+  tomate: { n: 'Tomate', c: 'verdura', u: 'g', k: 20, p: 0.9, h: 3.5, g: 0.2 },
+  lechuga: { n: 'Lechuga o ensalada de bolsa', c: 'verdura', u: 'g', k: 17, p: 1.3, h: 2, g: 0.2 },
+  espinacas: { n: 'Espinacas', c: 'verdura', u: 'g', k: 23, p: 2.9, h: 1.5, g: 0.4 },
+  judias: { n: 'Judías verdes', c: 'verdura', u: 'g', k: 30, p: 1.8, h: 4.5, g: 0.2 },
+  berenjena: { n: 'Berenjena', c: 'verdura', u: 'g', k: 25, p: 1, h: 4.5, g: 0.2 },
+  salteado: { n: 'Verduras para saltear (congeladas)', c: 'verdura', u: 'g', k: 45, p: 2.5, h: 6, g: 0.6 },
+  aguacate: { n: 'Aguacate', c: 'verdura', u: 'g', k: 160, p: 2, h: 3, g: 15 },
 
-  platano: { n: 'Plátanos', c: 'fruta', u: 'ud', k: 105, p: 1.3, s: ['plátano', 'plátanos'] },
-  fruta: { n: 'Fruta de temporada (piezas)', c: 'fruta', u: 'ud', k: 80, p: 1, s: ['pieza de fruta', 'piezas de fruta'] },
-  rojos: { n: 'Frutos rojos congelados', c: 'fruta', u: 'g', k: 45, p: 1 },
-  limon: { n: 'Limón', c: 'fruta', u: 'ud', k: 0, p: 0, s: ['limón', 'limones'] },
+  platano: { n: 'Plátanos', c: 'fruta', u: 'ud', k: 105, p: 1.3, h: 25, g: 0.3, s: ['plátano', 'plátanos'] },
+  fruta: { n: 'Fruta de temporada (piezas)', c: 'fruta', u: 'ud', k: 80, p: 1, h: 18, g: 0.3, s: ['pieza de fruta', 'piezas de fruta'] },
+  rojos: { n: 'Frutos rojos congelados', c: 'fruta', u: 'g', k: 45, p: 1, h: 8, g: 0.4 },
+  limon: { n: 'Limón', c: 'fruta', u: 'ud', k: 0, p: 0, h: 0, g: 0, s: ['limón', 'limones'] },
 
-  arroz: { n: 'Arroz', c: 'despensa', u: 'g', k: 355, p: 7 },
-  pasta: { n: 'Pasta', c: 'despensa', u: 'g', k: 355, p: 12.5 },
-  noodles: { n: 'Fideos de huevo para wok', c: 'despensa', u: 'g', k: 350, p: 12 },
-  gnocchi: { n: 'Ñoquis', c: 'despensa', u: 'g', k: 160, p: 4 },
-  avena: { n: 'Copos de avena', c: 'despensa', u: 'g', k: 370, p: 13.5 },
-  pan: { n: 'Pan', c: 'despensa', u: 'g', k: 250, p: 8.5 },
-  panburger: { n: 'Pan de hamburguesa', c: 'despensa', u: 'ud', k: 160, p: 5, s: ['pan de hamburguesa', 'panes de hamburguesa'] },
-  tortilla: { n: 'Tortillas de trigo medianas', c: 'despensa', u: 'ud', k: 120, p: 3.2, s: ['tortilla de trigo mediana', 'tortillas de trigo medianas'] },
-  tortitas: { n: 'Tortitas de arroz', c: 'despensa', u: 'ud', k: 30, p: 0.7, s: ['tortita de arroz', 'tortitas de arroz'] },
-  lentejas: { n: 'Lentejas cocidas (bote, escurridas)', c: 'despensa', u: 'g', k: 105, p: 8 },
-  garbanzos: { n: 'Garbanzos cocidos (bote, escurridos)', c: 'despensa', u: 'g', k: 125, p: 7.5 },
-  triturado: { n: 'Tomate triturado', c: 'despensa', u: 'g', k: 30, p: 1.5 },
-  maiz: { n: 'Maíz dulce', c: 'despensa', u: 'g', k: 85, p: 3 },
-  aceitunas: { n: 'Aceitunas', c: 'despensa', u: 'g', k: 150, p: 1 },
-  nueces: { n: 'Nueces', c: 'despensa', u: 'g', k: 650, p: 15 },
-  almendras: { n: 'Almendras al natural', c: 'despensa', u: 'g', k: 600, p: 21 },
-  cacahuete: { n: 'Crema de cacahuete', c: 'despensa', u: 'g', k: 600, p: 25 },
-  miel: { n: 'Miel', c: 'despensa', u: 'g', k: 320, p: 0.3 },
-  choco: { n: 'Chocolate negro 85%', c: 'despensa', u: 'g', k: 600, p: 9 },
-  prote: { n: 'Proteína en polvo', c: 'despensa', u: 'ud', k: 120, p: 24, s: ['cacito de proteína en polvo', 'cacitos de proteína en polvo'] },
+  arroz: { n: 'Arroz', c: 'despensa', u: 'g', k: 355, p: 7, h: 79, g: 0.7 },
+  pasta: { n: 'Pasta', c: 'despensa', u: 'g', k: 355, p: 12.5, h: 72, g: 1.5 },
+  noodles: { n: 'Fideos de huevo para wok', c: 'despensa', u: 'g', k: 350, p: 12, h: 68, g: 3 },
+  gnocchi: { n: 'Ñoquis', c: 'despensa', u: 'g', k: 160, p: 4, h: 34, g: 0.5 },
+  avena: { n: 'Copos de avena', c: 'despensa', u: 'g', k: 370, p: 13.5, h: 59, g: 7 },
+  pan: { n: 'Pan', c: 'despensa', u: 'g', k: 250, p: 8.5, h: 50, g: 1.5 },
+  panburger: { n: 'Pan de hamburguesa', c: 'despensa', u: 'ud', k: 160, p: 5, h: 28, g: 3, s: ['pan de hamburguesa', 'panes de hamburguesa'] },
+  tortilla: { n: 'Tortillas de trigo medianas', c: 'despensa', u: 'ud', k: 120, p: 3.2, h: 20, g: 3, s: ['tortilla de trigo mediana', 'tortillas de trigo medianas'] },
+  tortitas: { n: 'Tortitas de arroz', c: 'despensa', u: 'ud', k: 30, p: 0.7, h: 6.3, g: 0.2, s: ['tortita de arroz', 'tortitas de arroz'] },
+  lentejas: { n: 'Lentejas cocidas (bote, escurridas)', c: 'despensa', u: 'g', k: 105, p: 8, h: 14, g: 0.6 },
+  garbanzos: { n: 'Garbanzos cocidos (bote, escurridos)', c: 'despensa', u: 'g', k: 125, p: 7.5, h: 16, g: 2.5 },
+  triturado: { n: 'Tomate triturado', c: 'despensa', u: 'g', k: 30, p: 1.5, h: 5, g: 0.2 },
+  maiz: { n: 'Maíz dulce', c: 'despensa', u: 'g', k: 85, p: 3, h: 15, g: 1.2 },
+  aceitunas: { n: 'Aceitunas', c: 'despensa', u: 'g', k: 150, p: 1, h: 1, g: 15 },
+  nueces: { n: 'Nueces', c: 'despensa', u: 'g', k: 650, p: 15, h: 5, g: 63 },
+  almendras: { n: 'Almendras al natural', c: 'despensa', u: 'g', k: 600, p: 21, h: 6, g: 52 },
+  cacahuete: { n: 'Crema de cacahuete', c: 'despensa', u: 'g', k: 600, p: 25, h: 12, g: 50 },
+  miel: { n: 'Miel', c: 'despensa', u: 'g', k: 320, p: 0.3, h: 80, g: 0 },
+  choco: { n: 'Chocolate negro 85%', c: 'despensa', u: 'g', k: 600, p: 9, h: 20, g: 50 },
+  prote: { n: 'Proteína en polvo', c: 'despensa', u: 'ud', k: 120, p: 24, h: 2.5, g: 1.8, s: ['cacito de proteína en polvo', 'cacitos de proteína en polvo'] },
 
-  aceite: { n: 'Aceite de oliva', c: 'basicos', u: 'g', k: 900, p: 0 },
+  aceite: { n: 'Aceite de oliva', c: 'basicos', u: 'g', k: 900, p: 0, h: 0, g: 100 },
   soja: { n: 'Salsa de soja', c: 'basicos' },
   ajo: { n: 'Ajo', c: 'basicos' },
   pimenton: { n: 'Pimentón', c: 'basicos' },
@@ -367,7 +388,9 @@ const ING = {
 };
 
 /* ---------- Recetas ---------- */
-const TIPOS = { des: 'Desayuno', com: 'Comida', mer: 'Merienda', cen: 'Cena' };
+const TIPOS = { des: 'Desayuno', com: 'Comida', pc: 'Postre de la comida', mer: 'Merienda', cen: 'Cena', pn: 'Postre de la cena', pos: 'Postre' };
+const SLOTS = ['des', 'com', 'pc', 'mer', 'cen', 'pn'];
+const RTIPOS = ['des', 'com', 'cen', 'mer', 'pos'];
 const REC = [];
 function R(id, t, n, min, tags, ing, pasos, nota) {
   REC.push({ id, t, n, min, tags, ing, pasos, nota: nota || '' });
@@ -437,15 +460,15 @@ R('m9', 'mer', 'Skyr helado con frutos rojos', 4, ['rapida', 'sincocinar'],
 
 /* Comidas */
 R('c1', 'com', 'Pollo al horno con patatas y verduras', 45, ['horno', 'taper'],
-  [['pollo', 220], ['patata', 400], ['pimiento', 150], ['calabacin', 100], ['cebolla', 50], ['aceite', 15], ['pimenton', 0], ['fruta', 1]],
-  ['Corta la patata en gajos y las verduras en trozos grandes. Ponlo todo en una bandeja con el aceite, sal y pimentón.', 'Hornea 20 minutos a 200 °C.', 'Añade el pollo en trozos salpimentado y hornea 15-20 minutos más.', 'Fruta de postre.'],
+  [['pollo', 220], ['patata', 400], ['pimiento', 150], ['calabacin', 100], ['cebolla', 50], ['aceite', 15], ['pimenton', 0]],
+  ['Corta la patata en gajos y las verduras en trozos grandes. Ponlo todo en una bandeja con el aceite, sal y pimentón.', 'Hornea 20 minutos a 200 °C.', 'Añade el pollo en trozos salpimentado y hornea 15-20 minutos más.'],
   'Haz el doble: mañana tienes táper.');
 R('c2', 'com', 'Bol de arroz con ternera', 20, ['taper'],
-  [['ternera', 180], ['arroz', 100], ['salteado', 200], ['aceite', 10], ['soja', 0], ['ajo', 0], ['fruta', 1]],
-  ['Cuece el arroz.', 'Saltea la ternera con el ajo hasta que se dore. Aparta.', 'En la misma sartén saltea las verduras con el aceite 5 minutos.', 'Junta todo sobre el arroz con un chorro de salsa de soja. Fruta de postre.']);
+  [['ternera', 180], ['arroz', 100], ['salteado', 200], ['aceite', 10], ['soja', 0], ['ajo', 0]],
+  ['Cuece el arroz.', 'Saltea la ternera con el ajo hasta que se dore. Aparta.', 'En la misma sartén saltea las verduras con el aceite 5 minutos.', 'Junta todo sobre el arroz con un chorro de salsa de soja.']);
 R('c3', 'com', 'Pasta con atún y tomate', 15, ['rapida', 'taper'],
-  [['pasta', 120], ['atun', 3], ['triturado', 200], ['cebolla', 50], ['aceite', 10], ['ajo', 0], ['oregano', 0], ['fruta', 1]],
-  ['Pon la pasta a cocer.', 'Sofríe la cebolla y el ajo en el aceite, añade el tomate y el orégano y deja 8 minutos.', 'Añade el atún escurrido y mezcla con la pasta. Fruta de postre.']);
+  [['pasta', 120], ['atun', 3], ['triturado', 200], ['cebolla', 50], ['aceite', 10], ['ajo', 0], ['oregano', 0]],
+  ['Pon la pasta a cocer.', 'Sofríe la cebolla y el ajo en el aceite, añade el tomate y el orégano y deja 8 minutos.', 'Añade el atún escurrido y mezcla con la pasta.']);
 R('c4', 'com', 'Lentejas con pollo', 20, ['taper'],
   [['lentejas', 350], ['pollo', 150], ['cebolla', 50], ['zanahoria', 80], ['pimiento', 80], ['aceite', 10], ['pimenton', 0], ['caldo', 0], ['pan', 50]],
   ['Sofríe la cebolla, la zanahoria y el pimiento picados en el aceite.', 'Añade el pollo en dados y dóralo.', 'Echa las lentejas escurridas, pimentón y un vaso de caldo. Cuece 10 minutos.', 'Sirve con el pan.'],
@@ -464,11 +487,11 @@ R('c8', 'com', 'Garbanzos salteados con espinacas y huevo', 12, ['rapida'],
   [['garbanzos', 300], ['espinacas', 150], ['huevo', 2], ['serrano', 40], ['aceite', 10], ['ajo', 0], ['pimenton', 0], ['pan', 40]],
   ['Dora el ajo laminado y el jamón en taquitos en el aceite.', 'Añade los garbanzos escurridos, el pimentón y las espinacas. Saltea 4 minutos.', 'Haz los huevos a la plancha y ponlos encima. Acompaña con el pan.']);
 R('c9', 'com', 'Fideos salteados con ternera', 15, ['rapida'],
-  [['noodles', 100], ['filete', 180], ['salteado', 250], ['aceite', 10], ['soja', 0], ['ajo', 0], ['fruta', 1]],
-  ['Cuece los fideos según el paquete y escúrrelos.', 'Corta la ternera en tiras finas y saltéala a fuego fuerte 2 minutos. Aparta.', 'Saltea las verduras con el aceite y el ajo. Añade fideos, ternera y soja y mezcla un minuto. Fruta de postre.']);
+  [['noodles', 100], ['filete', 180], ['salteado', 250], ['aceite', 10], ['soja', 0], ['ajo', 0]],
+  ['Cuece los fideos según el paquete y escúrrelos.', 'Corta la ternera en tiras finas y saltéala a fuego fuerte 2 minutos. Aparta.', 'Saltea las verduras con el aceite y el ajo. Añade fideos, ternera y soja y mezcla un minuto.']);
 R('c10', 'com', 'Solomillo de cerdo con arroz y verduras', 20, [],
-  [['solomillo', 220], ['arroz', 90], ['calabacin', 150], ['pimiento', 100], ['aceite', 15], ['comino', 0], ['fruta', 1]],
-  ['Cuece el arroz.', 'Saltea el calabacín y el pimiento en dados con la mitad del aceite y comino.', 'Corta el solomillo en medallones y hazlos a la plancha con el resto del aceite, 2-3 minutos por lado. Fruta de postre.']);
+  [['solomillo', 220], ['arroz', 90], ['calabacin', 150], ['pimiento', 100], ['aceite', 15], ['comino', 0]],
+  ['Cuece el arroz.', 'Saltea el calabacín y el pimiento en dados con la mitad del aceite y comino.', 'Corta el solomillo en medallones y hazlos a la plancha con el resto del aceite, 2-3 minutos por lado.']);
 R('c11', 'com', 'Ensalada de pasta con pollo', 20, ['taper'],
   [['pasta', 100], ['pollo', 180], ['tomate', 150], ['maiz', 60], ['aceitunas', 30], ['mozza', 30], ['aceite', 10], ['oregano', 0]],
   ['Cuece la pasta y enfríala con agua.', 'Haz el pollo a la plancha y córtalo en dados.', 'Mezcla todo con el tomate troceado, el maíz, las aceitunas y la mozzarella. Aliña con aceite y orégano.'],
@@ -477,8 +500,8 @@ R('c12', 'com', 'Bol mexicano de ternera', 20, ['taper'],
   [['arroz', 100], ['ternera', 180], ['maiz', 50], ['tomate', 100], ['aguacate', 50], ['lechuga', 50], ['aceite', 5], ['comino', 0], ['pimenton', 0], ['picante', 0]],
   ['Cuece el arroz.', 'Dora la carne con el aceite, comino, pimentón y el picante que quieras.', 'Monta el bol con el arroz, la carne, el maíz, el tomate en dados, la lechuga y el aguacate.']);
 R('c13', 'com', 'Pollo a la plancha con boniato y judías verdes', 30, ['airfryer'],
-  [['pollo', 220], ['boniato', 350], ['judias', 200], ['aceite', 15], ['pimenton', 0], ['fruta', 1]],
-  ['Corta el boniato en bastones, mézclalo con la mitad del aceite y pimentón y hazlo 18-20 minutos en freidora de aire a 190 °C (o 30 minutos al horno).', 'Cuece las judías 8 minutos.', 'Haz el pollo a la plancha con el resto del aceite. Fruta de postre.']);
+  [['pollo', 220], ['boniato', 350], ['judias', 200], ['aceite', 15], ['pimenton', 0]],
+  ['Corta el boniato en bastones, mézclalo con la mitad del aceite y pimentón y hazlo 18-20 minutos en freidora de aire a 190 °C (o 30 minutos al horno).', 'Cuece las judías 8 minutos.', 'Haz el pollo a la plancha con el resto del aceite.']);
 R('c14', 'com', 'Arroz salteado con pollo y huevo', 20, ['taper'],
   [['arroz', 100], ['pollo', 150], ['huevo', 2], ['zanahoria', 60], ['salteado', 100], ['aceite', 10], ['soja', 0]],
   ['Cuece el arroz y déjalo enfriar un poco (si es del día anterior, mejor).', 'Saltea el pollo en dados con el aceite, añade la zanahoria y las verduras.', 'Aparta a un lado, cuaja los huevos batidos y mezcla todo con el arroz y la soja.']);
@@ -498,8 +521,8 @@ R('c18', 'com', 'Tortilla de patatas con ensalada de atún', 30, ['taper'],
 
 /* Cenas */
 R('n1', 'cen', 'Tortilla con pavo y ensalada', 10, ['rapida'],
-  [['huevo', 3], ['pavo', 100], ['pan', 80], ['lechuga', 150], ['tomate', 100], ['aceite', 10], ['skyr', 125]],
-  ['Haz una tortilla con los huevos y el pavo troceado.', 'Aliña la ensalada con el aceite.', 'Acompaña con el pan y toma el skyr de postre.']);
+  [['huevo', 3], ['pavo', 100], ['pan', 80], ['lechuga', 150], ['tomate', 100], ['aceite', 10]],
+  ['Haz una tortilla con los huevos y el pavo troceado.', 'Aliña la ensalada con el aceite.', 'Acompaña con el pan.']);
 R('n2', 'cen', 'Hamburguesa casera con patatas', 25, ['airfryer'],
   [['ternera', 200], ['panburger', 1], ['loncha', 1], ['tomate', 50], ['lechuga', 30], ['patata', 250], ['aceite', 5], ['mostaza', 0]],
   ['Corta la patata en bastones, mézclala con el aceite y hazla en freidora de aire 18 minutos a 190 °C (o al horno 30).', 'Forma dos hamburguesas finas con la carne salpimentada y hazlas a la plancha 2-3 minutos por lado. Pon el queso encima al final.', 'Monta en el pan con tomate, lechuga y mostaza.']);
@@ -510,26 +533,26 @@ R('n4', 'cen', 'Ensalada completa de atún', 20, ['taper'],
   [['atun', 3], ['huevo', 2], ['patata', 300], ['tomate', 150], ['lechuga', 100], ['aceitunas', 30], ['aceite', 15], ['vinagre', 0]],
   ['Cuece la patata troceada 15 minutos y los huevos 10.', 'Mezcla con el tomate, la lechuga, las aceitunas y el atún escurrido.', 'Aliña con aceite y vinagre.']);
 R('n5', 'cen', 'Lomo con pimientos y patata', 25, [],
-  [['lomo', 200], ['patata', 300], ['pimiento', 200], ['aceite', 15], ['ajo', 0], ['fruta', 1]],
-  ['Cuece la patata o hazla al microondas 8 minutos.', 'Fríe los pimientos en tiras con el aceite y el ajo a fuego medio, 12 minutos.', 'Haz el lomo a la plancha, 2 minutos por lado. Fruta de postre.']);
+  [['lomo', 200], ['patata', 300], ['pimiento', 200], ['aceite', 15], ['ajo', 0]],
+  ['Cuece la patata o hazla al microondas 8 minutos.', 'Fríe los pimientos en tiras con el aceite y el ajo a fuego medio, 12 minutos.', 'Haz el lomo a la plancha, 2 minutos por lado.']);
 R('n6', 'cen', 'Pizza rápida de tortilla', 12, ['rapida', 'horno'],
   [['tortilla', 2], ['triturado', 100], ['mozza', 80], ['cocido', 80], ['pimiento', 80], ['atun', 1], ['oregano', 0], ['lechuga', 100], ['aceite', 5]],
   ['Extiende el tomate sobre las tortillas y reparte la mozzarella, el jamón, el pimiento en tiras finas y el atún.', 'Hornea 6-8 minutos a 220 °C (o en freidora de aire 5 minutos a 200 °C).', 'Termina con orégano y acompaña con la ensalada aliñada.']);
 R('n7', 'cen', 'Salmón al horno con patata y judías verdes', 25, ['horno'],
-  [['salmon', 170], ['patata', 300], ['judias', 200], ['aceite', 5], ['limon', 0.5], ['skyr', 125]],
-  ['Corta la patata en rodajas finas y ponla en una bandeja con las judías, el aceite y sal. Hornea 12 minutos a 200 °C.', 'Coloca el salmón encima con rodajas de limón y hornea 10-12 minutos más.', 'Skyr de postre.']);
+  [['salmon', 170], ['patata', 300], ['judias', 200], ['aceite', 5], ['limon', 0.5]],
+  ['Corta la patata en rodajas finas y ponla en una bandeja con las judías, el aceite y sal. Hornea 12 minutos a 200 °C.', 'Coloca el salmón encima con rodajas de limón y hornea 10-12 minutos más.']);
 R('n8', 'cen', 'Revuelto de calabacín y jamón', 12, ['rapida'],
-  [['huevo', 3], ['calabacin', 250], ['serrano', 50], ['pan', 80], ['aceite', 10], ['ajo', 0], ['skyr', 125]],
-  ['Saltea el calabacín en medias lunas finas con el ajo y el aceite hasta que se dore.', 'Añade el jamón en tiras y los huevos batidos. Remueve fuera del fuego para que quede jugoso.', 'Sirve con el pan tostado. Skyr de postre.']);
+  [['huevo', 3], ['calabacin', 250], ['serrano', 50], ['pan', 80], ['aceite', 10], ['ajo', 0]],
+  ['Saltea el calabacín en medias lunas finas con el ajo y el aceite hasta que se dore.', 'Añade el jamón en tiras y los huevos batidos. Remueve fuera del fuego para que quede jugoso.', 'Sirve con el pan tostado.']);
 R('n9', 'cen', 'Wraps de pollo con salsa de yogur', 15, ['rapida', 'taper'],
-  [['pollo', 180], ['tortilla', 2], ['lechuga', 60], ['tomate', 80], ['loncha', 1], ['griego', 50], ['aceite', 10], ['pimenton', 0], ['fruta', 1]],
-  ['Corta el pollo en tiras, sazónalo con pimentón y hazlo a la plancha con el aceite.', 'Mezcla el yogur con sal y unas gotas de limón o vinagre.', 'Rellena las tortillas con el pollo, el queso, la lechuga, el tomate y la salsa. Fruta de postre.']);
+  [['pollo', 180], ['tortilla', 2], ['lechuga', 60], ['tomate', 80], ['loncha', 1], ['griego', 50], ['aceite', 10], ['pimenton', 0]],
+  ['Corta el pollo en tiras, sazónalo con pimentón y hazlo a la plancha con el aceite.', 'Mezcla el yogur con sal y unas gotas de limón o vinagre.', 'Rellena las tortillas con el pollo, el queso, la lechuga, el tomate y la salsa.']);
 R('n10', 'cen', 'Pasta carbonara ligera', 15, ['rapida'],
   [['pasta', 100], ['huevo', 2], ['serrano', 50], ['rallado', 20], ['lechuga', 100], ['aceite', 5]],
   ['Cuece la pasta y guarda medio vaso del agua.', 'Dora el jamón en tiras sin aceite. Bate los huevos con el queso y pimienta.', 'Fuera del fuego, mezcla la pasta con el jamón, el huevo y un poco del agua hasta que quede cremosa.', 'Acompaña con la ensalada aliñada.']);
 R('n11', 'cen', 'Pollo al limón con arroz', 20, ['taper'],
-  [['pollo', 200], ['arroz', 80], ['calabacin', 200], ['aceite', 15], ['limon', 1], ['ajo', 0], ['skyr', 125]],
-  ['Cuece el arroz.', 'Saltea el calabacín en dados con la mitad del aceite.', 'Dora el pollo en tiras con el ajo y el resto del aceite; al final añade el zumo del limón.', 'Skyr de postre.']);
+  [['pollo', 200], ['arroz', 80], ['calabacin', 200], ['aceite', 15], ['limon', 1], ['ajo', 0]],
+  ['Cuece el arroz.', 'Saltea el calabacín en dados con la mitad del aceite.', 'Dora el pollo en tiras con el ajo y el resto del aceite; al final añade el zumo del limón.']);
 R('n12', 'cen', 'Tacos de ternera', 15, ['rapida'],
   [['ternera', 180], ['tortilla', 3], ['tomate', 100], ['cebolla', 40], ['lechuga', 50], ['aguacate', 50], ['griego', 30], ['comino', 0], ['pimenton', 0]],
   ['Dora la carne con comino, pimentón y sal.', 'Pica el tomate y la cebolla y mézclalos.', 'Rellena las tortillas calientes con la carne, el picadillo, la lechuga, el aguacate y el yogur.']);
@@ -537,16 +560,16 @@ R('n13', 'cen', 'Berenjena rellena de carne', 40, ['horno', 'taper'],
   [['berenjena', 300], ['ternera', 180], ['triturado', 150], ['mozza', 50], ['cebolla', 50], ['aceite', 10], ['oregano', 0], ['pan', 60]],
   ['Parte la berenjena por la mitad, hazle cortes y cuécela en el microondas 8 minutos. Saca la pulpa.', 'Sofríe la cebolla en el aceite, dora la carne y añade el tomate, la pulpa y orégano. Cuece 8 minutos.', 'Rellena, cubre con la mozzarella y gratina 10 minutos. Acompaña con el pan.']);
 R('n14', 'cen', 'Bocadillo de lomo con pimientos y queso', 12, ['rapida'],
-  [['pan', 120], ['lomo', 150], ['pimiento', 100], ['loncha', 1], ['aceite', 10], ['fruta', 1]],
-  ['Fríe el pimiento en tiras con el aceite 6-8 minutos.', 'Haz el lomo a la plancha y funde el queso encima.', 'Monta el bocadillo. Fruta de postre.']);
+  [['pan', 120], ['lomo', 150], ['pimiento', 100], ['loncha', 1], ['aceite', 10]],
+  ['Fríe el pimiento en tiras con el aceite 6-8 minutos.', 'Haz el lomo a la plancha y funde el queso encima.', 'Monta el bocadillo.']);
 R('n15', 'cen', 'Huevos al plato con tomate y jamón', 20, [],
   [['huevo', 3], ['triturado', 300], ['pimiento', 100], ['cebolla', 60], ['serrano', 40], ['pan', 90], ['aceite', 10], ['comino', 0], ['pimenton', 0]],
   ['Sofríe la cebolla y el pimiento en el aceite. Añade el tomate, comino y pimentón y cuece 10 minutos.', 'Haz tres huecos, casca los huevos dentro y tapa hasta que cuaje la clara.', 'Reparte el jamón por encima y moja con el pan.']);
 
 /* Cenas ligeras (para los días de restaurante) */
 R('l1', 'cen', 'Tortilla francesa con pavo y ensalada grande', 10, ['rapida', 'ligera'],
-  [['huevo', 3], ['pavo', 100], ['lechuga', 150], ['tomate', 150], ['aceite', 10], ['skyr', 125]],
-  ['Haz una tortilla con los huevos y el pavo.', 'Acompaña con la ensalada aliñada. Skyr de postre.']);
+  [['huevo', 3], ['pavo', 100], ['lechuga', 150], ['tomate', 150], ['aceite', 10]],
+  ['Haz una tortilla con los huevos y el pavo.', 'Acompaña con la ensalada aliñada.']);
 R('l2', 'cen', 'Ensalada ligera de atún y huevo', 15, ['rapida', 'ligera', 'taper'],
   [['atun', 3], ['huevo', 2], ['patata', 150], ['tomate', 150], ['lechuga', 100], ['aceite', 10], ['vinagre', 0]],
   ['Cuece la patata troceada y los huevos.', 'Mezcla con el resto y aliña.']);
@@ -554,15 +577,15 @@ R('l3', 'cen', 'Pollo a la plancha con verduras', 15, ['rapida', 'ligera'],
   [['pollo', 200], ['calabacin', 200], ['berenjena', 150], ['pimiento', 100], ['aceite', 10], ['pan', 50]],
   ['Saltea las verduras troceadas con la mitad del aceite, 8-10 minutos.', 'Haz el pollo a la plancha con el resto.', 'Acompaña con el pan.']);
 R('l4', 'cen', 'Crema de calabacín con huevo y jamón', 25, ['ligera', 'taper'],
-  [['calabacin', 400], ['patata', 100], ['cebolla', 60], ['huevo', 2], ['serrano', 40], ['aceite', 10], ['caldo', 0], ['skyr', 125]],
-  ['Sofríe la cebolla en el aceite, añade el calabacín y la patata troceados y cubre con caldo. Cuece 15 minutos y tritura.', 'Cuece los huevos 10 minutos.', 'Sirve la crema con el huevo picado y el jamón en tiras. Skyr de postre.'],
+  [['calabacin', 400], ['patata', 100], ['cebolla', 60], ['huevo', 2], ['serrano', 40], ['aceite', 10], ['caldo', 0]],
+  ['Sofríe la cebolla en el aceite, añade el calabacín y la patata troceados y cubre con caldo. Cuece 15 minutos y tritura.', 'Cuece los huevos 10 minutos.', 'Sirve la crema con el huevo picado y el jamón en tiras.'],
   'La crema aguanta cuatro días en la nevera y congela bien.');
 R('l5', 'cen', 'Salmón a la plancha con ensalada', 12, ['rapida', 'ligera'],
   [['salmon', 170], ['lechuga', 150], ['tomate', 150], ['aceite', 5], ['limon', 0.5], ['pan', 40]],
   ['Haz el salmón a la plancha, 3-4 minutos por lado.', 'Aliña la ensalada con el aceite y el limón. Acompaña con el pan.']);
 R('l6', 'cen', 'Wok de pollo y verduras', 12, ['rapida', 'ligera'],
-  [['pollo', 200], ['salteado', 300], ['aceite', 10], ['almendras', 10], ['soja', 0], ['ajo', 0], ['fruta', 1]],
-  ['Saltea el pollo en tiras con el aceite y el ajo a fuego fuerte.', 'Añade las verduras y saltea 5 minutos. Termina con soja y las almendras.', 'Fruta de postre.']);
+  [['pollo', 200], ['salteado', 300], ['aceite', 10], ['almendras', 10], ['soja', 0], ['ajo', 0]],
+  ['Saltea el pollo en tiras con el aceite y el ajo a fuego fuerte.', 'Añade las verduras y saltea 5 minutos. Termina con soja y las almendras.']);
 R('l7', 'cen', 'Hamburguesa al plato con huevo y ensalada', 12, ['rapida', 'ligera'],
   [['ternera', 200], ['huevo', 1], ['loncha', 1], ['lechuga', 150], ['tomate', 150], ['aceite', 10]],
   ['Haz la hamburguesa a la plancha y funde el queso encima.', 'Haz el huevo a la plancha en la misma sartén.', 'Sirve sin pan, con la ensalada aliñada.']);
@@ -601,14 +624,14 @@ R('n17', 'cen', 'Hamburguesa de pollo con boniato', 20, ['airfryer'],
   [['pollo', 200], ['panburger', 1], ['loncha', 1], ['lechuga', 30], ['tomate', 50], ['aguacate', 40], ['boniato', 200], ['aceite', 5], ['pimenton', 0], ['picante', 0]],
   ['Corta el boniato en bastones, mézclalo con el aceite y pimentón y hazlo 14-16 minutos en freidora de aire a 190 °C.', 'Abre la pechuga en filete, sazónala con pimentón y picante y hazla a la plancha. Funde el queso encima.', 'Monta en el pan con lechuga, tomate y aguacate.']);
 R('n18', 'cen', 'Berenjena salteada con ternera y arroz', 20, [],
-  [['berenjena', 250], ['ternera', 180], ['arroz', 80], ['aceite', 10], ['soja', 0], ['ajo', 0], ['picante', 0], ['skyr', 125]],
-  ['Cuece el arroz.', 'Corta la berenjena en dados pequeños y saltéala con el aceite hasta que se ablande, 8 minutos.', 'Añade la carne y el ajo, dora, y termina con soja y picante. Sirve sobre el arroz. Skyr de postre.']);
+  [['berenjena', 250], ['ternera', 180], ['arroz', 80], ['aceite', 10], ['soja', 0], ['ajo', 0], ['picante', 0]],
+  ['Cuece el arroz.', 'Corta la berenjena en dados pequeños y saltéala con el aceite hasta que se ablande, 8 minutos.', 'Añade la carne y el ajo, dora, y termina con soja y picante. Sirve sobre el arroz.']);
 R('n19', 'cen', 'Bocadillo de pollo, aguacate y tomate', 12, ['rapida', 'taper'],
-  [['pan', 120], ['pollo', 180], ['aguacate', 50], ['tomate', 80], ['lechuga', 30], ['aceite', 5], ['fruta', 1]],
-  ['Haz el pollo fileteado a la plancha con el aceite.', 'Aplasta el aguacate sobre el pan y monta con el pollo, el tomate y la lechuga.', 'Fruta de postre.']);
+  [['pan', 120], ['pollo', 180], ['aguacate', 50], ['tomate', 80], ['lechuga', 30], ['aceite', 5]],
+  ['Haz el pollo fileteado a la plancha con el aceite.', 'Aplasta el aguacate sobre el pan y monta con el pollo, el tomate y la lechuga.']);
 R('n20', 'cen', 'Tosta de salmón ahumado, huevo y aguacate', 10, ['rapida'],
-  [['pan', 100], ['salmonah', 100], ['huevo', 2], ['aguacate', 60], ['tomate', 100], ['limon', 0.5], ['skyr', 125]],
-  ['Tuesta el pan y aplasta el aguacate encima con unas gotas de limón.', 'Haz los huevos a la plancha o pasados por agua.', 'Monta el salmón y los huevos y acompaña con el tomate. Skyr de postre.']);
+  [['pan', 100], ['salmonah', 100], ['huevo', 2], ['aguacate', 60], ['tomate', 100], ['limon', 0.5]],
+  ['Tuesta el pan y aplasta el aguacate encima con unas gotas de limón.', 'Haz los huevos a la plancha o pasados por agua.', 'Monta el salmón y los huevos y acompaña con el tomate.']);
 R('n21', 'cen', 'Tortilla de espinacas y queso', 12, ['rapida'],
   [['huevo', 3], ['espinacas', 150], ['mozza', 50], ['serrano', 40], ['pan', 100], ['aceite', 5], ['ajo', 0]],
   ['Saltea las espinacas con el ajo y el aceite hasta que reduzcan.', 'Añade los huevos batidos y la mozzarella y cuaja la tortilla.', 'Sirve con el jamón y el pan.']);
@@ -616,8 +639,8 @@ R('l8', 'cen', 'Ensalada de pollo, aguacate y huevo', 12, ['rapida', 'ligera', '
   [['pollo', 180], ['aguacate', 60], ['huevo', 1], ['lechuga', 150], ['tomate', 150], ['aceite', 10], ['pan', 30], ['vinagre', 0]],
   ['Haz el pollo a la plancha y córtalo en tiras. Cuece el huevo 10 minutos.', 'Mezcla con la lechuga, el tomate y el aguacate y aliña.', 'Acompaña con el pan.']);
 R('l9', 'cen', 'Salteado picante de ternera con berenjena', 15, ['rapida', 'ligera'],
-  [['ternera', 200], ['berenjena', 200], ['pimiento', 150], ['aceite', 10], ['soja', 0], ['ajo', 0], ['picante', 0], ['skyr', 125]],
-  ['Saltea la berenjena y el pimiento en dados con el aceite, 8 minutos.', 'Añade la carne y el ajo y dora a fuego fuerte.', 'Termina con soja y picante. Skyr de postre.']);
+  [['ternera', 200], ['berenjena', 200], ['pimiento', 150], ['aceite', 10], ['soja', 0], ['ajo', 0], ['picante', 0]],
+  ['Saltea la berenjena y el pimiento en dados con el aceite, 8 minutos.', 'Añade la carne y el ajo y dora a fuego fuerte.', 'Termina con soja y picante.']);
 R('l10', 'cen', 'Lentejas rápidas con huevo', 15, ['rapida', 'ligera', 'taper'],
   [['lentejas', 300], ['zanahoria', 80], ['cebolla', 50], ['triturado', 100], ['huevo', 2], ['aceite', 5], ['pimenton', 0], ['comino', 0], ['caldo', 0]],
   ['Sofríe la cebolla y la zanahoria picadas en el aceite.', 'Añade el tomate, las lentejas escurridas, pimentón, comino y un vaso de caldo. Cuece 8 minutos.', 'Sirve con los huevos cocidos o escalfados dentro.']);
@@ -649,14 +672,60 @@ R('c30', 'com', 'Ñoquis con pollo al curry', 15, ['rapida', 'taper'],
   [['gnocchi', 280], ['pollo', 180], ['griego', 80], ['cebolla', 60], ['espinacas', 80], ['aceite', 5], ['curry', 0], ['caldo', 0]],
   ['Sofríe la cebolla en el aceite y dora el pollo en dados con una cucharada de curry.', 'Añade las espinacas y medio vaso de caldo y cuece 5 minutos.', 'Cuece los ñoquis, mézclalos con el pollo y, fuera del fuego, añade el yogur.']);
 R('n22', 'cen', 'Ñoquis crujientes con pollo y pimientos', 15, ['rapida', 'airfryer'],
-  [['gnocchi', 220], ['pollo', 180], ['pimiento', 150], ['cebolla', 50], ['aceite', 10], ['pimenton', 0], ['skyr', 125]],
-  ['Mezcla los ñoquis crudos con una cucharadita de aceite y hazlos 10-12 minutos en freidora de aire a 200 °C, moviendo a la mitad.', 'Saltea el pollo en tiras con el pimiento y la cebolla, el resto del aceite y pimentón.', 'Junta todo. Skyr de postre.']);
+  [['gnocchi', 220], ['pollo', 180], ['pimiento', 150], ['cebolla', 50], ['aceite', 10], ['pimenton', 0]],
+  ['Mezcla los ñoquis crudos con una cucharadita de aceite y hazlos 10-12 minutos en freidora de aire a 200 °C, moviendo a la mitad.', 'Saltea el pollo en tiras con el pimiento y la cebolla, el resto del aceite y pimentón.', 'Junta todo.']);
 R('n23', 'cen', 'Ñoquis gratinados con ternera y mozzarella', 20, ['horno'],
   [['gnocchi', 220], ['ternera', 150], ['triturado', 150], ['mozza', 60], ['cebolla', 40], ['oregano', 0]],
   ['Dora la carne con la cebolla picada. Añade el tomate y el orégano y cuece 5 minutos.', 'Cuece los ñoquis y mézclalos con la salsa en una fuente.', 'Cubre con la mozzarella y gratina 6-8 minutos en el horno o en la freidora de aire a 200 °C.']);
 R('n24', 'cen', 'Ñoquis salteados con ternera y verduras', 15, ['rapida'],
   [['gnocchi', 220], ['ternera', 170], ['salteado', 200], ['aceite', 10], ['soja', 0], ['ajo', 0], ['picante', 0]],
   ['Dora los ñoquis crudos en la sartén con el aceite, 5-6 minutos, hasta que queden crujientes. Aparta.', 'Saltea la carne con el ajo a fuego fuerte y añade las verduras 4 minutos.', 'Junta todo y termina con soja y picante.']);
+
+/* Postres: uno después de comer y otro después de cenar */
+R('p1', 'pos', 'Yogur natural con canela', 1, ['rapida', 'sincocinar'],
+  [['yogur', 125], ['canela', 0]],
+  ['Un yogur natural con canela por encima.']);
+R('p2', 'pos', 'Yogur con kéfir y un poco de miel', 2, ['rapida', 'sincocinar'],
+  [['yogur', 125], ['kefir', 100], ['miel', 5]],
+  ['Mezcla el yogur con el kéfir hasta que quede cremoso.', 'Añade la miel por encima.']);
+R('p3', 'pos', 'Kéfir con frutos rojos', 2, ['rapida', 'sincocinar'],
+  [['kefir', 200], ['rojos', 80]],
+  ['Sirve el kéfir en un bol con los frutos rojos, aunque estén congelados: lo enfrían.']);
+R('p4', 'pos', 'Vaso de kéfir', 1, ['rapida', 'sincocinar'],
+  [['kefir', 200]],
+  ['Un vaso de kéfir natural, bien frío.']);
+R('p5', 'pos', 'Pieza de fruta', 1, ['rapida', 'sincocinar'],
+  [['fruta', 1]],
+  ['La fruta de temporada que tengas.']);
+R('p6', 'pos', 'Skyr con canela', 1, ['rapida', 'sincocinar'],
+  [['skyr', 150], ['canela', 0]],
+  ['Skyr o queso fresco batido con canela.'],
+  'El postre con más proteína: úsalo los días que la comida o la cena vayan justas.');
+R('p7', 'pos', 'Yogur alto en proteína', 1, ['rapida', 'sincocinar'],
+  [['yopro', 1]],
+  ['Un yogur de los que ponen «proteína» o «+proteínas», del sabor que quieras.']);
+R('p8', 'pos', 'Manzana al microondas con canela y yogur', 4, ['rapida'],
+  [['fruta', 1], ['yogur', 60], ['canela', 0]],
+  ['Corta la manzana en dados, ponle canela y hazla 2-3 minutos en el microondas, tapada.', 'Sirve templada con el yogur encima.']);
+R('p9', 'pos', 'Dos onzas de chocolate negro', 1, ['rapida', 'sincocinar'],
+  [['choco', 20]],
+  ['Dos onzas de chocolate del 85%, despacio, con un café o una infusión.']);
+R('p10', 'pos', 'Requesón con canela y nueces', 2, ['rapida', 'sincocinar'],
+  [['cottage', 100], ['nueces', 5], ['canela', 0]],
+  ['Requesón con canela y un par de nueces troceadas.']);
+R('p11', 'pos', 'Helado rápido de skyr y frutos rojos', 3, ['rapida', 'sincocinar'],
+  [['skyr', 125], ['rojos', 100]],
+  ['Tritura el skyr con los frutos rojos congelados hasta que quede como un helado.', 'Cómelo al momento.']);
+R('p12', 'pos', 'Gelatina sin azúcar con frutos rojos', 1, ['rapida', 'sincocinar'],
+  [['gelatina', 1], ['rojos', 80]],
+  ['Una gelatina sin azúcar con frutos rojos por encima.'],
+  'El más ligero: para los días que ya vas justo de calorías.');
+R('p13', 'pos', 'Medio plátano con crema de cacahuete', 2, ['rapida', 'sincocinar'],
+  [['platano', 0.5], ['cacahuete', 10]],
+  ['Corta medio plátano en rodajas y pon un poco de crema de cacahuete en cada una.']);
+R('p14', 'pos', 'Yogur griego con nueces', 2, ['rapida', 'sincocinar'],
+  [['griego', 100], ['nueces', 5]],
+  ['Yogur griego natural con un par de nueces troceadas.']);
 
 /* ---------- Fuera de casa ---------- */
 const SITIOS = [
@@ -717,13 +786,13 @@ const SALIR = [
 ];
 /* Ingredientes que le encantan: sus platos salen más a menudo cuando elige la app. */
 const ME_GUSTA = ['gnocchi'];
-const PLAN = { kcal: 2350, kcalMin: 2300, kcalMax: 2400, protMin: 150, protMax: 165, revision: 82, copasTope: 5, entrenos: 3, maxMin: 20 };
-const EXTRA = { rest_ok: { k: 850, p: 45 }, rest_pas: { k: 1300, p: 50 }, libre: { k: 1200, p: 40 } };
+const PLAN = { kcal: 2350, kcalMin: 2300, kcalMax: 2400, protMin: 150, protMax: 165, revision: 82, copasTope: 5, entrenos: 3, maxMin: 20, hidMin: 230, hidMax: 270, graMin: 70, graMax: 85, peso: 84 };
+const EXTRA = { rest_ok: { k: 850, p: 45, h: 80, g: 38 }, rest_pas: { k: 1300, p: 50, h: 130, g: 62 }, libre: { k: 1200, p: 40, h: 130, g: 55 } };
 
 /* ---------- Compra base: los productos que cubren más recetas (calculado sobre el recetario) ---------- */
 const BASE = [
   ['pollo', '1 kg'], ['ternera', '500 g'], ['lomo', '400 g'], ['pavo', '2 paquetes (400 g)'], ['serrano', '200 g'], ['cocido', '1 paquete (150 g)'], ['atun', '6 latas'], ['salmonah', '2 sobres (200 g)'],
-  ['huevo', '2 docenas'], ['skyr', '1 kg'], ['griego', '1 pack'], ['burgos', '1 tarrina (250 g)'], ['loncha', '1 paquete'], ['mozza', '1 bolsa (150 g)'],
+  ['huevo', '2 docenas'], ['skyr', '1 kg'], ['yogur', '1 pack de 8'], ['kefir', '1 botella (1 l)'], ['griego', '1 pack'], ['burgos', '1 tarrina (250 g)'], ['loncha', '1 paquete'], ['mozza', '1 bolsa (150 g)'],
   ['patata', '2 kg'], ['tomate', '1 kg'], ['pimiento', '4-5 (600 g)'], ['cebolla', '1 malla (1 kg)'], ['calabacin', '2 (500 g)'], ['berenjena', '2'], ['lechuga', '2 bolsas'], ['zanahoria', '1 bolsa (500 g)'], ['salteado', '1 bolsa (450 g)'], ['aguacate', '2-3'],
   ['fruta', '8-10 piezas'],
   ['arroz', '1 kg'], ['pan', '1 barra cada 1-2 días'], ['tortilla', '1 paquete (8 ud)'], ['triturado', '2 botes (800 g)'], ['lentejas', '2 botes (800 g)']
@@ -732,6 +801,20 @@ const BASE2 = [
   ['salmon', '2 lomos (350 g)'], ['rallado', '1 bolsa pequeña'], ['boniato', '2 (600 g)'], ['espinacas', '1 bolsa (300 g)'], ['judias', '1 bolsa (300 g)'],
   ['pasta', '500 g'], ['gnocchi', '1 paquete (500 g)'], ['garbanzos', '2 botes (800 g)'], ['maiz', '1 lata pequeña'], ['panburger', '1 paquete (4 ud)']
 ];
+
+/* ---------- Suplementos ---------- */
+const SUPLES = [
+  { g: 'Merecen la pena', l: [
+    ['Creatina monohidrato', '3-5 g al día, todos los días, a la hora que quieras', 'El suplemento con más respaldo para ganar fuerza y conservar músculo mientras bajas de peso.', 'Retiene algo de agua dentro del músculo: la báscula puede subir 0,5-1 kg las primeras semanas. No es grasa. Bebe agua de sobra.'],
+    ['Proteína en polvo', '1 cacito (unos 24 g de proteína), solo los días que no llegues', 'Sirve para llegar a los 150 g cuando la comida no alcanza, por ejemplo un día de restaurante.', 'Es comida en polvo. Si con el menú ya llegas, no la necesitas.']
+  ] },
+  { g: 'Solo si te hace falta', l: [
+    ['Vitamina D', '1.000-2.000 UI al día en otoño e invierno', 'Si te da poco el sol o una analítica sale baja.', 'Lo ideal es mirarlo en una analítica antes de tomarla todo el año.'],
+    ['Omega-3 (EPA y DHA)', '1 g al día', 'Solo si no comes salmón o atún al menos 2 veces por semana.', 'Con las recetas de salmón y atún del plan ya lo cubres.'],
+    ['Cafeína', 'Un café 30-60 minutos antes de entrenar', 'Ayuda a rendir algo más en el entreno.', 'Ya la tomas con el café: no hace falta comprar nada. Evítala desde media tarde para dormir bien.']
+  ] }
+];
+const SUPLES_NO = 'Quemagrasas, BCAA y aminoácidos sueltos (ya comes proteína de sobra), colágeno, productos «detox» y multivitamínicos si comes variado.';
 
 /* ---------- Fechas (siempre en hora local) ---------- */
 function pad2(n) { return n < 10 ? '0' + n : '' + n; }
@@ -755,16 +838,16 @@ function sgn(n, dec) { return (n > 0 ? '+' : n < 0 ? '−' : '') + kgf(Math.abs(
 const RBY = {};
 REC.forEach(function (r) { RBY[r.id] = r; });
 function nut(r) {
-  let k = 0, p = 0;
+  let k = 0, p = 0, h = 0, g = 0;
   r.ing.forEach(function (x) {
-    const g = ING[x[0]];
-    if (!g || !g.k && !g.p) return;
-    const f = g.u === 'ud' ? x[1] : x[1] / 100;
-    k += g.k * f; p += g.p * f;
+    const i = ING[x[0]];
+    if (!i || !i.u) return;
+    const f = i.u === 'ud' ? x[1] : x[1] / 100;
+    k += (i.k || 0) * f; p += (i.p || 0) * f; h += (i.h || 0) * f; g += (i.g || 0) * f;
   });
-  return { k: Math.round(k / 5) * 5, p: Math.round(p) };
+  return { k: Math.round(k / 5) * 5, p: Math.round(p), h: Math.round(h), g: Math.round(g) };
 }
-REC.forEach(function (r) { const n = nut(r); r.k = n.k; r.p = n.p; });
+REC.forEach(function (r) { const n = nut(r); r.k = n.k; r.p = n.p; r.h = n.h; r.g = n.g; });
 
 function cantidad(id, q) {
   const g = ING[id];
@@ -784,7 +867,7 @@ function cantidad(id, q) {
 /* ---------- Diario ---------- */
 function slotNut(e) {
   if (!e) return null;
-  if (e.r && RBY[e.r]) return { k: RBY[e.r].k, p: RBY[e.r].p };
+  if (e.r && RBY[e.r]) return RBY[e.r];
   if (e.x === 'rest') return e.q === 'pas' ? EXTRA.rest_pas : EXTRA.rest_ok;
   if (e.x === 'libre') return EXTRA.libre;
   return null;
@@ -796,14 +879,14 @@ function copasDe(day) {
   return { n: n, k: k };
 }
 function totales(day) {
-  const t = { plan: { k: 0, p: 0 }, hecho: { k: 0, p: 0 }, slots: 0, ok: 0 };
-  ['des', 'com', 'mer', 'cen'].forEach(function (s) {
+  const t = { plan: { k: 0, p: 0, h: 0, g: 0 }, hecho: { k: 0, p: 0, h: 0, g: 0 }, slots: 0, ok: 0 };
+  SLOTS.forEach(function (s) {
     const e = day && day.m && day.m[s];
     const n = slotNut(e);
     if (!n) return;
     t.slots++;
-    t.plan.k += n.k; t.plan.p += n.p;
-    if (e.ok) { t.ok++; t.hecho.k += n.k; t.hecho.p += n.p; }
+    t.plan.k += n.k; t.plan.p += n.p; t.plan.h += n.h; t.plan.g += n.g;
+    if (e.ok) { t.ok++; t.hecho.k += n.k; t.hecho.p += n.p; t.hecho.h += n.h; t.hecho.g += n.g; }
   });
   const c = copasDe(day);
   t.plan.k += c.k; t.hecho.k += c.k;
@@ -837,6 +920,7 @@ function usos(dias) {
 }
 function candidatas(slot, tipo, todas) {
   return REC.filter(function (r) {
+    if (slot === 'pc' || slot === 'pn') return r.t === 'pos';
     if (slot === 'des' || slot === 'mer') return r.t === slot;
     if (todas) return r.t === 'com' || r.t === 'cen';
     if (slot === 'com') return r.t === 'com';
@@ -861,14 +945,23 @@ function elegir(slot, tipo, fecha, dias, favs, evitar, rnd, solo) {
   return sc[0].r.id;
 }
 
+/* Huecos que no hace falta rellenar: la comida de un día de curro y el postre de una comida fuera o libre. */
+function sinHueco(d, s) {
+  const m = d.m || {};
+  if (s === 'com') return d.tipo === 'curro';
+  if (s === 'pc') return !!(m.com && m.com.x) || (d.tipo === 'curro' && !m.com);
+  if (s === 'pn') return !!(m.cen && m.cen.x);
+  return false;
+}
+
 /* ---------- Lista de la compra ---------- */
 function compra(dias, desde, n, sueltos) {
   const items = {}; let platos = 0, huecos = 0;
   for (let i = 0; i < n; i++) {
     const d = dias[addDays(desde, i)] || { tipo: 'casa', m: {} };
-    ['des', 'com', 'mer', 'cen'].forEach(function (s) {
+    SLOTS.forEach(function (s) {
       const e = d.m && d.m[s];
-      if (!e) { if (!(s === 'com' && d.tipo === 'curro')) huecos++; return; }
+      if (!e) { if (!sinHueco(d, s)) huecos++; return; }
       if (!e.r || e.ok || !RBY[e.r]) return;
       platos++;
       RBY[e.r].ing.forEach(function (x) { items[x[0]] = (items[x[0]] || 0) + x[1]; });
@@ -949,7 +1042,6 @@ const S = {
   prefs: { favs: {} }
 };
 const DOCS = Object.keys(S);
-const SLOTS = ['des', 'com', 'mer', 'cen'];
 function clone(o) { return JSON.parse(JSON.stringify(o)); }
 function norm(d, v) {
   v = v && typeof v === 'object' ? v : {};
@@ -1038,13 +1130,14 @@ const IC = {
   recetas: '<svg viewBox="0 0 24 24"><path d="M5 4.5h10.5a3 3 0 0 1 3 3V20H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h10.5"/></svg>',
   compra: '<svg viewBox="0 0 24 24"><path d="M4 9h16l-1.5 10.5h-13z"/><path d="M8.5 9L12 4l3.5 5"/></svg>',
   fuera: '<svg viewBox="0 0 24 24"><path d="M7 3v18M4.5 3v4.5a2.5 2.5 0 0 0 5 0V3"/><path d="M17 21V3c-2 1.5-3 4-3 7.5V13h3"/></svg>',
+  plan: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/><path d="M12 3.5V6M12 18v2.5M3.5 12H6M18 12h2.5"/></svg>',
   check: '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
   star: '<svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.9 6.8 19.6l1-5.8L3.5 9.7l5.9-.8z"/></svg>',
   prev: '<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>',
   next: '<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>',
   close: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>'
 };
-const TABS = [['hoy', 'Hoy'], ['peso', 'Peso'], ['recetas', 'Recetas'], ['compra', 'Compra'], ['fuera', 'Fuera']];
+const TABS = [['hoy', 'Hoy'], ['peso', 'Peso'], ['recetas', 'Recetas'], ['compra', 'Compra'], ['fuera', 'Fuera'], ['plan', 'Plan']];
 let tab = 'hoy', dia = todayStr();
 const ui = { rtipo: 'todo', rflags: {}, q: '', pesoTodos: false, pickAll: false };
 let hoja = null;
@@ -1070,6 +1163,16 @@ function baseMap() { const m = {}; recetasCon(baseIds()).forEach(function (r) { 
 /* Entre semana solo platos de 20 minutos o menos; el fin de semana, cualquiera. */
 function elige(s, tipo, f, evitar) {
   const wd = dparse(f).getDay(), lab = wd >= 1 && wd <= 5, bm = S.compra.solo ? baseMap() : null;
+  if (s === 'pc' || s === 'pn') {
+    /* Postre a la medida de lo que queda del día: si ya vas cargado, uno ligero. */
+    const d = dayOf(f), cur = slotNut(d.m && d.m[s]);
+    const usado = totales(d).plan.k - (cur ? cur.k : 0);
+    const otro = s === 'pc' ? 'pn' : 'pc', falta = !(d.m && d.m[otro]) && !sinHueco(d, otro) ? 1 : 0;
+    const tope = Math.max(80, (PLAN.kcalMax - usado) / (1 + falta));
+    const okp = {};
+    REC.forEach(function (r) { if (r.t === 'pos' && r.k <= tope && (!bm || bm[r.id])) okp[r.id] = true; });
+    return elegir(s, tipo, f, S.diario.dias, S.prefs.favs, evitar, null, okp);
+  }
   if (!lab && !bm) return elegir(s, tipo, f, S.diario.dias, S.prefs.favs, evitar, null, null);
   const ok = {};
   REC.forEach(function (r) { if ((!bm || bm[r.id]) && (!lab || r.min <= PLAN.maxMin)) ok[r.id] = true; });
@@ -1104,6 +1207,7 @@ function setTipo(f, tipo) {
   d.tipo = tipo;
   if (tipo === 'curro') {
     if (!d.m.com || !d.m.com.ok) d.m.com = { x: 'rest' };
+    if (d.m.pc && !d.m.pc.ok) delete d.m.pc;
     if (d.m.cen && d.m.cen.r && !d.m.cen.ok && !esLigera(d.m.cen.r)) d.m.cen = { r: elige('cen', 'curro', f) };
   } else if (d.m.com && d.m.com.x === 'rest' && !d.m.com.ok) {
     delete d.m.com;
@@ -1113,10 +1217,13 @@ function rellenar(desde, n) {
   let c = 0;
   for (let i = 0; i < n; i++) {
     const f = addDays(desde, i), d = mutDay(f);
-    SLOTS.forEach(function (s) {
+    /* Primero los platos y al final los postres, que se ajustan a lo que quede del día. */
+    ['des', 'com', 'mer', 'cen', 'pc', 'pn'].forEach(function (s) {
       if (d.m[s]) return;
-      if (s === 'com' && d.tipo === 'curro') d.m[s] = { x: 'rest' };
-      else { d.m[s] = { r: elige(s, d.tipo, f) }; c++; }
+      if (s === 'com' && d.tipo === 'curro') { d.m[s] = { x: 'rest' }; return; }
+      if (sinHueco(d, s)) return;
+      const id = elige(s, d.tipo, f);
+      if (id) { d.m[s] = { r: id }; c++; }
     });
   }
   return c;
@@ -1170,10 +1277,11 @@ function vHoy() {
     '<div class="meter"><span class="lbl">Calorías</span><div class="num">' + miles(t.hecho.k) + '</div><span class="small muted">de ' + miles(PLAN.kcal) + ' kcal</span><div class="bar k"><i style="width:' + pk + '%"></i><b style="width:' + hk + '%"></b></div>' +
     '<span class="small ' + (sobra ? 'up' : 'muted') + '">Plan del día: ' + miles(t.plan.k) + ' kcal' + (sobra ? ', por encima del objetivo' : '') + '</span></div>' +
     '<div class="meter"><span class="lbl">Proteína</span><div class="num">' + t.hecho.p + ' g</div><span class="small muted">de ' + PLAN.protMin + '-' + PLAN.protMax + ' g</span><div class="bar p"><i style="width:' + pp + '%"></i><b style="width:' + hp + '%"></b></div>' +
-    '<span class="small muted">Plan del día: ' + t.plan.p + ' g</span></div></div></div>';
+    '<span class="small muted">Plan del día: ' + t.plan.p + ' g</span></div>' +
+    mini('Hidratos', 'h', t.hecho.h, t.plan.h, PLAN.hidMin, PLAN.hidMax) + mini('Grasa', 'g', t.hecho.g, t.plan.g, PLAN.graMin, PLAN.graMax) + '</div></div>';
 
   h += '<div class="card">' + SLOTS.map(function (s) { return slotHTML(s, d); }).join('') + '</div>';
-  if (t.slots < 4) h += '<button class="btn pri" data-a="fill7">Rellenar los huecos de los próximos 7 días</button>';
+  if (SLOTS.some(function (s) { return !(d.m && d.m[s]) && !sinHueco(d, s); })) h += '<button class="btn pri" data-a="fill7">Rellenar los huecos de los próximos 7 días</button>';
 
   if (dia === hoy) {
     const p = S.peso.kg[hoy];
@@ -1195,6 +1303,10 @@ function vHoy() {
     stat(w.entrenos, PLAN.entrenos, 'Entrenos', false) + stat(w.copas, PLAN.copasTope, 'Copas (tope)', w.copas > PLAN.copasTope) +
     stat(w.libres, 1, 'Comida libre', w.libres > 1) + stat(w.pesajes, 4, 'Pesajes', false) + '</div></div>';
   return h;
+}
+function mini(l, c, hecho, plan, min, max) {
+  return '<div class="meter mini"><div class="row" style="gap:6px;align-items:baseline"><span class="lbl grow">' + l + '</span><span class="num">' + hecho + ' g</span></div><div class="bar ' + c + '"><i style="width:' + Math.min(100, plan / max * 100) + '%"></i><b style="width:' + Math.min(100, hecho / max * 100) + '%"></b></div>' +
+    '<span class="small muted">Plan: ' + plan + ' g de ' + min + '-' + max + '</span></div>';
 }
 function stat(a, b, l, over) {
   return '<div class="stat' + (over ? ' over' : '') + '"><div class="num">' + a + '<small> / ' + b + '</small></div><span>' + l + '</span></div>';
@@ -1314,7 +1426,7 @@ function recList() {
 }
 function vRecetas() {
   return '<h2 class="h2">Recetario</h2><input type="search" id="buscar" placeholder="Buscar plato o ingrediente: pollo, arroz, atún…" value="' + esc(ui.q) + '" aria-label="Buscar recetas">' +
-    '<div class="chips">' + [['todo', 'Todo']].concat(SLOTS.map(function (s) { return [s, TIPOS[s]]; })).map(function (x) {
+    '<div class="chips">' + [['todo', 'Todo']].concat(RTIPOS.map(function (s) { return [s, TIPOS[s]]; })).map(function (x) {
       return '<button class="chip" data-a="rtipo" data-t="' + x[0] + '" aria-pressed="' + (ui.rtipo === x[0]) + '">' + x[1] + '</button>';
     }).join('') + '</div><div class="chips">' + RFLAGS.map(function (x) {
       return '<button class="chip" data-a="rflag" data-f="' + x[0] + '" aria-pressed="' + (!!ui.rflags[x[0]]) + '">' + x[1] + '</button>';
@@ -1371,7 +1483,7 @@ function vCompraBase() {
   const cnt = function (t) { return act.filter(function (r) { return r.t === t; }).length; };
   const hechos = l.filter(function (x) { return S.compra.hechos[x[0]]; }).length;
   let h = modoSeg() + '<div class="card"><div class="stats" style="grid-template-columns:1fr 1fr">' + stat(l.length, NPROD, 'Productos de los ' + NPROD + ' del recetario', false) + stat(act.length, REC.length, 'Recetas que puedes hacer', false) + '</div>' +
-    '<span class="small muted">' + cnt('des') + ' desayunos, ' + cnt('com') + ' comidas, ' + cnt('cen') + ' cenas y ' + cnt('mer') + ' meriendas. Son los productos que más recetas completas cubren. Las cantidades son para una semana comiendo en casa: si curras 3 días, compra un tercio menos de carne y verdura fresca, o congela.</span>' +
+    '<span class="small muted">' + cnt('des') + ' desayunos, ' + cnt('com') + ' comidas, ' + cnt('cen') + ' cenas, ' + cnt('mer') + ' meriendas y ' + cnt('pos') + ' postres. Son los productos que más recetas completas cubren. Las cantidades son para una semana comiendo en casa: si curras 3 días, compra un tercio menos de carne y verdura fresca, o congela.</span>' +
     '<div class="row"><button class="btn pri" data-a="verbase">Ver las ' + act.length + ' recetas</button></div>' +
     '<div class="row"><button class="check sq" data-a="csolo" aria-pressed="' + S.compra.solo + '" aria-label="Elegir solo entre estos platos">' + IC.check + '</button><div class="grow"><b>Elegir por mí solo entre estos platos</b><div class="small muted">«Sorpréndeme» y «Elegir por mí» no te propondrán nada que no puedas cocinar con esta compra.</div></div></div></div>';
   h += '<div class="row"><span class="small muted grow">' + hechos + ' de ' + l.length + ' en el carro</span><button class="btn sm" data-a="copy">Copiar lista</button>' + (hechos ? '<button class="btn sm" data-a="uncheck">Desmarcar todo</button>' : '') + '</div>';
@@ -1444,13 +1556,49 @@ function vFuera() {
   return h;
 }
 
+/* ---------- Plan: macros, postres y suplementos ---------- */
+function vPlan() {
+  const med = function (f, k) { const l = REC.filter(f); return Math.round(l.reduce(function (a, r) { return a + r[k]; }, 0) / l.length); };
+  const filas = [
+    ['Desayuno', function (r) { return r.t === 'des'; }],
+    ['Comida', function (r) { return r.t === 'com'; }],
+    ['Postre', function (r) { return r.t === 'pos' && r.k <= 100; }],
+    ['Merienda, si la haces', function (r) { return r.t === 'mer'; }],
+    ['Cena', function (r) { return r.t === 'cen' && !esLigera(r.id); }],
+    ['Postre', function (r) { return r.t === 'pos' && r.k <= 100; }]
+  ];
+  const tot = { k: 0, p: 0, h: 0, g: 0 };
+  const kv = function (a, b, c) { return '<div class="kv"><div class="row" style="align-items:baseline"><b class="grow">' + a + '</b><span class="num">' + b + '</span></div><span class="small muted">' + c + '</span></div>'; };
+  let h = '<h2 class="h2">Tu plan</h2><div class="card"><span class="lbl">Lo que puedes comer en un día</span><div>' +
+    kv('Calorías', miles(PLAN.kcalMin) + '-' + miles(PLAN.kcalMax) + ' kcal', 'Lo que gastas (2.700-2.900 kcal) menos unas 400-500.') +
+    kv('Proteína', PLAN.protMin + '-' + PLAN.protMax + ' g', '1,8-2 g por kilo de peso.') +
+    kv('Grasa', PLAN.graMin + '-' + PLAN.graMax + ' g', '0,8-1 g por kilo de peso.') +
+    kv('Hidratos', PLAN.hidMin + '-' + PLAN.hidMax + ' g', 'Las calorías que quedan después de la proteína y la grasa.') + '</div>' +
+    '<ul class="dots small"><li>Un gramo de proteína o de hidratos son 4 kcal; uno de grasa, 9 kcal.</li><li>La proteína es el número que no puedes fallar. Hidratos y grasa pueden bailar entre sí mientras cuadren las calorías.</li><li>Los días de entreno, pon los hidratos en la comida de antes y en la de después.</li><li>Calculado para ' + PLAN.peso + ' kg. Cuando bajes 3-4 kg lo recalculamos.</li></ul></div>';
+  h += '<div class="card"><span class="lbl">Cómo se reparte en un día en casa</span><div class="tw"><table class="tp"><thead><tr><th></th><th class="r">kcal</th><th class="r">Prot.</th><th class="r">Hidr.</th><th class="r">Grasa</th></tr></thead><tbody>' +
+    filas.map(function (x) {
+      const k = med(x[1], 'k'), p = med(x[1], 'p'), hh = med(x[1], 'h'), g = med(x[1], 'g');
+      tot.k += k; tot.p += p; tot.h += hh; tot.g += g;
+      return '<tr><td>' + x[0] + '</td><td class="r">' + k + '</td><td class="r">' + p + ' g</td><td class="r">' + hh + ' g</td><td class="r">' + g + ' g</td></tr>';
+    }).join('') + '<tr><td><b>Total</b></td><td class="r"><b>' + miles(tot.k) + '</b></td><td class="r"><b>' + tot.p + ' g</b></td><td class="r"><b>' + tot.h + ' g</b></td><td class="r"><b>' + tot.g + ' g</b></td></tr></tbody></table></div>' +
+    '<span class="small muted">Medias de las recetas de la app. Los días de curro la comida es de restaurante (unas 850 kcal) y la cena, una de las ligeras.</span></div>';
+  const np = REC.filter(function (r) { return r.t === 'pos'; }).length;
+  h += '<div class="card"><span class="lbl">Postre después de comer y de cenar</span><ul class="dots"><li>Cabe uno después de cada comida: van de 45 a 155 kcal.</li><li>Si ese día meriendas, elige postres de menos de 100 kcal: yogur natural, yogur alto en proteína, fruta o gelatina.</li><li>Si no meriendas, te caben los grandes: yogur con kéfir y miel, kéfir con frutos rojos o yogur griego con nueces.</li><li>Cuando eliges «Sorpréndeme», la app ya te pone un postre a la medida de lo que queda del día.</li></ul><div class="row"><button class="btn pri" data-a="verpos">Ver los ' + np + ' postres</button></div></div>';
+  h += '<h2 class="h2">Suplementos</h2>' + SUPLES.map(function (gr) {
+    return '<div class="card"><span class="lbl">' + gr.g + '</span>' + gr.l.map(function (x) {
+      return '<div class="sup"><b>' + x[0] + '</b><span class="dose">' + x[1] + '</span><span>' + x[2] + '</span><span class="small muted">' + x[3] + '</span></div>';
+    }).join('') + '</div>';
+  }).join('') + '<div class="card"><span class="lbl">No hacen falta</span><span>' + SUPLES_NO + '</span><span class="small muted">Orientación general, no consejo médico. Si tomas medicación o tienes algún problema de riñón, pregunta a tu médico antes de tomar creatina o cualquier otro suplemento.</span></div>';
+  return h;
+}
+
 /* ---------- Hojas (receta y selector) ---------- */
 function hojaRec(id) {
   const r = RBY[id], fav = !!S.prefs.favs[id], d = dayOf(dia);
-  const dest = r.t === 'des' || r.t === 'mer' ? [r.t] : ['com', 'cen'];
-  return '<div class="sh-head"><div class="grow"><span class="lbl">' + (esLigera(id) ? 'Cena ligera' : TIPOS[r.t]) + '</span><h2 class="h2">' + esc(r.n) + '</h2><div class="meta">' + metaRec(r) + '</div></div>' +
+  const dest = r.t === 'des' || r.t === 'mer' ? [r.t] : r.t === 'pos' ? ['pc', 'pn'] : ['com', 'cen'];
+  return '<div class="sh-head"><div class="grow"><span class="lbl">' + (esLigera(id) ? 'Cena ligera' : TIPOS[r.t]) + '</span><h2 class="h2">' + esc(r.n) + '</h2><div class="meta">' + metaRec(r) + '</div><div class="meta"><span><b>' + r.h + ' g</b> hidratos</span><span><b>' + r.g + ' g</b> grasa</span></div></div>' +
     '<button class="icon' + (fav ? ' on' : '') + '" data-a="fav" data-id="' + id + '" aria-pressed="' + fav + '" aria-label="Favorita">' + IC.star + '</button><button class="icon" data-a="close" aria-label="Cerrar">' + IC.close + '</button></div>' +
-    '<div class="sh-body"><div class="card"><span class="lbl">Ingredientes, 1 ración (peso en crudo)</span><ul class="dots">' + r.ing.map(function (x) { return '<li>' + cantidad(x[0], x[1]) + '</li>'; }).join('') + '</ul></div>' +
+    '<div class="sh-body"><div class="card"><span class="lbl">' + (r.t === 'pos' ? 'Ingredientes' : 'Ingredientes, 1 ración (peso en crudo)') + '</span><ul class="dots">' + r.ing.map(function (x) { return '<li>' + cantidad(x[0], x[1]) + '</li>'; }).join('') + '</ul></div>' +
     '<div class="card"><span class="lbl">Pasos</span><ol class="pasos">' + r.pasos.map(function (p) { return '<li>' + p + '</li>'; }).join('') + '</ol>' + (r.nota ? '<span class="small muted">' + r.nota + '</span>' : '') + '</div>' +
     '<div class="row">' + dest.map(function (s) {
       const ya = d.m && d.m[s] && d.m[s].r === id;
@@ -1509,7 +1657,7 @@ function render() {
     return '<button class="tab" role="tab" data-a="tab" data-t="' + t[0] + '" aria-selected="' + (tab === t[0]) + '">' + IC[t[0]] + '<span>' + t[1] + '</span></button>';
   }).join('') + '</div>';
   const v = document.getElementById('view');
-  v.innerHTML = tab === 'hoy' ? vHoy() : tab === 'peso' ? vPeso() : tab === 'recetas' ? vRecetas() : tab === 'compra' ? vCompra() : vFuera();
+  v.innerHTML = tab === 'hoy' ? vHoy() : tab === 'peso' ? vPeso() : tab === 'recetas' ? vRecetas() : tab === 'compra' ? vCompra() : tab === 'plan' ? vPlan() : vFuera();
   if (hoja) renderHoja();
   syncUI();
 }
@@ -1557,7 +1705,7 @@ document.addEventListener('click', function (ev) {
       save('diario'); hoja = null; renderHoja();
       if (tab !== 'hoy') {
         render();
-        toast(TIPOS[s] + ' del ' + fcorta(f) + ' cambiada', function () { const x = mutDay(f); if (prev) x.m[s] = prev; else delete x.m[s]; save('diario'); render(); });
+        toast('Añadido al ' + fcorta(f) + ': ' + TIPOS[s].toLowerCase(), function () { const x = mutDay(f); if (prev) x.m[s] = prev; else delete x.m[s]; save('diario'); render(); });
       } else render();
       break;
     }
@@ -1593,6 +1741,7 @@ document.addEventListener('click', function (ev) {
     case 'cmodo': S.compra.modo = b.dataset.m; save('compra'); render(); break;
     case 'camp': S.compra.amp = !S.compra.amp; save('compra'); render(); break;
     case 'csolo': S.compra.solo = !S.compra.solo; save('compra'); render(); break;
+    case 'verpos': ui.rtipo = 'pos'; ui.rflags = {}; ui.q = ''; irTab('recetas'); break;
     case 'verbase': ui.rtipo = 'todo'; ui.rflags = { base: true }; ui.q = ''; irTab('recetas'); break;
     case 'backup': bakPend = null; abrir({ k: 'bak' }); break;
     case 'bak-dl': {
